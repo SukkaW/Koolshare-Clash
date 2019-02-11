@@ -1,3 +1,3 @@
 #!/bin/sh
 
-tar zcvf clash.tar.gz clash
+tar zcvf koolclash.tar.gz koolclash
