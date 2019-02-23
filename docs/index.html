@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="KoolClash 的使用文档。Clash 是一个基于规则的代理程序，兼容 Shadowsocks、V2Ray 等协议，拥有像 Surge 一样强大的代理规则。KoolClash 是 Clash 在 Koolshare OpenWrt 上的客户端">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/npm/skx@0.1.0/img/clash-logo.png">
+    <link rel="icon" href="https://cdn.jsdelivr.net/npm/skx@0.1.0/img/clash-logo.png">
+    <title>KoolClash Documents</title>
+    <meta property="og:url" content="https://koolclash.js.org">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="KoolClash Documents">
+    <meta property="og:description" content="KoolClash 的使用文档。Clash 是一个基于规则的代理程序，兼容 Shadowsocks、V2Ray 等协议，拥有像 Surge 一样强大的代理规则。KoolClash 是 Clash 在 Koolshare OpenWrt 上的客户端">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
+</head>
+
+<body>
+    <div id="app">Loading ...</div>
+    <script>
+        window.$docsify = {
+            name: 'KoolClash Documents',
+            themeColor: '#002b5e',
+
+            // Search Support
+            search: {
+                maxAge: 108000, // 过期时间，单位毫秒，默认一天
+                paths: 'auto',
+                placeholder: {
+                    '/': '在文档中搜索',
+                },
+                noData: {
+                    '/': '找不到结果',
+                },
+            },
+
+            // load sidevar from _sidebar.md
+            loadSidebar: '_sidebar.md',
+            subMaxLevel: 2,
+            autoHeader: true,
+
+            //Auto2Top
+            auto2top: true,
+
+            executeScript: true,
+
+            themeable: {
+                readyTransition: true, // default
+                responsiveTables: true  // default
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify@4.9.1/lib/docsify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify-pagination@2.3.5/dist/docsify-pagination.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify@4.9.1/lib/plugins/zoom-image.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify@4.9.1/lib/plugins/search.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.15.0/components/prism-bash.min.js"></script>
+</body>
+
+</html>

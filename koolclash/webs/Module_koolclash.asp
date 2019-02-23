@@ -47,14 +47,11 @@
 
     <div class="box">
         <div class="heading" style="color: red">
-            ！！请注意！！以下内容务必仔细阅读！
+            ！！请注意！！
         </div>
         <div class="content">
             <div class="col" style="line-height:30px; color: brown">
-                <p>启动 KoolClash 插件以后，Clash 会开始监听 53 端口作为 DNS。你应该前往 OpenWrt/LEDE 的 <a href="/cgi-bin/luci/admin/network/dhcp" style="font-weight: bold">网络 - DHCP/DNS</a>，在「高级设置」中将「DNS 服务器端口」修改为除了 53 以外的任何不冲突的端口（如 5353、53535）。</p>
-
-                <p style="margin-top: 20px">KoolClash 插件将会修改 Clash Config 文件中的部分设置（如代理端口、透明代理端口、外部控制端口等）。如果你正在购买并使用商业性质的公共代理服务，请务必先仔细阅读相关服务商的 服务条款与条件（ToS）。部分公共代理服务商（如 rixCloud）的服务条款与条件规定，如果用户更改了服务商提供的托管配置将会被视为自动放弃 SLA 和技术支持服务。</p>
-                <p>如果你使用的公共代理服务提供商有诸如此类的限制性条款（如 rixCloud），我会耸耸肩、然后表示很遗憾。你应该向你正在使用的公共代理服务提供商提交技术支持请求，并在支持请求中附上 <a href="https://graph.org/%E5%85%B3%E4%BA%8E-KoolClash-%E6%8F%92%E4%BB%B6-02-11" target="_blank" style="font-weight: bold">这篇文章</a> 的链接，询问使用本插件是否违背了他们的条款和条件。然后由您自行做出选择是否继续使用本插件。</p>
+                <p>在使用 Clash 之前，请务必仔细阅读 <a href="" target="_blank">KoolClash 的使用文档！!</a>
             </div>
         </div>
     </div>
@@ -83,7 +80,6 @@
                 <button type="button" id="koolclash-btn-save-config" onclick="updateRemoteConfig()" class="btn btn-primary">更新 Clash 配置</button>
                 <p style="margin-top: 4px"><small>「更新 Clash 配置」将会从「Clash 托管配置 URL」下载最新的托管配置文件并生效「Clash 运行配置」。</small></p>
             </div>
-            <p>KoolClash 没有实现自动更新 Clash 配置的功能，需要通过「更新 Clash 配置」手动更新。</p>
         </div>
     </div>
 
