@@ -69,8 +69,8 @@
             <!-- ### KoolClash 运行状态 ### -->
             <div id="koolclash-field"></div>
             <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-save-config" onclick="restartClash()" class="btn btn-primary">启动/重启 Clash</button>
-                <button type="button" id="koolclash-btn-save-config" onclick="stopClash()" class="btn">停止 Clash</button>
+                <button type="button" id="koolclash-btn-start-clash" onclick="restartClash()" class="btn btn-primary">启动/重启 Clash</button>
+                <button type="button" id="koolclash-btn-stop-clash" onclick="stopClash()" class="btn">停止 Clash</button>
             </div>
         </div>
     </div>
@@ -110,7 +110,7 @@
             <!-- ### KoolClash 运行配置设置 ### -->
             <div id="koolclash-config"></div>
             <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-save-config" onclick="updateRemoteConfig()" class="btn btn-primary">提交 Clash 配置</button>
+                <button type="button" id="koolclash-btn-save-config" onclick="KoolClash.submitClashConfig();" class="btn btn-primary">提交 Clash 配置</button>
             </div>
         </div>
     </div>
@@ -234,10 +234,10 @@
                 ]);
                 $('#koolclash-config').forms([
                     {
-                        title: '',
+                        title: '<b>Clash Config (YAML)</b>',
                         name: 'koolclash-config-yml',
                         type: 'textarea',
-                        value: '正在获取存储的 Clash Config 配置...',
+                        value: '正在加载存储的 Clash Config 配置...',
                         style: 'width: 100%; height: 600px;'
                     },
                 ]);
@@ -303,12 +303,48 @@
                         if (softcenter === 1) {
                             return false;
                         }
-                        alert('获取存储的 Clash Config 失败！请刷新页面重试');
+                        alert('加载存储的 Clash Config 失败！请刷新页面重试');
                     }
                 });
             },
-            submitConfig: () => {
-                console.log(window.btoa(E('_koolclash-config-headeer').value));
+            submitClashConfig: () => {
+                document.getElementById('koolclash-btn-save-config').setAttribute('disabled', '');
+                document.getElementById('koolclash-btn-save-config').innerHTML = '正在提交 Clash 配置...';
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_save_config.sh",
+                        "params": [`${window.btoa(document.getElementById('_koolclash-config-yml').value)}`],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+                        document.getElementById('koolclash-btn-save-config').innerHTML = 'Clash 配置保存成功！';
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    },
+                    error: () => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+                        document.getElementById('koolclash-btn-save-config').innerHTML = 'Clash 配置文件保存失败！请重试！';
+                        setTimeout(() => {
+                            document.getElementById('koolclash-btn-save-config').innerHTML = '提交 Clash 配置';
+                            document.getElementById('koolclash-btn-save-config').removeAttribute('disabled');
+                        }, 2000);
+                    }
+                });
+
             }
         };
     </script>
