@@ -88,9 +88,9 @@
             <div style="display: flex;">
                 <div style="width: 61.8%">
                     <p><span class="ip-title">IPIP&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-ipipnet"></span></p>
-                    <p><span class="ip-title">淘宝&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-taobao"></span><span id="ip-taobao-ipip"></span></p>
-                    <p><span class="ip-title">IP.SB&nbsp;海外</span>:&nbsp;<span id="ip-ipsb"></span><span id="ip-ipsb-geo"></span></p>
-                    <p><span class="ip-title">ipify&nbsp;&nbsp;海外</span>:&nbsp;<span id="ip-ipify"></span><span id="ip-ipify-ipip"></span><span id="ip-ipify-1" style="display: none"></span><span id="ip-ipify-cz88" style="display: none"></span></p>
+                    <p><span class="ip-title">淘宝&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-taobao">&nbsp;</span><span id="ip-taobao-ipip"></span></p>
+                    <p><span class="ip-title">IP.SB&nbsp;海外</span>:&nbsp;<span id="ip-ipsb"></span>&nbsp;<span id="ip-ipsb-geo"></span></p>
+                    <p><span class="ip-title">ipify&nbsp;&nbsp;海外</span>:&nbsp;<span id="ip-ipify"></span>&nbsp;<span id="ip-ipify-ipip"></span></p>
                 </div>
                 <div style="width: 38.2%">
                     <p><span class="ip-title">百度搜索</span>&nbsp;:&nbsp;<span id="http-baidu"></span></p>
@@ -115,7 +115,11 @@
             </div>
         </div>
     </div>
-
+    <script>
+        if (!window.fetch) {
+            window.alert('KoolClash 不支持你的浏览器！是时候去用 Chrome 浏览器了！')
+        }
+    </script>
     <script>
         let softcenter = 0;
         let KoolClash = {
