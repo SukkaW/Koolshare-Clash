@@ -46,6 +46,7 @@ rm -rf $KSROOT/init.d/S99koolclash.sh >/dev/null 2>&1
 rm -rf $KSROOT/bin/clash-* >/dev/null 2>&1
 rm -rf $KSROOT/webs/Module_koolclash.asp >/dev/null 2>&1
 rm -rf $KSROOT/webs/res/icon-koolclash* >/dev/null 2>&1
+rm -rf $KSROOT/webs/res/koolclash_* >/dev/null 2>&1
 [ -f "/koolshare/webs/files/koolclash.tar.gz" ] && rm -rf /koolshare/webs/files/koolclash.tar.gz >/dev/null 2>&1
 
 # 创建相关的文件夹

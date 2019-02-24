@@ -11,6 +11,7 @@ rm -rf $KSROOT/init.d/S99koolclash.sh
 rm -rf $KSROOT/bin/clash-*
 rm -rf $KSROOT/webs/Module_koolclash.asp
 rm -rf $KSROOT/webs/res/icon-koolclash*
+rm -rf $KSROOT/webs/res/koolclash_*
 
 rm -rf /tmp/luci-*
 
