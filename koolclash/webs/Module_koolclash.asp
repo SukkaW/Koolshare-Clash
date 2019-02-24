@@ -114,7 +114,12 @@
             </div>
         </div>
     </div>
-
+    <script>
+        if (typeof IP !== 'undefined' || typeof HTTP !== 'undefined' || typeof noop !== 'undefined' || typeof KoolClash !== 'undefined') {
+            console.clear();
+            window.location.reload();
+        }
+    </script>
     <script>
         if (!window.fetch) {
             window.alert('KoolClash 不支持你的浏览器！是时候去用 Chrome 浏览器了！')
