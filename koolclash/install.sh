@@ -42,6 +42,14 @@ mkdir -p $KSROOT/init.d
 # 停止 KoolClash
 
 # 清理 旧文件夹
+rm -rf $KSROOT/koolclash
+rm -rf $KSROOT/scripts/koolclash_*
+rm -rf $KSROOT/init.d/S99koolclash.sh
+rm -rf $KSROOT/bin/clash-*
+rm -rf $KSROOT/webs/Module_koolclash.asp
+rm -rf $KSROOT/webs/res/icon-koolclash*
+[ -f "/koolshare/webs/files/koolclash.tar.gz" ] && rm -rf /koolshare/webs/files/koolclash.tar.gz
+
 
 # 复制文件
 cd /tmp
@@ -61,10 +69,13 @@ rm -rf /tmp/luci-*
 # 为新安装文件赋予执行权限...
 logger "KoolClash: 设置可执行权限"
 chmod 755 $KSROOT/bin/*
+chmod 755 $KSROOT/koolclash/*.sh
+chmod 755 $KSROOT/scripts/koolclash_*
+chmod 755 $KSROOT/init.d/S99koolclash.sh
 
 local_version=$(cat $KSROOT/koolclash/version)
 logger "KoolClash: 设置版本号为 $local_version..."
-dbus set clash_version=$local_version
+dbus set koolclash_version=$local_version
 
 sleep 2
 
