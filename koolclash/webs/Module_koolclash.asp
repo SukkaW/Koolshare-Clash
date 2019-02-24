@@ -121,17 +121,6 @@
         }
     </script>
     <script>
-        if (!window.fetch) {
-            window.alert('KoolClash 不支持你的浏览器！是时候去用 Chrome 浏览器了！')
-        }
-
-        let noop = () => { };
-
-        if (typeof noop !== 'function') {
-            window.alert('KoolClash 不支持你的浏览器！是时候去用 Chrome 浏览器了！')
-        }
-    </script>
-    <script>
         if (typeof softcenter === undefined) {
             let softcenter = 0;
         } else {
@@ -230,27 +219,6 @@
         };
 
         let KoolClash = {
-            // KoolClash 默认头部配置
-            defaultConfig: `
-port: 8888
-socks-port: 8889
-redir-port: 23456
-allow-lan: true
-mode: Rule
-log-level: info
-external-controller: '0.0.0.0:6170'
-dns:
-  enable: true
-  listen: 0.0.0.0:53
-  enhanced-mode: redir-host
-  nameserver:
-    - 119.29.29.29
-    - 223.5.5.5
-    - tls://dns.rubyfish.cn:853
-  fallback:
-    - tls://dns.google
-    - tls://1dot1dot1dot1.cloudflare-dns.com
-`,
             // KoolClash.renderUI()
             // 创建 KoolClash 界面
             renderUI: () => {
@@ -266,7 +234,7 @@ dns:
                 ]);
                 $('#koolclash-config').forms([
                     {
-                        title: `<b>Clash 运行配置</b>`,
+                        title: '',
                         name: 'koolclash-config-yml',
                         type: 'textarea',
                         value: '正在获取存储的 Clash Config 配置...',
