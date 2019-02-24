@@ -51,6 +51,7 @@ rm -rf $KSROOT/webs/res/icon-koolclash* >/dev/null 2>&1
 # 创建相关的文件夹
 logger "KoolClash: 创建文件夹..."
 mkdir -p $KSROOT/koolclash
+mkdir -p $KSROOT/koolclash/config
 mkdir -p $KSROOT/init.d
 
 # 复制文件

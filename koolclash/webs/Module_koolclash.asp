@@ -88,7 +88,7 @@
             <div style="display: flex;">
                 <div style="width: 61.8%">
                     <p><span class="ip-title">IPIP&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-ipipnet"></span></p>
-                    <p><span class="ip-title">淘宝&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-taobao">&nbsp;</span><span id="ip-taobao-ipip"></span></p>
+                    <p><span class="ip-title">淘宝&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-taobao"></span>&nbsp;<span id="ip-taobao-ipip"></span></p>
                     <p><span class="ip-title">IP.SB&nbsp;海外</span>:&nbsp;<span id="ip-ipsb"></span>&nbsp;<span id="ip-ipsb-geo"></span></p>
                     <p><span class="ip-title">ipify&nbsp;&nbsp;海外</span>:&nbsp;<span id="ip-ipify"></span>&nbsp;<span id="ip-ipify-ipip"></span></p>
                 </div>
@@ -110,17 +110,18 @@
             <!-- ### KoolClash 运行配置设置 ### -->
             <div id="koolclash-config"></div>
             <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-save-config" onclick="saveRemoteConfigUrl()" class="btn btn-primary">提交 Clash 托管配置 URL</button>
-                <button type="button" id="koolclash-btn-save-config" onclick="updateRemoteConfig()" class="btn btn-primary">更新 Clash 配置</button>
+                <button type="button" id="koolclash-btn-save-config" onclick="updateRemoteConfig()" class="btn btn-primary">提交 Clash 配置</button>
             </div>
         </div>
     </div>
+
     <script>
         if (!window.fetch) {
             window.alert('KoolClash 不支持你的浏览器！是时候去用 Chrome 浏览器了！')
         }
 
         let noop = () => { };
+
         if (typeof noop !== 'function') {
             window.alert('KoolClash 不支持你的浏览器！是时候去用 Chrome 浏览器了！')
         }
@@ -132,95 +133,6 @@
             softcenter = 0;
         }
 
-        let KoolClash = {
-            // KoolClash 默认头部配置
-            defaultConfig: `
-port: 8888
-socks-port: 8889
-redir-port: 23456
-allow-lan: true
-mode: Rule
-log-level: info
-external-controller: '0.0.0.0:6170'
-dns:
-  enable: true
-  listen: 0.0.0.0:53
-  enhanced-mode: redir-host
-  nameserver:
-    - 119.29.29.29
-    - 223.5.5.5
-    - tls://dns.rubyfish.cn:853
-  fallback:
-    - tls://dns.google
-    - tls://1dot1dot1dot1.cloudflare-dns.com
-`,
-            // getClashPid
-            // 获取 Clash 进程 PID
-            getClashPid: () => {
-                let id = parseInt(Math.random() * 100000000),
-                    postData = JSON.stringify({
-                        "id": id,
-                        "method": "koolclash_get_clash_pid.sh",
-                        "params": [],
-                        "fields": ""
-                    });
-
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "/_api/",
-                    data: postData,
-                    dataType: "json",
-                    success: (resp) => {
-                        if (softcenter === 1) {
-                            return false;
-                        }
-                        document.getElementById("koolclash_status").innerHTML = resp.result;
-                    },
-                    error: () => {
-                        if (softcenter === 1) {
-                            return false;
-                        }
-                        document.getElementById("koolclash_status").innerHTML = `<span style="color: red">获取 Clash 进程运行状态失败！`;
-                    }
-                });
-            },
-            submitConfig: () => {
-                Base64.encode(E('_koolclash-config-headeer').value);
-            }
-        };
-
-        // 创建 KoolClash 界面
-        $('#koolclash-field').forms([
-            {
-                title: '<b>Clash 运行状态</b>',
-                text: '<span id="koolclash_status" name="koolclash_status" color="#1bbf35">正在获取 Clash 进程状态...</span>'
-            },
-            {
-                title: '<b>Clash 面板</b>',
-                text: '<p><a href="https://clashx.skk.moe" target="_blank">Clash Dashboard</a>（请 <span style="font-weight: bold">务必使用 Chrome 浏览器</span> 访问）</p>'
-            },
-        ]);
-        $('#koolclash-config').forms([
-            {
-                title: '<b>Clash 托管配置 URL</b>',
-                name: 'koolclash-remote-config-url',
-                type: 'text',
-                value: 'https://example.com/clash', // KoolClash.remote_config_url || '';
-                style: `width:100%`,
-                placeholder: 'https://example.com/clash'
-            },
-            {
-                title: `<b>Clash 运行配置</b>`,
-                name: 'koolclash-config-headeer',
-                type: 'textarea',
-                value: KoolClash.defaultConfig, //Base64.decode(dbus.ss_isp_website_web) || KoolClash.defaultConfig,
-                style: 'width: 100%; height: 300px;'
-            },
-        ]);
-    </script>
-
-    <script>
         // IP 检查
         let IP = {
             get: (url, type) =>
@@ -312,13 +224,127 @@ dns:
             }
         };
 
-        IP.getIpipnetIP();
-        IP.getIpifyIP();
-        HTTP.runcheck();
+        let KoolClash = {
+            // KoolClash 默认头部配置
+            defaultConfig: `
+port: 8888
+socks-port: 8889
+redir-port: 23456
+allow-lan: true
+mode: Rule
+log-level: info
+external-controller: '0.0.0.0:6170'
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  enhanced-mode: redir-host
+  nameserver:
+    - 119.29.29.29
+    - 223.5.5.5
+    - tls://dns.rubyfish.cn:853
+  fallback:
+    - tls://dns.google
+    - tls://1dot1dot1dot1.cloudflare-dns.com
+`,
+            // KoolClash.renderUI()
+            // 创建 KoolClash 界面
+            renderUI: () => {
+                $('#koolclash-field').forms([
+                    {
+                        title: '<b>Clash 运行状态</b>',
+                        text: '<span id="koolclash_status" name="koolclash_status" color="#1bbf35">正在获取 Clash 进程状态...</span>'
+                    },
+                    {
+                        title: '<b>Clash 面板</b>',
+                        text: '<p><a href="https://clashx.skk.moe" target="_blank">Clash Dashboard</a>（请 <span style="font-weight: bold">务必使用 Chrome 浏览器</span> 访问）</p>'
+                    },
+                ]);
+                $('#koolclash-config').forms([
+                    {
+                        title: `<b>Clash 运行配置</b>`,
+                        name: 'koolclash-config-yml',
+                        type: 'textarea',
+                        value: '正在获取存储的 Clash Config 配置...',
+                        style: 'width: 100%; height: 600px;'
+                    },
+                ]);
+            },
+            // getClashPid
+            // 获取 Clash 进程 PID
+            getClashPid: () => {
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_get_clash_pid.sh",
+                        "params": [],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+                        document.getElementById("koolclash_status").innerHTML = resp.result;
+                    },
+                    error: () => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+                        document.getElementById("koolclash_status").innerHTML = `<span style="color: red">获取 Clash 进程运行状态失败！请刷新页面重试`;
+                    }
+                });
+            },
+            checkIP: () => {
+                IP.getIpipnetIP();
+                IP.getIpifyIP();
+                HTTP.runcheck();
+            },
+            getClashConfig: () => {
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_get_config.sh",
+                        "params": [],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+                        document.getElementById("_koolclash-config-yml").value = window.atob(resp.result);
+                    },
+                    error: () => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+                        alert('获取存储的 Clash Config 失败！请刷新页面重试');
+                    }
+                });
+            },
+            submitConfig: () => {
+                console.log(window.btoa(E('_koolclash-config-headeer').value));
+            }
+        };
     </script>
 
     <script>
-        
+        KoolClash.renderUI();
+        KoolClash.getClashPid();
+        KoolClash.getClashConfig();
+        KoolClash.checkIP();
     </script>
     <script src="https://www.taobao.com/help/getip.php"></script>
     <script src="https://ipv4.ip.sb/addrinfo.php?callback=IP.getIpsbIP"></script>
