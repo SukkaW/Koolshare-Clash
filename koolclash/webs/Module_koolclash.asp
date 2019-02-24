@@ -84,6 +84,7 @@
     </div>
 
     <script>
+        let softcenter = 0;
         let KoolClash = {
             defaultConfig: `
 port: 8888
@@ -105,19 +106,48 @@ dns:
     - tls://dns.google
     - tls://1dot1dot1dot1.cloudflare-dns.com
 `,
+            getClashPid: () => {
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "kms_status.sh",
+                        "params": [],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (response) => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+                        document.getElementById("koolclash_status").innerHTML = response.result;
+                        setTimeout(KoolClash.getClashPid, 5000);
+                    },
+                    error: () => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+                        document.getElementById("koolclash_status").innerHTML = `<span style="color: red">获取 Clash 进程运行状态失败！`;
+                        setTimeout(KoolClash.getClashPid, 5000);
+                    }
+                });
+            }
         };
-
-
 
 
         $('#koolclash-field').forms([
             {
                 title: '<b>Clash 运行状态</b>',
-                text: '<span id="_koolclash_status" name="koolclash_status" color="#1bbf35">正在获取 Clash 进程状态...</span>'
+                text: '<span id="koolclash_status" name="koolclash_status" color="#1bbf35">正在获取 Clash 进程状态...</span>'
             },
             {
                 title: '&nbsp;',
-                text: '<p>查看代理运行状态请访问 <a href="https://ip.skk.moe/?from=koolclash_plugin" target="_blank">IP.SKK.MOE</a> 查看自己的 IP</p>'
+                text: '<p>查看代理运行状态请访问 <a href="https://ip.skk.moe/?from=koolclash_plugin" target="_blank">https://ip.skk.moe</a> 查看自己的 IP</p>'
             },
             {
                 title: '<b>Clash 面板</b>',
@@ -130,7 +160,7 @@ dns:
                 title: '<b>Clash 托管配置 URL</b>',
                 name: 'koolclash-remote-config-url',
                 type: 'text',
-                value: '', // Clash.remote_config_url || '';
+                value: 'https://example.com/clash', // KoolClash.remote_config_url || '';
                 style: `width:100%`,
                 placeholder: 'https://example.com/clash'
             },
