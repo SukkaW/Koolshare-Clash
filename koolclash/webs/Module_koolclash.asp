@@ -123,6 +123,7 @@
     <script>
         let softcenter = 0;
         let KoolClash = {
+            // KoolClash 默认头部配置
             defaultConfig: `
 port: 8888
 socks-port: 8889
@@ -143,11 +144,13 @@ dns:
     - tls://dns.google
     - tls://1dot1dot1dot1.cloudflare-dns.com
 `,
+            // getClashPid
+            // 获取 Clash 进程 PID
             getClashPid: () => {
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         "id": id,
-                        "method": "kms_status.sh",
+                        "method": "get_clash_pid.sh",
                         "params": [],
                         "fields": ""
                     });
@@ -176,7 +179,7 @@ dns:
             }
         };
 
-
+        // 创建 KoolClash 界面
         $('#koolclash-field').forms([
             {
                 title: '<b>Clash 运行状态</b>',
@@ -187,7 +190,6 @@ dns:
                 text: '<p><a href="https://clashx.skk.moe" target="_blank">Clash Dashboard</a>（请 <span style="font-weight: bold">务必使用 Chrome 浏览器</span> 访问）</p>'
             },
         ]);
-
         $('#koolclash-config').forms([
             {
                 title: '<b>Clash 托管配置 URL</b>',
@@ -208,6 +210,7 @@ dns:
     </script>
 
     <script>
+        // IP 检查
         let IP = {
             get: (url, type) =>
                 fetch(url, { method: 'GET' }).then((resp) => {
@@ -267,9 +270,9 @@ dns:
                     })
             },
         };
-
+        // 将淘宝的 jsonp 回调给 IP 函数
         window.ipCallback = (data) => IP.getTaobaoIP(data);
-
+        // 网站访问检查
         let HTTP = {
             checker: (domain, cbElID) => {
                 let img = new Image;
