@@ -1,4 +1,4 @@
-<title>KoolShare Clash 插件</title>
+<title>KoolClash - Clash for Koolshare OpenWrt/LEDE</title>
 <content>
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/tomato.js"></script>
@@ -126,7 +126,12 @@
         }
     </script>
     <script>
-        let softcenter = 0;
+        if (typeof softcenter === undefined) {
+            let softcenter = 0;
+        } else {
+            softcenter = 0;
+        }
+
         let KoolClash = {
             // KoolClash 默认头部配置
             defaultConfig: `
@@ -155,7 +160,7 @@ dns:
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         "id": id,
-                        "method": "get_clash_pid.sh",
+                        "method": "koolclash_get_clash_pid.sh",
                         "params": [],
                         "fields": ""
                     });
@@ -166,19 +171,17 @@ dns:
                     url: "/_api/",
                     data: postData,
                     dataType: "json",
-                    success: (response) => {
+                    success: (resp) => {
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById("koolclash_status").innerHTML = response.result;
-                        setTimeout(KoolClash.getClashPid, 5000);
+                        document.getElementById("koolclash_status").innerHTML = resp.result;
                     },
                     error: () => {
                         if (softcenter === 1) {
                             return false;
                         }
                         document.getElementById("koolclash_status").innerHTML = `<span style="color: red">获取 Clash 进程运行状态失败！`;
-                        setTimeout(KoolClash.getClashPid, 5000);
                     }
                 });
             },
