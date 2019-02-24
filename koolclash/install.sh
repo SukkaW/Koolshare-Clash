@@ -34,22 +34,24 @@ x86_64)
     ;;
 esac
 
-# 创建相关的文件夹
-logger "KoolClash: 创建文件夹..."
-mkdir -p $KSROOT/koolclash
-mkdir -p $KSROOT/init.d
+
 
 # 停止 KoolClash
 
 # 清理 旧文件夹
-rm -rf $KSROOT/koolclash
-rm -rf $KSROOT/scripts/koolclash_*
-rm -rf $KSROOT/init.d/S99koolclash.sh
-rm -rf $KSROOT/bin/clash-*
-rm -rf $KSROOT/webs/Module_koolclash.asp
-rm -rf $KSROOT/webs/res/icon-koolclash*
-[ -f "/koolshare/webs/files/koolclash.tar.gz" ] && rm -rf /koolshare/webs/files/koolclash.tar.gz
+logger "KoolClash: 清理旧版文件..."
+rm -rf $KSROOT/koolclash >/dev/null 2>&1
+rm -rf $KSROOT/scripts/koolclash_* >/dev/null 2>&1
+rm -rf $KSROOT/init.d/S99koolclash.sh >/dev/null 2>&1
+rm -rf $KSROOT/bin/clash-* >/dev/null 2>&1
+rm -rf $KSROOT/webs/Module_koolclash.asp >/dev/null 2>&1
+rm -rf $KSROOT/webs/res/icon-koolclash* >/dev/null 2>&1
+[ -f "/koolshare/webs/files/koolclash.tar.gz" ] && rm -rf /koolshare/webs/files/koolclash.tar.gz >/dev/null 2>&1
 
+# 创建相关的文件夹
+logger "KoolClash: 创建文件夹..."
+mkdir -p $KSROOT/koolclash
+mkdir -p $KSROOT/init.d
 
 # 复制文件
 cd /tmp

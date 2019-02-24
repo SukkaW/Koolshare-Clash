@@ -119,6 +119,11 @@
         if (!window.fetch) {
             window.alert('KoolClash 不支持你的浏览器！是时候去用 Chrome 浏览器了！')
         }
+
+        let noop = () => { };
+        if (typeof noop !== 'function') {
+            window.alert('KoolClash 不支持你的浏览器！是时候去用 Chrome 浏览器了！')
+        }
     </script>
     <script>
         let softcenter = 0;
@@ -176,6 +181,9 @@ dns:
                         setTimeout(KoolClash.getClashPid, 5000);
                     }
                 });
+            },
+            submitConfig: () => {
+                Base64.encode(E('_koolclash-config-headeer').value);
             }
         };
 
@@ -203,7 +211,7 @@ dns:
                 title: `<b>Clash 运行配置</b>`,
                 name: 'koolclash-config-headeer',
                 type: 'textarea',
-                value: Base64.decode(dbus.ss_isp_website_web) || KoolClash.defaultConfig,
+                value: KoolClash.defaultConfig, //Base64.decode(dbus.ss_isp_website_web) || KoolClash.defaultConfig,
                 style: 'width: 100%; height: 300px;'
             },
         ]);
@@ -304,6 +312,10 @@ dns:
         IP.getIpipnetIP();
         IP.getIpifyIP();
         HTTP.runcheck();
+    </script>
+
+    <script>
+        
     </script>
     <script src="https://www.taobao.com/help/getip.php"></script>
     <script src="https://ipv4.ip.sb/addrinfo.php?callback=IP.getIpsbIP"></script>
