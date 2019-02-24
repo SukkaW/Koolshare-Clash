@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://koolclash.js.org/img/logo.png" alt="Clash" width="150">
+    <img src="https://koolclash.js.org/img/koolclash.png" alt="Clash" width="150">
     <br>KoolClash
 </h1>
 
