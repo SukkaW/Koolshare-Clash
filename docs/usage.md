@@ -57,3 +57,5 @@ dns:
 # (2) 如果您不在乎可能解析到污染的结果，更加追求速度。请将 nameserver 列表的服务器插入至 fallback 列表内，并移除重复项
 # (3) 在 Clash 的 DNS 支持 dns2docks 之前，不建议在 fallback 中使用常规方式进行解析（即直接配置 IP）
 ```
+
+「更新 Clash 配置」将会从「Clash 托管配置 URL」下载最新的托管配置文件并生效「Clash 运行配置」。
