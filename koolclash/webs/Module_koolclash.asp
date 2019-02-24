@@ -4,6 +4,7 @@
     <script type="text/javascript" src="/js/tomato.js"></script>
     <script type="text/javascript" src="/js/advancedtomato.js"></script>
     <script type="text/javascript" src="/layer/layer.js"></script>
+    <script type="text/javascript" src="/res/koolclash_js-base64.min.js"></script>
     <style type="text/css">
         .box,
         #clash_tabs {
@@ -297,7 +298,7 @@
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById("_koolclash-config-yml").value = window.atob(resp.result);
+                        document.getElementById("_koolclash-config-yml").value = Base64.decode(resp.result);
                     },
                     error: () => {
                         if (softcenter === 1) {
@@ -314,7 +315,7 @@
                     postData = JSON.stringify({
                         "id": id,
                         "method": "koolclash_save_config.sh",
-                        "params": [`${window.btoa(document.getElementById('_koolclash-config-yml').value)}`],
+                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-yml').value)}`],
                         "fields": ""
                     });
 
@@ -329,9 +330,9 @@
                             return false;
                         }
                         document.getElementById('koolclash-btn-save-config').innerHTML = 'Clash 配置保存成功！';
-                        setTimeout(() => {
+                        /*setTimeout(() => {
                             window.location.reload();
-                        }, 2000);
+                        }, 2000);*/
                     },
                     error: () => {
                         if (softcenter === 1) {
@@ -341,7 +342,7 @@
                         setTimeout(() => {
                             document.getElementById('koolclash-btn-save-config').innerHTML = '提交 Clash 配置';
                             document.getElementById('koolclash-btn-save-config').removeAttribute('disabled');
-                        }, 2000);
+                        }, 5000);
                     }
                 });
 
