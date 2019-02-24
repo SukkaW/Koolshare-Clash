@@ -29,7 +29,7 @@
     </style>
     <div class="box">
         <div class="heading">
-            <a style="padding-left: 0; color: #0099FF" href="https://github.com/SukkaW/Koolshare-Clash" target="_blank">KoolClash</a>
+            <a style="padding-left: 0; color: #0099FF" href="https://koolclash.js.org" target="_blank">KoolClash</a>
             <a href="#/soft-center.asp" class="btn" style="float: right; margin-right: 5px; border-radius:3px; margin-top: 0px;">返回</a>
             <!--<a href="https://github.com/koolshare/ledesoft/blob/master/v2ray/Changelog.txt" target="_blank"
                 class="btn btn-primary" style="float:right;border-radius:3px;margin-right:5px;margin-top:0px;">更新日志</a>-->
@@ -40,7 +40,7 @@
                 <p>Clash 是一个基于规则的代理程序，兼容 Shadowsocks、V2Ray 等协议，拥有像 Surge 一样强大的代理规则。</p>
                 <p>KoolClash 是 Clash 在 Koolshare OpenWrt 上的客户端</p>
 
-                <p style="margin-top: 10px"><a href="https://github.com/Dreamacro/clash">Clash on GitHub</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://github.com/SukkaW/Koolshare-Clash" target="_blank">KoolClash on GitHub</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://koolclash.skk.moe" target="_blank">KoolClash 使用文档</a></p>
+                <p style="margin-top: 10px"><a href="https://github.com/Dreamacro/clash">Clash on GitHub</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://github.com/SukkaW/Koolshare-Clash" target="_blank">KoolClash on GitHub</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://koolclash.js.org" target="_blank">KoolClash 使用文档</a></p>
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
         </div>
         <div class="content">
             <div class="col" style="line-height:30px; color: brown">
-                <p>在使用 Clash 之前，请务必仔细阅读 <a href="" target="_blank">KoolClash 的使用文档！!</a>
+                <p>在使用 Clash 之前，请务必仔细阅读 <a href="https://koolclash.js.org" target="_blank">KoolClash 的使用文档！!</a>
             </div>
         </div>
     </div>
@@ -130,7 +130,7 @@ dns:
                 title: '<b>Clash 托管配置 URL</b>',
                 name: 'koolclash-remote-config-url',
                 type: 'text',
-                value: 'https://example.com/clash', // Clash.remote_config_url || '';
+                value: '', // Clash.remote_config_url || '';
                 style: `width:100%`,
                 placeholder: 'https://example.com/clash'
             },
