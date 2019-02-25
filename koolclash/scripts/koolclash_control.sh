@@ -62,13 +62,13 @@ stop)
 esac
 
 # used by httpdb
-case $1 in
+case $2 in
 start)
-    start_clash
     http_response 'y'
+    start_clash
     ;;
 stop)
     stop_clash
-        http_response 'n'
+    http_response 'n'
     ;;
 esac
