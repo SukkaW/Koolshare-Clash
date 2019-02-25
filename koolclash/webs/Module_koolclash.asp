@@ -44,6 +44,10 @@
             margin: 2px 0;
         }
 
+        #koolclash-btn-upload {
+            margin-bottom: 8px;
+        }
+
     </style>
     <div class="box">
         <div class="heading">
@@ -110,9 +114,7 @@
         <div class="content">
             <!-- ### KoolClash 运行配置设置 ### -->
             <div id="koolclash-config"></div>
-            <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-save-config" onclick="KoolClash.submitClashConfig();" class="btn btn-primary">提交 Clash 配置</button>
-            </div>
+            <p id="koolclash-config-upload-msg"></p>
         </div>
     </div>
     <script>
@@ -235,11 +237,8 @@
                 ]);
                 $('#koolclash-config').forms([
                     {
-                        title: '<b>Clash Config (YAML)</b>',
-                        name: 'koolclash-config-yml',
-                        type: 'textarea',
-                        value: '正在加载存储的 Clash Config 配置...',
-                        style: 'width: 100%; height: 600px;'
+                        title: '<b>Clash 配置上传</b>',
+                        suffix: '<input type="file" id="koolclash-file-config" size="50">&nbsp;&nbsp;<button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-success">上传</button>'
                     },
                 ]);
             },
@@ -264,13 +263,13 @@
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById("koolclash_status").innerHTML = resp.result;
+                        document.getElementById('koolclash_status').innerHTML = resp.result;
                     },
                     error: () => {
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById("koolclash_status").innerHTML = `<span style="color: red">获取 Clash 进程运行状态失败！请刷新页面重试`;
+                        document.getElementById('koolclash_status').innerHTML = `<span style="color: red">获取 Clash 进程运行状态失败！请刷新页面重试`;
                     }
                 });
             },
@@ -279,73 +278,61 @@
                 IP.getIpifyIP();
                 HTTP.runcheck();
             },
-            getClashConfig: () => {
-                let id = parseInt(Math.random() * 100000000),
-                    postData = JSON.stringify({
-                        "id": id,
-                        "method": "koolclash_get_config.sh",
-                        "params": [],
-                        "fields": ""
-                    });
-
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "/_api/",
-                    data: postData,
-                    dataType: "json",
-                    success: (resp) => {
-                        if (softcenter === 1) {
-                            return false;
-                        }
-                        document.getElementById("_koolclash-config-yml").value = Base64.decode(resp.result);
-                    },
-                    error: () => {
-                        if (softcenter === 1) {
-                            return false;
-                        }
-                        alert('加载存储的 Clash Config 失败！请刷新页面重试');
-                    }
-                });
-            },
             submitClashConfig: () => {
-                document.getElementById('koolclash-btn-save-config').setAttribute('disabled', '');
-                document.getElementById('koolclash-btn-save-config').innerHTML = '正在提交 Clash 配置...';
-                let id = parseInt(Math.random() * 100000000),
-                    postData = JSON.stringify({
-                        "id": id,
-                        "method": "koolclash_save_config.sh",
-                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-yml').value)}`],
-                        "fields": ""
-                    });
+                document.getElementById('koolclash-config-upload-msg').innerHTML = '正在提交 Clash 配置...';
 
+                let formData = new FormData();
+                formData.append('clash.config.yml', $('#koolclash-file-config')[0].files[0]);
                 $.ajax({
-                    type: "POST",
+                    url: '/_upload',
+                    type: 'POST',
+                    async: true,
                     cache: false,
-                    url: "/_api/",
-                    data: postData,
-                    dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: (resp) => {
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById('koolclash-btn-save-config').innerHTML = 'Clash 配置保存成功！';
-                        /*setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);*/
+                        document.getElementById('koolclash-config-upload-msg').innerHTML = '上传成功，正在处理';
+                        (() => {
+                            let id = parseInt(Math.random() * 100000000),
+                                postData = JSON.stringify({
+                                    "id": id,
+                                    "method": "koolclash_save_config.sh",
+                                    "params": [],
+                                    "fields": ""
+                                });
+
+                            $.ajax({
+                                type: "POST",
+                                cache: false,
+                                url: "/_api/",
+                                data: postData,
+                                dataType: "json",
+                                success: (resp) => {
+                                    if (softcenter === 1) {
+                                        return false;
+                                    }
+                                    document.getElementById("koolclash-config-upload-msg").innerHTML = '处理完毕！';
+                                },
+                                error: () => {
+                                    if (softcenter === 1) {
+                                        return false;
+                                    }
+                                    document.getElementById("koolclash-config-upload-msg").innerHTML = `处理失败，请重新上传！`;
+                                }
+                            });
+                        })();
                     },
                     error: () => {
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById('koolclash-btn-save-config').innerHTML = 'Clash 配置文件保存失败！请重试！';
-                        setTimeout(() => {
-                            document.getElementById('koolclash-btn-save-config').innerHTML = '提交 Clash 配置';
-                            document.getElementById('koolclash-btn-save-config').removeAttribute('disabled');
-                        }, 5000);
+                        document.getElementById('koolclash-btn-save-config').innerHTML = '上传失败，请重试';
                     }
                 });
-
             }
         };
     </script>
@@ -353,7 +340,6 @@
     <script>
         KoolClash.renderUI();
         KoolClash.getClashPid();
-        KoolClash.getClashConfig();
         KoolClash.checkIP();
     </script>
     <script src="https://www.taobao.com/help/getip.php"></script>
