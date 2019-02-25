@@ -10,5 +10,21 @@
 
 START=99
 STOP=15
+
 source /koolshare/scripts/base.sh
-eval `dbus export clash`
+
+if [ ! -f "$KSROOT/koolclash/config/status" ]; then
+    touch $KSROOT/koolclash/config/status
+    echo '0' >$KSROOT/koolclash/config/status
+    clash_status="0"
+else
+    clash_status=$(cat "$KSROOT/koolclash/config/status")
+fi
+
+start() {
+    [ "$clash_status" == "1" ] && sh /koolshare/scripts/koolclash_sontrol.sh start
+}
+
+stop() {
+    sh /koolshare/scripts/koolclash_sontrol.sh start
+}

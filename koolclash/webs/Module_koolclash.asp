@@ -78,8 +78,8 @@
             <!-- ### KoolClash 运行状态 ### -->
             <div id="koolclash-field"></div>
             <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-start-clash" onclick="restartClash()" class="btn btn-primary">启动/重启 Clash</button>
-                <button type="button" id="koolclash-btn-stop-clash" onclick="stopClash()" class="btn">停止 Clash</button>
+                <button type="button" id="koolclash-btn-start-clash" onclick="KoolClash.restart()" class="btn btn-primary">启动/重启 Clash</button>
+                <button type="button" id="koolclash-btn-stop-clash" onclick="KoolClash.stop()" class="btn">停止 Clash</button>
             </div>
         </div>
     </div>
@@ -446,7 +446,61 @@ dns:
                         }, 3000)
                     }
                 });
-            }
+            },
+            restart: () => {
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_control.sh",
+                        "params": ['start'],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000)
+                    },
+                    error: () => {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000)
+                    }
+                });
+            },
+            stop: () => {
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_control.sh",
+                        "params": ['stop'],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000)
+                    },
+                    error: () => {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000)
+                    }
+                });
+            },
         };
     </script>
 
