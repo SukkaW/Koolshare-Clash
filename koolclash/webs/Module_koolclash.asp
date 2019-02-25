@@ -55,7 +55,7 @@
     </style>
     <div class="box">
         <div class="heading">
-            <a style="padding-left: 0; color: #0099FF; font-size: 20px;" href="https://koolclash.js.org" target="_blank">KoolClash</a>
+            <a style="padding-left: 0; color: #0099FF; font-size: 20px;" href="https://koolclash.js.org" target="_blank">KoolClash&nbsp;<span id="koolclash-version"></span></a>
             <a href="#/soft-center.asp" class="btn" style="float: right; margin-right: 5px; border-radius:3px; margin-top: 0px;">返回</a>
             <!--<a href="https://github.com/koolshare/ledesoft/blob/master/v2ray/Changelog.txt" target="_blank"
                 class="btn btn-primary" style="float:right;border-radius:3px;margin-right:5px;margin-top:0px;">更新日志</a>-->
@@ -255,6 +255,16 @@
                         style: 'width: 100%; height: 200px;'
                     },
                 ]);
+
+                // 获取版本号
+                $.ajax({
+                    type: "GET",
+                    cache: false,
+                    url: "/res/koolclash_.version",
+                    success: (resp) => {
+                        document.getElementById('koolclash-version').innerHTML = resp;
+                    }
+                });
             },
             // getClashPid
             // 获取 Clash 进程 PID

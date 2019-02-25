@@ -38,7 +38,6 @@ esac
 
 # 清理 旧文件夹
 logger "KoolClash: 清理旧版文件..."
-rm -rf $KSROOT/koolclash >/dev/null 2>&1
 rm -rf $KSROOT/scripts/koolclash_* >/dev/null 2>&1
 rm -rf $KSROOT/init.d/S99koolclash.sh >/dev/null 2>&1
 rm -rf $KSROOT/bin/clash-* >/dev/null 2>&1
@@ -49,7 +48,6 @@ rm -rf $KSROOT/webs/res/koolclash_* >/dev/null 2>&1
 
 # 创建相关的文件夹
 logger "KoolClash: 创建文件夹..."
-mkdir -p $KSROOT/koolclash
 mkdir -p $KSROOT/koolclash/config
 mkdir -p $KSROOT/init.d
 
@@ -59,7 +57,6 @@ cd /tmp
 logger "KoolClash: 复制安装包内的文件到路由器..."
 
 cp -rf /tmp/koolclash/bin/* $KSROOT/bin/
-cp -rf /tmp/koolclash/koolclash/* $KSROOT/koolclash/
 cp -rf /tmp/koolclash/scripts/* $KSROOT/scripts/
 cp -rf /tmp/koolclash/init.d/* $KSROOT/init.d/
 cp -rf /tmp/koolclash/webs/* $KSROOT/webs/
@@ -71,11 +68,10 @@ rm -rf /tmp/luci-*
 # 为新安装文件赋予执行权限...
 logger "KoolClash: 设置可执行权限"
 chmod 755 $KSROOT/bin/*
-chmod 755 $KSROOT/koolclash/*.sh
 chmod 755 $KSROOT/scripts/koolclash_*
 chmod 755 $KSROOT/init.d/S99koolclash.sh
 
-local_version=$(cat $KSROOT/koolclash/version)
+local_version=$(cat $KSROOT/webs/res/koolclash_.version)
 logger "KoolClash: 设置版本号为 $local_version..."
 dbus set koolclash_version=$local_version
 
