@@ -395,6 +395,8 @@ dns:
                 });
             },
             submitDNSConfig: () => {
+                document.getElementById('koolclash-btn-save-dns-config').setAttribute('disabled', '');
+                document.getElementById('koolclash-btn-save-dns-config').innerHTML = '正在提交...';
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         "id": id,
@@ -402,6 +404,35 @@ dns:
                         "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash DNS 配置，推荐使用以下的配置\n', ''))}`],
                         "fields": ""
                     });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+
+                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '保存成功！';
+                        setTimeout(() => {
+                            document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交 Clash DNS 配置';
+                            document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
+                        }, 3000)
+                    },
+                    error: () => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '保存失败！请重试';
+                        setTimeout(() => {
+                            document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交 Clash DNS 配置';
+                            document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
+                        }, 3000)
+                    }
+                });
             }
         };
     </script>
