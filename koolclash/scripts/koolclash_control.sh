@@ -19,9 +19,7 @@ stop_clash() {
         killall clash-linux-amd64
     fi
     # 清除 iptables
-    iptables -t nat -D PREROUTING -p tcp --dport 22 -j ACCEPT
-    iptables -t nat -D PREROUTING -p tcp -j REDIRECT --to-ports 8887
-    iptables -t nat -D PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
+    iptables -t nat -F KOOLCLASH
 
     echo '0' >$KSROOT/koolclash/config/status
 }
@@ -34,9 +32,10 @@ start_clash() {
 
     [ ! -L "/etc/rc.d/S99koolclash.sh" ] && ln -sf $KSROOT/init.d/S99koolclash.sh /etc/rc.d/S99koolclash.sh
     # 设置 iptables
-    iptables -t nat -A PREROUTING -p tcp --dport 22 -j ACCEPT
-    iptables -t nat -A PREROUTING -p tcp -j REDIRECT --to-ports 8887
-    iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
+    iptables -t nat -N KOOLCLASH
+    iptables -t nat -A KOOLCLASH -p tcp --dport 22 -j ACCEPT
+    iptables -t nat -A KOOLCLASH -p tcp -j REDIRECT --to-ports 23456
+    iptables -t nat -I PREROUTING -p tcp -j KOOLCLASH
 
     echo '1' >$KSROOT/koolclash/config/status
 }

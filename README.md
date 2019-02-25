@@ -27,7 +27,7 @@
     </a>
 </p>
 
-<h3 align="center">!!!ATTENTION!!!<br>THIS PROJECT IS STILL WORK IN PROGRESS. USE AT YOUR OWN RISK.</h2>
+<h3 align="center">!!!ATTENTION!!!<br>THIS PROJECT IS STILL UNSTABLE. USE AT YOUR OWN RISK.</h2>
 
 ## Keywords
 
