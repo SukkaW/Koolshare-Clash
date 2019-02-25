@@ -58,4 +58,6 @@ dns:
 # (3) 在 Clash 的 DNS 支持 dns2docks 之前，不建议在 fallback 中使用常规方式进行解析（即直接配置 IP）
 ```
 
-「更新 Clash 配置」将会从「Clash 托管配置 URL」下载最新的托管配置文件并生效「Clash 运行配置」。
+「更新 Clash 配置」将会从「Clash 托管配置 URL」下载最新的托管配置文件。
+
+只有当上传的 Clash 或者下载的托管配置 Clash 配置中没有 dns 配置时才会提交 DNS 配置才会生效。
