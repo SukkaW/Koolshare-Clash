@@ -1,6 +1,7 @@
 <title>KoolClash - Clash for Koolshare OpenWrt/LEDE</title>
 <content>
     <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/res/koolclash_base64.js"></script>
     <script type="text/javascript" src="/js/tomato.js"></script>
     <script type="text/javascript" src="/js/advancedtomato.js"></script>
     <script type="text/javascript" src="/layer/layer.js"></script>
@@ -113,7 +114,10 @@
         <div class="content">
             <!-- ### KoolClash 运行配置设置 ### -->
             <div id="koolclash-config"></div>
-            <p id="koolclash-config-upload-msg"></p>
+
+            <div class="koolclash-btn-container">
+                <button type="button" id="koolclash-btn-save-dns-config" onclick="KoolClash.submitDNSConfig();" class="btn btn-primary">提交 Clash DNS 配置</button>
+            </div>
         </div>
     </div>
     <script>
@@ -237,7 +241,14 @@
                 $('#koolclash-config').forms([
                     {
                         title: '<b>Clash 配置上传</b>',
-                        suffix: '<input type="file" id="koolclash-file-config" size="50">&nbsp;&nbsp;<button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-success">上传</button>'
+                        suffix: '<input type="file" id="koolclash-file-config" size="50">&nbsp;&nbsp;<button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-success">上传</button><br><p id="koolclash-config-upload-msg"></p>'
+                    },
+                    {
+                        title: '<b>Clash DNS Config (YAML)</b>',
+                        name: 'koolclash-config-dns',
+                        type: 'textarea',
+                        value: '正在加载存储的 Clash DNS Config 配置...',
+                        style: 'width: 100%; height: 200px;'
                     },
                 ]);
             },
@@ -332,6 +343,65 @@
                         document.getElementById('koolclash-btn-save-config').innerHTML = '上传失败，请重试';
                     }
                 });
+            },
+            defaultDNSConfig: `# 没有找到保存的 Clash DNS 配置，推荐使用以下的配置
+dns:
+  enable: true
+  ipv6: false
+  listen: 0.0.0.0:53
+  enhanced-mode: redir-host
+  nameserver:
+     - 119.28.28.28
+     - 119.29.29.29
+     - 223.5.5.5
+     - tls://dns.rubyfish.cn:853
+  fallback:
+     - tls://1dot1dot1dot1.cloudflare-dns.com
+     - tls://one.one.one.one
+     - tls://dns.google
+`,
+            getDNSConfig: () => {
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_get_dns_config.sh",
+                        "params": [],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+
+                        if (resp.result === '') {
+                            document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
+                        } else {
+                            document.getElementById('_koolclash-config-dns').innerHTML = resp.result;
+                        }
+                    },
+                    error: () => {
+                        if (softcenter === 1) {
+                            return false;
+                        }
+                        document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
+                    }
+                });
+            },
+            submitDNSConfig: () => {
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_get_dns_config.sh",
+                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash DNS 配置，推荐使用以下的配置\n', ''))}`],
+                        "fields": ""
+                    });
             }
         };
     </script>
@@ -339,6 +409,7 @@
     <script>
         KoolClash.renderUI();
         KoolClash.getClashPid();
+        KoolClash.getDNSConfig();
         KoolClash.checkIP();
     </script>
     <script src="https://www.taobao.com/help/getip.php"></script>
