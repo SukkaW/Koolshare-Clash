@@ -48,6 +48,10 @@
             margin-bottom: 8px;
         }
 
+        fieldset .help-block {
+            margin: 0;
+        }
+
     </style>
     <div class="box">
         <div class="heading">
@@ -383,7 +387,7 @@ dns:
                         if (resp.result === '') {
                             document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
                         } else {
-                            document.getElementById('_koolclash-config-dns').innerHTML = resp.result;
+                            document.getElementById('_koolclash-config-dns').innerHTML = Base64.decode(resp.result);
                         }
                     },
                     error: () => {
@@ -400,7 +404,7 @@ dns:
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         "id": id,
-                        "method": "koolclash_get_dns_config.sh",
+                        "method": "koolclash_save_dns_config.sh",
                         "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash DNS 配置，推荐使用以下的配置\n', ''))}`],
                         "fields": ""
                     });
@@ -418,8 +422,7 @@ dns:
 
                         document.getElementById('koolclash-btn-save-dns-config').innerHTML = '保存成功！';
                         setTimeout(() => {
-                            document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交 Clash DNS 配置';
-                            document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
+                            window.location.reload();
                         }, 3000)
                     },
                     error: () => {
