@@ -4,7 +4,6 @@
     <script type="text/javascript" src="/js/tomato.js"></script>
     <script type="text/javascript" src="/js/advancedtomato.js"></script>
     <script type="text/javascript" src="/layer/layer.js"></script>
-    <script type="text/javascript" src="/res/koolclash_js-base64.min.js"></script>
     <style type="text/css">
         .box,
         #clash_tabs {
