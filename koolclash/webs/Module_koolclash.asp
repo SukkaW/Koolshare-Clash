@@ -239,7 +239,7 @@
                     },
                     {
                         title: '<b>Clash 面板</b>',
-                        text: '<p><a href="https://clashx.skk.moe" target="_blank">Clash Dashboard</a>（请 <span style="font-weight: bold">务必使用 Chrome 浏览器</span> 访问）</p>'
+                        text: '<p><a href="/koolclash/index.html" target="_blank">Clash Dashboard</a>（请 <span style="font-weight: bold">务必使用 Chrome 浏览器</span> 访问）</p>'
                     },
                 ]);
                 $('#koolclash-config').forms([
