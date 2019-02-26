@@ -1,41 +1,31 @@
 # 使用教程
 
-启动 KoolClash 插件以后，Clash 会开始监听 53 端口作为 DNS。你应该前往 OpenWrt/LEDE 的「网络 - DHCP/DNS」，在「高级设置」中将「DNS 服务器端口」修改为除了 53 以外的任何不冲突的端口（如 5353、53535）。
+## 修改 dnsmasq 监听端口
 
-KoolClash 没有实现自动更新 Clash 配置的功能，需要通过「更新 Clash 配置」手动更新。
+Clash 的规则依赖 Clash 接管 DNS 解析，所以首先需要修改 LEDE/OpenWrt 中 dnsmasq 监听的端口。在「网络 - DHCP/DNS - 服务器设置 - 高级设置」中，找到「DNS 服务器端口」，修改为除了 53 以外任何不冲突的端口，「保存并应用」。
+
+![](img/usage-1.png)
+
+!> 如果（有很大可能性）你的 DNS 设置为 LEDE/OpenWrt 的 IP，那么这项操作会立刻影响到你的互联网连接（无法正常进行域名解析）你可以修改你的 DNS 设置。  
+但是在启用 KoolClash 以后应该将 DNS 设置为 LEDE/OpenWrt 的 IP。
+
+## 上传 Clash 配置文件
+
+选择 Clash 配置文件并点击右侧的「上传」即可上传 Clash 配置文件到 KoolClash 中。
+
+![](img/usage-2.png)
+
+?> KoolClash 尚不支持自动从托管配置自动下载更新 Clash 配置文件，需要用户自行手动上传。
+
+## 设置 Clash DNS 配置
+
+如果你正在使用的是由公共代理服务提供商提供的客户端配置，且没有关于 DNS 的设置，你可以添加 DNS 配置。
+
+![](img/usage-2.png)
+
+以下是一个 DNS 配置的示范：
 
 ```yaml
-# HTTP 代理端口（必填）
-port: 8888
-
-# SOCKS5 代理端口（必填）
-socks-port: 8889
-
-# 透明代理端口
-# KoolClash 在保存配置时会将其覆盖为 23456
-redir-port: 23456
-
-# 是否允许局域网设备连接
-# KoolClash 在保存配置时会将其覆盖为 true
-allow-lan: true
-
-# Clash 运行模式（必填）
-# Rule / Global/ Direct
-mode: Rule
-
-# Clash 输出日志等级（必填）
-# info / warning / error / debug / silent
-# 建议日常使用时 silent，不输出任何日志以避免内存溢出
-log-level: silent
-
-# Clash RESTful API 监听
-# 建议设置成 0.0.0.0 以便路由器外网域也可以使用
-external-controller: 0.0.0.0:6170
-
-# Clash RESTful API 使用的 Secret（可选项）
-# secret: ""
-
-# DNS 设置
 dns:
   enable: true
   listen: 0.0.0.0:53
@@ -58,6 +48,10 @@ dns:
 # (3) 在 Clash 的 DNS 支持 dns2docks 之前，不建议在 fallback 中使用常规方式进行解析（即直接配置 IP）
 ```
 
-「更新 Clash 配置」将会从「Clash 托管配置 URL」下载最新的托管配置文件。
+KoolClash 会自动检查你上传的 Clash 配置文件有没有包含 DNS 配置，只有目前 Clash 配置文件中没有包含 DNS 配置时才会将你提交的 DNS 配置附在 Clash 配置文件之中。
 
-只有当上传的 Clash 或者下载的托管配置 Clash 配置中没有 dns 配置时才会提交 DNS 配置才会生效。
+?> 提交完 DNS 配置以后，建议重新上传一次 Clash 配置文件。
+
+## 启动 Clash
+
+配置好以后，可以点击「启动/重启 Clash」启动 Clash。通过检查「Clash 运行状态」和「IP 地址检查 & 网站访问检查」来判断代理运行状态。

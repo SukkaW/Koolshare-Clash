@@ -4,8 +4,8 @@
 </h1>
 
 <p align="center">
-(WIP) A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://github.com/Dreamacro/clash" target="_blank">Clash</a>.<br>
-<a href="https://koolclash.js.org">Website</a> | <a href="https://koolclash.js.org">Documentation</a> |
+A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://github.com/Dreamacro/clash" target="_blank">Clash</a>.<br>
+<a href="https://koolclash.js.org">Documentation (简体中文)</a> |
 <a href="https://github.com/SukkaW/Koolshare-Clash/releases">Download</a>
 </p>
 
@@ -26,6 +26,8 @@
         <img src="https://img.shields.io/github/license/sukkaw/koolshare-clash.svg?style=flat-square"/>
     </a>
 </p>
+
+---
 
 <h3 align="center">!!!ATTENTION!!!<br>THIS PROJECT IS STILL UNSTABLE. USE AT YOUR OWN RISK.</h2>
 
