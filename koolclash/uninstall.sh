@@ -20,3 +20,5 @@ dbus remove softcenter_module_koolclash_install
 dbus remove softcenter_module_koolclash_name
 dbus remove softcenter_module_koolclash_title
 dbus remove softcenter_module_koolclash_version
+
+dbus remove koolclash_enable
