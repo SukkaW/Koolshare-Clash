@@ -15,7 +15,7 @@ source /koolshare/scripts/base.sh
 eval $(dbus export koolclash_)
 
 start() {
-    [ "$koolclash_enable" == "1" ] && sh /koolshare/scripts/koolclash_sontrol.sh start
+    [ "$koolclash_enable" == "1" ] && sh /koolshare/scripts/koolclash_sontrol.sh stop
 }
 
 stop() {
