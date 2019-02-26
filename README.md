@@ -29,7 +29,7 @@ A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://g
 
 ---
 
-<h3 align="center">!!!ATTENTION!!!<br>THIS PROJECT IS STILL UNSTABLE. USE AT YOUR OWN RISK.</h2>
+<h3 align="center">!!!ATTENTION!!!<br>KoolClash IS STILL UNSTABLE! USE AT YOUR OWN RISK!</h2>
 
 ## Keywords
 
