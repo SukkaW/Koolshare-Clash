@@ -175,7 +175,7 @@
                     })
             },
             getIpipnetIP: () => {
-                IP.get('https://myip.ipip.net', 'text')
+                IP.get(`https://myip.ipip.net?${+(new Date)}`, 'text')
                     .then(resp => document.getElementById('ip-ipipnet').innerHTML = resp.data);
             },
             getTaobaoIP: (data) => {
@@ -187,7 +187,7 @@
                 document.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.operator}`
             },
             getIpifyIP: () => {
-                IP.get('https://api.ipify.org/?format=json', 'json')
+                IP.get(`https://api.ipify.org/?format=json&id=${+(new Date)}`, 'json')
                     .then(resp => {
                         document.getElementById('ip-ipify').innerHTML = resp.data.ip;
                         return resp.data.ip;
@@ -206,7 +206,7 @@
                 let timeout = setTimeout(() => {
                     img.onerror = img.onload = null;
                     document.getElementById(cbElID).innerHTML = '<span class="sk-text-error">连接超时</span>'
-                }, 6000);
+                }, 5000);
 
                 img.onerror = () => {
                     clearTimeout(timeout);
