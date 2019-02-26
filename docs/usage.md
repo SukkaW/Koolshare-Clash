@@ -6,8 +6,8 @@ Clash 的规则依赖 Clash 接管 DNS 解析，所以首先需要修改 LEDE/Op
 
 ![](img/usage-1.png)
 
-!> 如果（有很大可能性）你的 DNS 设置为 LEDE/OpenWrt 的 IP，那么这项操作会立刻影响到你的互联网连接（无法正常进行域名解析）你可以修改你的 DNS 设置。  
-但是在启用 KoolClash 以后应该将 DNS 设置为 LEDE/OpenWrt 的 IP。
+!> 如果你的 DNS 设置为 LEDE/OpenWrt 的 IP（有很大可能性你就是这么做的），那么这项操作会立刻影响到你的互联网连接（无法正常进行域名解析）你可以修改你的上网设备（或宿主机网络）的 DNS 设置为其它公共 DNS 来暂时恢复网络。  
+但是在启用 KoolClash 以后你应该将你的上网设备（或宿主机网络）的 DNS 设置为 LEDE/OpenWrt 的 IP。
 
 ## 上传 Clash 配置文件
 
@@ -56,4 +56,4 @@ KoolClash 会自动检查你上传的 Clash 配置文件有没有包含 DNS 配�
 
 ## 启动 Clash
 
-配置好以后，可以点击「启动/重启 Clash」启动 Clash。通过检查「Clash 运行状态」和「IP 地址检查 & 网站访问检查」来判断代理运行状态。
+配置好以后，可以点击「启动/重启 Clash」启动 Clash。你可以通过检查「Clash 运行状态」和「IP 地址检查 & 网站访问检查」来判断代理运行状态。
