@@ -542,7 +542,7 @@ dns:
                             $('#msg_warning').show();
                             setTimeout(() => {
                                 window.location.reload();
-                            }, 10000)
+                            }, 15000)
                         }
                     },
                     error: () => {
