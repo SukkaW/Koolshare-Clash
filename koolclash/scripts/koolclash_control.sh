@@ -10,7 +10,11 @@ start_clash() {
     iptables -t nat -A PREROUTING -p tcp --dport 22 -j ACCEPT
     iptables -t nat -A PREROUTING -p tcp -j REDIRECT --to-ports 23456
 
+    sleep 1
+
     /etc/init.d/dnsmasq restart
+
+    sleep 2
 
     [ ! -L "/etc/rc.d/S99koolclash.sh" ] && ln -sf $KSROOT/init.d/S99koolclash.sh /etc/rc.d/S99koolclash.sh
 
@@ -25,6 +29,8 @@ stop_clash() {
     iptables -t nat -D PREROUTING -p tcp --dport 22 -j ACCEPT
     iptables -t nat -D PREROUTING -p tcp -j REDIRECT --to-ports 23456
 
+    sleep 1
+
     # 关闭 Clash 进程
     if [ -n "$(pidof clash-linux-amd64)" ]; then
         echo_date 关闭 Clash 进程...
@@ -32,6 +38,8 @@ stop_clash() {
     fi
 
     /etc/init.d/dnsmasq restart
+
+    sleep 2
 
     rm -rf /etc/rc.d/S99koolclash.sh >/dev/null 2>&1
     dbus set koolclash_enable=0
