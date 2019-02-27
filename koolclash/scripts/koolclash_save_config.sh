@@ -7,11 +7,13 @@ alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 if [ -f /tmp/upload/clash.config.yml ]; then
     echo_date "开始上传配置！"
     mkdir -p $KSROOT/koolclash/config/
-    cp /tmp/upload/clash.config.yml $KSROOT/koolclash/config/config.yml
+    cp /tmp/upload/clash.config.yml $KSROOT/koolclash/config/origin.yml
 else
     echo_date "没有找到上传的配置文件！退出恢复！"
     exit 1
 fi
+
+cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
 
 echo_date "设置 redir-port 和 allow-lan 属性"
 sed -i '/^redir-port:/ d' $KSROOT/koolclash/config/config.yml
