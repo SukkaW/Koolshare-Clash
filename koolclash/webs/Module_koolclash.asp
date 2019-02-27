@@ -258,7 +258,7 @@
                         suffix: '<input type="file" id="koolclash-file-config" size="50"><br><br><button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-primary">上传配置文件</button>'
                     },
                     {
-                        title: '<b>Clash DNS Config (YAML)</b><br><span id="koolclash-dns-msg"></span>',
+                        title: '<b>后备 Clash DNS 配置 (YAML)</b><br><span id="koolclash-dns-msg"></span>',
                         name: 'koolclash-config-dns',
                         type: 'textarea',
                         value: '正在加载存储的 Clash DNS Config 配置...',
@@ -416,7 +416,7 @@
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById('koolclash-btn-save-config').innerHTML = '上传失败，请刷新页面后重试';
+                        document.getElementById('koolclash-btn-save-config').innerHTML = '上传失败，请重试';
 
                         setTimeout(() => {
                             KoolClash.enableAllButton();
