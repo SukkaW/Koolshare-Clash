@@ -543,7 +543,7 @@ dns:
                             $('#msg_warning').show();
                             setTimeout(() => {
                                 window.location.reload();
-                            }, 10000)
+                            }, 15000)
                         } else {
                             $('#msg_warning').hide();
                             document.getElementById('msg_success').innerHTML = `Clash 即将启动成功！`;
@@ -552,7 +552,7 @@ dns:
                             $('#msg_warning').show();
                             setTimeout(() => {
                                 window.location.reload();
-                            }, 15000)
+                            }, 20000)
                         }
                     },
                     error: () => {
@@ -562,7 +562,7 @@ dns:
                         $('#msg_warning').show();
                         setTimeout(() => {
                             window.location.reload();
-                        }, 10000)
+                        }, 15000)
                     }
                 });
             },
@@ -585,13 +585,13 @@ dns:
                     dataType: "json",
                     success: (resp) => {
                         $('#msg_warning').hide();
-                        document.getElementById('msg_success').innerHTML = `Clash 已经关闭！`;
+                        document.getElementById('msg_success').innerHTML = `Clash 即将关闭！`;
                         document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                         $('#msg_success').show();
                         $('#msg_warning').show();
                         setTimeout(() => {
                             window.location.reload();
-                        }, 10000)
+                        }, 15000)
                     },
                     error: () => {
                         $('#msg_warning').hide();
@@ -601,7 +601,7 @@ dns:
                         $('#msg_warning').show();
                         setTimeout(() => {
                             window.location.reload();
-                        }, 10000)
+                        }, 15000)
                     }
                 });
             },

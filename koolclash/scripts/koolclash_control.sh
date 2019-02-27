@@ -106,9 +106,9 @@ start)
         remove_nat_start
     else
         remove_nat_start
+        http_response 'success'
         stop_clash
         sleep 1
-        http_response 'success'
         write_nat_start
         start_clash
     fi

@@ -38,7 +38,9 @@ esac
 if [ -d "$KSROOT/koolclash" ]; then
     echo_date '停止 KoolClash 以更新。注意更新完成以后 KoolClash 不会自动恢复，需要手动启动 Clash！'
     sleep 2
-    echo_date '更新过程中有可能会出现软件中心故障的提示，请不要刷新或关闭页面，务必等待日志恢复滚动！'
+    echo_date '更新过程中可能会出现「软件中心异常」的提示'
+    sleep 1
+    echo_date '请不要刷新或关闭页面，务必等待安装完成！'
     sh $KSROOT/scripts/koolclash_control.sh stop >/dev/null 2>&1
 fi
 
