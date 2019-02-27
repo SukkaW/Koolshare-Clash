@@ -55,7 +55,7 @@
     </style>
     <div class="box">
         <div class="heading">
-            <a style="padding-left: 0; color: #0099FF; font-size: 20px;" href="https://koolclash.js.org" target="_blank">KoolClash&nbsp;<span id="koolclash-version"></span></a>
+            <a style="padding-left: 0; color: #0099FF; font-size: 20px;" href="https://koolclash.js.org" target="_blank">KoolClash</a>
             <a href="#/soft-center.asp" class="btn" style="float: right; margin-right: 5px; border-radius:3px; margin-top: 0px;">返回</a>
             <!--<a href="https://github.com/koolshare/ledesoft/blob/master/v2ray/Changelog.txt" target="_blank"
                 class="btn btn-primary" style="float:right;border-radius:3px;margin-right:5px;margin-top:0px;">更新日志</a>-->
@@ -63,7 +63,9 @@
         </div>
         <div class="content">
             <div class="col" style="line-height:30px;">
-                <p>Clash 是一个基于规则的代理程序，兼容 Shadowsocks、Vmess 等协议，拥有像 Surge 一样强大的代理规则。</p>
+                <p id="koolclash-version-msg"></p>
+
+                <p style="margin-top: 10px">Clash 是一个基于规则的代理程序，兼容 Shadowsocks、Vmess 等协议，拥有像 Surge 一样强大的代理规则。</p>
                 <p>KoolClash 是 Clash 在 Koolshare OpenWrt 上的客户端</p>
 
                 <p style="margin-top: 10px"><a href="https://github.com/Dreamacro/clash">Clash on GitHub</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://github.com/SukkaW/Koolshare-Clash" target="_blank">KoolClash on GitHub</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://koolclash.js.org" target="_blank">KoolClash 使用文档</a></p>
@@ -255,16 +257,40 @@
                         style: 'width: 100%; height: 200px;'
                     },
                 ]);
-
-                // 获取版本号
+            },
+            checkUpdate: () => {
+                let installed = '',
+                    remote = '';
+                // 获取本地版本号
                 $.ajax({
                     type: "GET",
                     cache: false,
                     url: "/res/koolclash_.version",
                     success: (resp) => {
-                        document.getElementById('koolclash-version').innerHTML = resp;
+                        installed = resp;
+                        document.getElementById('koolclash-version-msg').innerHTML = `当前安装版本&nbsp;:&nbsp;${installed}`;
+                        // 获取远端版本号
+                        $.ajax({
+                            type: "GET",
+                            cache: false,
+                            url: "https://koolclash.js.org/koolclash_version",
+                            success: (resp) => {
+                                remote = resp;
+                                document.getElementById('koolclash-version-msg').innerHTML = `当前安装版本&nbsp;:&nbsp;${installed}&nbsp;&nbsp;/&nbsp;&nbsp;最新发布版本&nbsp;:&nbsp;${remote}`;
+
+                                if (installed !== remote) {
+                                    document.getElementById('koolclash-version-msg').innerHTML = `当前安装版本&nbsp;:&nbsp;${installed}&nbsp;&nbsp;|&nbsp;&nbsp;最新发布版本&nbsp;:&nbsp;${remote}<br>发现「当前安装版本」与「最新发布版本」版本号不同，可能是 KoolClash 有新版本发布，请前往 <a href="https://github.com/SukkaW/Koolshare-Clash/releases" target="_blank">GitHub Release</a> 查看更新日志`;
+                                }
+                            }
+                        });
+                    },
+                    error: () => {
+                        document.getElementById('koolclash-version-msg').innerHTML = `检测版本失败！`
                     }
                 });
+
+
+                document.getElementById('koolclash-version-msg').innerHTML = `当前安装版本&nbsp;:&nbsp;<span id="koolclash-version-installed"></span>&nbsp;&nbsp;|&nbsp;&nbsp;最新发布版本&nbsp;:&nbsp;<span id="koolclash-version-remote"></span>`;
             },
             // getClashPid
             // 获取 Clash 进程 PID
@@ -507,6 +533,7 @@ dns:
     <script>
         KoolClash.renderUI();
         KoolClash.getClashPid();
+        KoolClash.checkUpdate();
         KoolClash.getDNSConfig();
         KoolClash.checkIP();
     </script>
