@@ -48,6 +48,10 @@
             margin-bottom: 8px;
         }
 
+        #koolclash-file-config {
+            width: 100%;
+        }
+
         fieldset .help-block {
             margin: 0;
         }
@@ -80,7 +84,7 @@
             <!-- ### KoolClash 运行状态 ### -->
             <div id="koolclash-field"></div>
             <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-start-clash" onclick="KoolClash.restart()" class="btn btn-primary">启动/重启 Clash</button>
+                <button type="button" id="koolclash-btn-start-clash" onclick="KoolClash.restart()" class="btn btn-success">启动/重启 Clash</button>
                 <button type="button" id="koolclash-btn-stop-clash" onclick="KoolClash.stop()" class="btn">停止 Clash</button>
             </div>
         </div>
@@ -251,7 +255,7 @@
                 $('#koolclash-config').forms([
                     {
                         title: '<b>Clash 配置上传</b>',
-                        suffix: '<input type="file" id="koolclash-file-config" size="50">&nbsp;&nbsp;<button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-success">上传</button>'
+                        suffix: '<input type="file" id="koolclash-file-config" size="50"><br><br><button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-primary">上传配置文件</button>'
                     },
                     {
                         title: '<b>Clash DNS Config (YAML)</b><br><span id="koolclash-dns-msg"></span>',
@@ -382,11 +386,17 @@
                                     if (softcenter === 1) {
                                         return false;
                                     }
-                                    document.getElementById("koolclash-btn-upload").innerHTML = 'Clash 配置上传完毕！';
-                                    setTimeout(() => {
-                                        KoolClash.enableAllButton();
-                                        document.getElementById('koolclash-btn-upload').innerHTML = '上传';
-                                    }, 4000)
+                                    if (resp.result === 'nofallbackdns') {
+                                        document.getElementById('koolclash-btn-upload').innerHTML = '在 Clash 配置文件中没有找到 DNS 设置，请在下面添加 DNS 配置！';
+                                        document.getElementById('koolclash-btn-upload').classList.remove('btn-primary');
+                                        document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
+                                    } else {
+                                        document.getElementById("koolclash-btn-upload").innerHTML = 'Clash 配置文件上传完毕！';
+                                        setTimeout(() => {
+                                            KoolClash.enableAllButton();
+                                            document.getElementById('koolclash-btn-upload').innerHTML = '上传配置文件';
+                                        }, 4000)
+                                    }
                                 },
                                 error: () => {
                                     if (softcenter === 1) {
@@ -396,7 +406,7 @@
 
                                     setTimeout(() => {
                                         KoolClash.enableAllButton();
-                                        document.getElementById('koolclash-btn-upload').innerHTML = '上传';
+                                        document.getElementById('koolclash-btn-upload').innerHTML = '上传配置文件';
                                     }, 4000)
                                 }
                             });
@@ -454,7 +464,7 @@ dns:
                             document.getElementById('koolclash-dns-msg').innerHTML = `没有找到已保存的 DNS 配置`;
                             document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
                         } else {
-                            document.getElementById('koolclash-dns-msg').innerHTML = `找到了之前提交的 DNS 配置`;
+                            document.getElementById('koolclash-dns-msg').innerHTML = `之前提交的 DNS 配置`;
                             document.getElementById('_koolclash-config-dns').innerHTML = Base64.decode(resp.result);
                         }
                     },

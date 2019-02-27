@@ -9,8 +9,8 @@ touch $KSROOT/koolclash/config/dns.yml
 echo $2 | base64 -d | tee $KSROOT/koolclash/config/dns.yml
 
 hasdns=$(cat $KSROOT/koolclash/config/config.yml | grep "dns:")
-if [[ "$hasdns" != *"dns:"* ]]; then
+if [[ "$hasdns" != "dns:" ]]; then
     cat $KSROOT/koolclash/config/dns.yml | tee -a $KSROOT/koolclash/config/config.yml
 fi
 
-http_response 'Success'
+http_response 'success'

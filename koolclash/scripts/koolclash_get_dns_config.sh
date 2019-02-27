@@ -6,6 +6,6 @@ alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 
 touch $KSROOT/koolclash/config/dns.yml
 
-config=$(cat $KSROOT/koolclash/config/dns.yml | base64)
+dns=$(cat $KSROOT/koolclash/config/dns.yml | base64)
 
-http_response ${config}
+http_response ${dns}
