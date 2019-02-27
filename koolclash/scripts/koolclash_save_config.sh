@@ -21,7 +21,7 @@ echo 'redir-port: 23456' | tee -a $KSROOT/koolclash/config/config.yml
 echo 'allow-lan: true' | tee -a $KSROOT/koolclash/config/config.yml
 
 hasdns=$(cat $KSROOT/koolclash/config/config.yml | grep "dns:")
-if [[ "$hasdns" != *"dns:"* ]]; then
+if [[ "$hasdns" != "dns:" ]]; then
     cat $KSROOT/koolclash/config/dns.yml | tee -a $KSROOT/koolclash/config/config.yml
 fi
 
