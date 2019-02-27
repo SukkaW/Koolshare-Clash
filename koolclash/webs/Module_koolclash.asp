@@ -86,6 +86,10 @@
         </div>
     </div>
 
+    <div id="msg_warring" class="alert alert-warning icon" style="display:none;"></div>
+    <div id="msg_success" class="alert alert-success icon" style="display:none;"></div>
+    <div id="msg_error" class="alert alert-error icon" style="display:none;"></div>
+
     <div id="koolclash-ip" class="box">
         <div class="heading" style="padding-right: 20px;">
             <div style="display: flex;">
@@ -247,10 +251,10 @@
                 $('#koolclash-config').forms([
                     {
                         title: '<b>Clash 配置上传</b>',
-                        suffix: '<input type="file" id="koolclash-file-config" size="50">&nbsp;&nbsp;<button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-success">上传</button><br><p id="koolclash-config-upload-msg"></p>'
+                        suffix: '<input type="file" id="koolclash-file-config" size="50">&nbsp;&nbsp;<button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-success">上传</button>'
                     },
                     {
-                        title: '<b>Clash DNS Config (YAML)</b>',
+                        title: '<b>Clash DNS Config (YAML)</b><br><span id="koolclash-dns-msg"></span>',
                         name: 'koolclash-config-dns',
                         type: 'textarea',
                         value: '正在加载存储的 Clash DNS Config 配置...',
@@ -328,8 +332,21 @@
                 IP.getIpifyIP();
                 HTTP.runcheck();
             },
+            disableAllButton: () => {
+                let btnList = document.getElementsByTagName('button');
+                for (let i of btnList) {
+                    i.setAttribute('disabled', '');
+                }
+            },
+            enableAllButton: () => {
+                let btnList = document.getElementsByTagName('button');
+                for (let i of btnList) {
+                    i.removeAttribute('disabled');
+                }
+            },
             submitClashConfig: () => {
-                document.getElementById('koolclash-config-upload-msg').innerHTML = '正在提交 Clash 配置...';
+                KoolClash.disableAllButton();
+                document.getElementById('koolclash-btn-upload').innerHTML = '正在上传 Clash 配置...';
 
                 let formData = new FormData();
                 formData.append('clash.config.yml', $('#koolclash-file-config')[0].files[0]);
@@ -345,7 +362,7 @@
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById('koolclash-config-upload-msg').innerHTML = '上传成功，正在处理';
+                        document.getElementById('koolclash-btn-upload').innerHTML = '正在上传 Clash 配置...';
                         (() => {
                             let id = parseInt(Math.random() * 100000000),
                                 postData = JSON.stringify({
@@ -365,13 +382,22 @@
                                     if (softcenter === 1) {
                                         return false;
                                     }
-                                    document.getElementById("koolclash-config-upload-msg").innerHTML = '处理完毕！';
+                                    document.getElementById("koolclash-btn-upload").innerHTML = 'Clash 配置上传完毕！';
+                                    setTimeout(() => {
+                                        KoolClash.enableAllButton();
+                                        document.getElementById('koolclash-btn-upload').innerHTML = '上传';
+                                    }, 4000)
                                 },
                                 error: () => {
                                     if (softcenter === 1) {
                                         return false;
                                     }
-                                    document.getElementById("koolclash-config-upload-msg").innerHTML = `处理失败，请重新上传！`;
+                                    document.getElementById('koolclash-btn-upload').innerHTML = 'Clash 配置上传失败！';
+
+                                    setTimeout(() => {
+                                        KoolClash.enableAllButton();
+                                        document.getElementById('koolclash-btn-upload').innerHTML = '上传';
+                                    }, 4000)
                                 }
                             });
                         })();
@@ -380,7 +406,12 @@
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById('koolclash-btn-save-config').innerHTML = '上传失败，请重试';
+                        document.getElementById('koolclash-btn-save-config').innerHTML = '上传失败，请刷新页面后重试';
+
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-upload').innerHTML = '上传';
+                        }, 5000)
                     }
                 });
             },
@@ -397,7 +428,6 @@ dns:
      - tls://dns.rubyfish.cn:853
   fallback:
      - tls://1dot1dot1dot1.cloudflare-dns.com
-     - tls://one.one.one.one
      - tls://dns.google
 `,
             getDNSConfig: () => {
@@ -421,8 +451,10 @@ dns:
                         }
 
                         if (resp.result === '') {
+                            document.getElementById('koolclash-dns-msg').innerHTML = `没有找到已保存的 DNS 配置`;
                             document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
                         } else {
+                            document.getElementById('koolclash-dns-msg').innerHTML = `找到了之前提交的 DNS 配置`;
                             document.getElementById('_koolclash-config-dns').innerHTML = Base64.decode(resp.result);
                         }
                     },
@@ -435,7 +467,7 @@ dns:
                 });
             },
             submitDNSConfig: () => {
-                document.getElementById('koolclash-btn-save-dns-config').setAttribute('disabled', '');
+                KoolClash.disableAllButton();
                 document.getElementById('koolclash-btn-save-dns-config').innerHTML = '正在提交...';
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
@@ -456,10 +488,10 @@ dns:
                             return false;
                         }
 
-                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '保存成功！';
+                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交成功！页面将会刷新';
                         setTimeout(() => {
                             window.location.reload();
-                        }, 3000)
+                        }, 5000)
                     },
                     error: () => {
                         if (softcenter === 1) {
@@ -467,9 +499,9 @@ dns:
                         }
                         document.getElementById('koolclash-btn-save-dns-config').innerHTML = '保存失败！请重试';
                         setTimeout(() => {
+                            KoolClash.enableAllButton();
                             document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交 Clash DNS 配置';
-                            document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
-                        }, 3000)
+                        }, 5000)
                     }
                 });
             },
@@ -539,8 +571,4 @@ dns:
     </script>
     <script src="https://www.taobao.com/help/getip.php"></script>
     <script src="https://ipv4.ip.sb/addrinfo.php?callback=IP.getIpsbIP"></script>
-
-    <div id="msg_warring" class="alert alert-warning icon" style="display:none;"></div>
-    <div id="msg_success" class="alert alert-success icon" style="display:none;"></div>
-    <div id="msg_error" class="alert alert-error icon" style="display:none;"></div>
 </content>
