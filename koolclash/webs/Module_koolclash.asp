@@ -86,9 +86,9 @@
         </div>
     </div>
 
-    <div id="msg_warring" class="alert alert-warning icon" style="display:none;"></div>
     <div id="msg_success" class="alert alert-success icon" style="display:none;"></div>
     <div id="msg_error" class="alert alert-error icon" style="display:none;"></div>
+    <div id="msg_warning" class="alert alert-warning icon" style="display:none;"></div>
 
     <div id="koolclash-ip" class="box">
         <div class="heading" style="padding-right: 20px;">
@@ -506,6 +506,10 @@ dns:
                 });
             },
             restart: () => {
+                KoolClash.disableAllButton();
+                document.getElementById('msg_warning').innerHTML = `正在启动 Clash，请不要刷新或关闭页面！`;
+                $('#msg_warning').show();
+
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         "id": id,
@@ -521,18 +525,40 @@ dns:
                     data: postData,
                     dataType: "json",
                     success: (resp) => {
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 3000)
+                        if (resp.result === 'noconfig') {
+                            $('#msg_warning').hide();
+                            document.getElementById('msg_error').innerHTML = `没有找到 Clash 配置文件！`;
+                            document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
+                            $('#msg_error').show();
+                            $('#msg_warning').show();
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 10000)
+                        } else {
+                            $('#msg_warning').hide();
+                            document.getElementById('msg_success').innerHTML = `Clash 即将启动成功！`;
+                            document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
+                            $('#msg_success').show();
+                            $('#msg_warning').show();
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 10000)
+                        }
                     },
                     error: () => {
+                        document.getElementById('msg_error').innerHTML = `Clash 启动失败！`;
+                        document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
+                        $('#msg_error').show();
+                        $('#msg_warning').show();
                         setTimeout(() => {
                             window.location.reload();
-                        }, 3000)
+                        }, 10000)
                     }
                 });
             },
             stop: () => {
+                document.getElementById('msg_warning').innerHTML = `正在关闭 Clash，请不要刷新或关闭页面！`;
+                $('#msg_warning').show();
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         "id": id,
@@ -548,14 +574,24 @@ dns:
                     data: postData,
                     dataType: "json",
                     success: (resp) => {
+                        $('#msg_warning').hide();
+                        document.getElementById('msg_success').innerHTML = `Clash 已经关闭！`;
+                        document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
+                        $('#msg_success').show();
+                        $('#msg_warning').show();
                         setTimeout(() => {
                             window.location.reload();
-                        }, 3000)
+                        }, 10000)
                     },
                     error: () => {
+                        $('#msg_warning').hide();
+                        document.getElementById('msg_error').innerHTML = `Clash 关闭失败！`;
+                        document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
+                        $('#msg_error').show();
+                        $('#msg_warning').show();
                         setTimeout(() => {
                             window.location.reload();
-                        }, 3000)
+                        }, 10000)
                     }
                 });
             },

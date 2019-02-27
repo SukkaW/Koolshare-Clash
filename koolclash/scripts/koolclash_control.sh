@@ -70,11 +70,16 @@ remove_nat_start() {
 case $1 in
 start)
     if [ "$koolclash_enable" == "1" ]; then
-        stop_clash
-        remove_nat_start
-        sleep 2
-        write_nat_start
-        start_clash
+        if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+            stop_clash
+            remove_nat_start
+        else
+            stop_clash
+            remove_nat_start
+            sleep 2
+            write_nat_start
+            start_clash
+        fi
     else
         stop_clash
         remove_nat_start
@@ -95,16 +100,22 @@ esac
 # used by httpdb
 case $2 in
 start)
-    remove_nat_start
-    stop_clash
-    sleep 1
-    http_response ''
-    write_nat_start
-    start_clash
+    if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+        http_response 'noconfig'
+        stop_clash
+        remove_nat_start
+    else
+        remove_nat_start
+        stop_clash
+        sleep 1
+        http_response 'success'
+        write_nat_start
+        start_clash
+    fi
     ;;
 stop)
     remove_nat_start
-    http_response ''
+    http_response 'success'
     stop_clash
     ;;
 esac
