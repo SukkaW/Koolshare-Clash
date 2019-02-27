@@ -74,11 +74,18 @@ start)
             stop_clash
             remove_nat_start
         else
-            stop_clash
-            remove_nat_start
-            sleep 2
-            write_nat_start
-            start_clash
+            hasdns=$(cat $KSROOT/koolclash/config/config.yml | grep "dns:")
+            if [[ "$hasdns" != "dns:" ]]; then
+                stop_clash
+                remove_nat_start
+            else
+                stop_clash
+                remove_nat_start
+                sleep 2
+                write_nat_start
+                start_clash
+            fi
+
         fi
     else
         stop_clash
@@ -105,12 +112,19 @@ start)
         stop_clash
         remove_nat_start
     else
-        remove_nat_start
-        http_response 'success'
-        stop_clash
-        sleep 1
-        write_nat_start
-        start_clash
+        hasdns=$(cat $KSROOT/koolclash/config/config.yml | grep "dns:")
+        if [[ "$hasdns" != "dns:" ]]; then
+            http_response 'nodns'
+            stop_clash
+            remove_nat_start
+        else
+            remove_nat_start
+            http_response 'success'
+            stop_clash
+            sleep 1
+            write_nat_start
+            start_clash
+        fi
     fi
     ;;
 stop)

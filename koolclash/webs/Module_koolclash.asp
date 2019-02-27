@@ -498,7 +498,7 @@ dns:
                             return false;
                         }
 
-                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交成功！页面将会刷新';
+                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交成功！页面将会自动刷新！';
                         setTimeout(() => {
                             window.location.reload();
                         }, 5000)
@@ -537,13 +537,22 @@ dns:
                     success: (resp) => {
                         if (resp.result === 'noconfig') {
                             $('#msg_warning').hide();
-                            document.getElementById('msg_error').innerHTML = `没有找到 Clash 配置文件！`;
+                            document.getElementById('msg_error').innerHTML = `没有找到 Clash 配置文件！请在页面自动刷新之后(重新)上传 Clash 配置文件！`;
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_error').show();
                             $('#msg_warning').show();
                             setTimeout(() => {
                                 window.location.reload();
                             }, 15000)
+                        } else if (resp.result === 'nodns') {
+                            $('#msg_warning').hide();
+                            document.getElementById('msg_error').innerHTML = `在 Clash 配置文件中没有找到 DNS 设置！请在页面自动刷新之后(重新)上传 Clash 配置文件！`;
+                            document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
+                            $('#msg_error').show();
+                            $('#msg_warning').show();
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 10000)
                         } else {
                             $('#msg_warning').hide();
                             document.getElementById('msg_success').innerHTML = `Clash 即将启动成功！`;
@@ -556,7 +565,7 @@ dns:
                         }
                     },
                     error: () => {
-                        document.getElementById('msg_error').innerHTML = `Clash 启动失败！`;
+                        document.getElementById('msg_error').innerHTML = `Clash 启动失败！请在页面自动刷新之后重试！`;
                         document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                         $('#msg_error').show();
                         $('#msg_warning').show();
@@ -595,7 +604,7 @@ dns:
                     },
                     error: () => {
                         $('#msg_warning').hide();
-                        document.getElementById('msg_error').innerHTML = `Clash 关闭失败！`;
+                        document.getElementById('msg_error').innerHTML = `Clash 关闭失败！请在页面自动刷新之后重试！`;
                         document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                         $('#msg_error').show();
                         $('#msg_warning').show();
