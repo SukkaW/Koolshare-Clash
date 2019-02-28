@@ -442,13 +442,14 @@ dns:
   listen: 0.0.0.0:53
   enhanced-mode: redir-host
   nameserver:
-     - 119.28.28.28
-     - 119.29.29.29
-     - 223.5.5.5
-     - tls://dns.rubyfish.cn:853
+    - 119.28.28.28
+    - 119.29.29.29
+    - 223.5.5.5
+    - tls://dns.rubyfish.cn:853
   fallback:
-     - tls://1dot1dot1dot1.cloudflare-dns.com
-     - tls://dns.google
+    - tls://1.0.0.1:853
+    - tls://1.1.1.1:853
+    - tls://8.8.4.4:853
 `,
             getDNSConfig: () => {
                 let id = parseInt(Math.random() * 100000000),
