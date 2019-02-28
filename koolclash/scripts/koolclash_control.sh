@@ -72,21 +72,20 @@ case $1 in
 start)
     if [ "$koolclash_enable" == "1" ]; then
         if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-            stop_clash
             remove_nat_start
+            stop_clash
         else
             hasdns=$(cat $KSROOT/koolclash/config/config.yml | grep "dns:")
             if [[ "$hasdns" != "dns:" ]]; then
                 stop_clash
                 remove_nat_start
             else
-                stop_clash
                 remove_nat_start
-                sleep 2
+                stop_clash
+                sleep 1
                 write_nat_start
                 start_clash
             fi
-
         fi
     else
         stop_clash
@@ -94,8 +93,8 @@ start)
     fi
     ;;
 stop)
-    stop_clash
     remove_nat_start
+    stop_clash
     ;;
 *)
     if [ -z "$2" ]; then
