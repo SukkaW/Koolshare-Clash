@@ -664,6 +664,46 @@ dns:
                         }, 5500)
                     }
                 });
+            },
+            updateDashboard: () => {
+                KoolClash.disableAllButton();
+                document.getElementById('koolclash-btn-update-dashboard').innerHTML = `开始下载最新的 clash-dashboard`;
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_update_dashboard.sh",
+                        "params": [],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        if (resp.result === 'nodl') {
+                            document.getElementById('koolclash-btn-update-dashboard').innerHTML = `你的路由器中既没有 curl 也没有 wget，不能下载更新！`;
+                        } else if (resp.result === 'fail') {
+                            document.getElementById('koolclash-btn-update-dashboard').innerHTML = `Clash Dashboard 更新失败！`;
+                        } else {
+                            document.getElementById('koolclash-btn-update-dashboard').innerHTML = `Clash Dashboard 更新成功！`;
+                        }
+
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-update-dashboard').innerHTML = '更新 Clash Dashboard';
+                        }, 5500)
+                    },
+                    error: () => {
+                        document.getElementById('koolclash-btn-update-dashboard').innerHTML = `Clash Dashboard 更新失败！`;
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-update-dashboard').innerHTML = '更新 Clash Dashboard';
+                        }, 5500)
+                    }
+                });
             }
         };
     </script>
