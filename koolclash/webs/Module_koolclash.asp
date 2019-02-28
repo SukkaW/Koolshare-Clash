@@ -23,7 +23,7 @@
 
         hr {
             opacity: 1;
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
             margin: 1rem 0;
         }
 
@@ -133,7 +133,17 @@
                 <button type="button" id="koolclash-btn-save-dns-config" onclick="KoolClash.submitDNSConfig();" class="btn btn-primary">提交 Clash DNS 配置</button>
             </div>
         </div>
+
+        <div class="heading">组件更新</div>
+
+        <div class="content">
+            <div class="koolclash-btn-container">
+                <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn">更新 IP 解析库</button>
+                <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Clash Dashboard</button>
+            </div>
+        </div>
     </div>
+
     <script>
         if (typeof IP !== 'undefined' || typeof HTTP !== 'undefined' || typeof noop !== 'undefined' || typeof KoolClash !== 'undefined') {
             console.clear();
