@@ -7,8 +7,10 @@ alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 
 start_clash() {
     # 设置 iptables
-    iptables -t nat -A PREROUTING -p tcp --dport 22 -j ACCEPT
-    iptables -t nat -A PREROUTING -p tcp -j REDIRECT --to-ports 23456
+    iptables -t nat -N koolclash
+    iptables -t nat -A koolclash -p tcp --dport 22 -j ACCEPT
+    iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
+    iptables -t nat -I PREROUTING -p tcp -j koolclash
 
     sleep 1
 
@@ -26,8 +28,7 @@ start_clash() {
 
 stop_clash() {
     # 清除 iptables
-    iptables -t nat -D PREROUTING -p tcp --dport 22 -j ACCEPT
-    iptables -t nat -D PREROUTING -p tcp -j REDIRECT --to-ports 23456
+    iptables -t nat -F koolclash
 
     sleep 1
 
