@@ -587,6 +587,7 @@ dns:
                 });
             },
             stop: () => {
+                KoolClash.disableAllButton();
                 document.getElementById('msg_warning').innerHTML = `正在关闭 Clash，请不要刷新或关闭页面！`;
                 $('#msg_warning').show();
                 let id = parseInt(Math.random() * 100000000),
