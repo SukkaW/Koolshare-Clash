@@ -14,6 +14,7 @@ cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
 hasdns=$(cat $KSROOT/koolclash/config/config.yml | grep "dns:")
 
 if [[ "$hasdns" != "dns:" ]]; then
+    echo '' | tee -a $KSROOT/koolclash/config/config.yml
     cat $KSROOT/koolclash/config/dns.yml | tee -a $KSROOT/koolclash/config/config.yml
 fi
 

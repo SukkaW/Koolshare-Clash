@@ -19,6 +19,7 @@ echo_date "设置 redir-port 和 allow-lan 属性"
 sed -i '/^redir-port:/ d' $KSROOT/koolclash/config/origin.yml
 sed -i '/^allow-lan:/ d' $KSROOT/koolclash/config/origin.yml
 
+echo '' | tee -a $KSROOT/koolclash/config/origin.yml
 echo 'redir-port: 23456' | tee -a $KSROOT/koolclash/config/origin.yml
 echo 'allow-lan: true' | tee -a $KSROOT/koolclash/config/origin.yml
 
@@ -30,7 +31,10 @@ if [[ "$hasdns" != "dns:" ]]; then
     if [ ! -n "$fallbackdns" ]; then
         http_response 'nofallbackdns'
     else
+        echo '' | tee -a $KSROOT/koolclash/config/config.yml
         cat $KSROOT/koolclash/config/dns.yml | tee -a $KSROOT/koolclash/config/config.yml
         http_response 'success'
     fi
+else
+    http_response 'success'
 fi
