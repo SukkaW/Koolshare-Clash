@@ -79,6 +79,8 @@ All kinds of contributions (enhancements, new features, documentation & code imp
 
 KoolClash is released under the GPL-3.0 License - see the [LICENSE](https://github.com/SukkaW/Koolshare-Clash/blob/master/LICENSE) file for details.
 
+Also, this product includes [GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) data created by [MaxMind](https://www.maxmind.com).
+
 ## Maintainer
 
 **KoolClash** © [Sukka](https://github.com/SukkaW), Released under the [GPL-3.0]([./LICENSE](https://github.com/SukkaW/Koolshare-Clash/blob/master/LICENSE)) License.<br>
