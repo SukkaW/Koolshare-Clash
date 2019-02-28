@@ -75,7 +75,9 @@ $ ./build.sh
 
 ## 开源许可证
 
-KoolClash 使用 GPL-3.0 协议开源 - 阅读项目的 [LICENSE](https://github.com/SukkaW/Koolshare-Clash/blob/master/LICENSE) 文件.
+KoolClash 使用 GPL-3.0 协议开源 - 阅读项目的 [LICENSE](https://github.com/SukkaW/Koolshare-Clash/blob/master/LICENSE) 文件。
+
+同时，这个项目中还包含了由 [MaxMind](https://www.maxmind.com) 提供的 [GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/)。
 
 ## 维护者
 
