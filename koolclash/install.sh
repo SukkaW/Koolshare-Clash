@@ -68,6 +68,7 @@ cp -rf /tmp/koolclash/bin/* $KSROOT/bin/
 cp -rf /tmp/koolclash/scripts/* $KSROOT/scripts/
 cp -rf /tmp/koolclash/init.d/* $KSROOT/init.d/
 cp -rf /tmp/koolclash/webs/* $KSROOT/webs/
+cp -rf /tmp/koolclash/koolclash/config/* $KSROOT/koolclash/config/
 cp /tmp/koolclash/install.sh $KSROOT/scripts/koolclash_install.sh
 cp /tmp/koolclash/uninstall.sh $KSROOT/scripts/uninstall_koolclash.sh
 # 删除 Luci 缓存
