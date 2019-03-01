@@ -115,8 +115,8 @@
             </p>
 
             <div class="koolclash-btn-container">
-                <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">Clash Dashboard</a>
-                <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Dashboard</button>
+                <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">访问 Clash Dashboard</a>
+                <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Clash Dashboard</button>
             </div>
         </div>
     </div>
@@ -160,9 +160,8 @@
             <!-- ### KoolClash 运行配置设置 ### -->
             <div id="koolclash-config"></div>
             <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-save-suburl" onclick="KoolClash.submitSuburl();" class="btn">设置 Clash 托管配置 URL</button>
-                <button type="button" id="koolclash-btn-update-sub" onclick="KoolClash.updateRemoteConfig();" class="btn">下载最新的 Clash 托管配置</button>
-                <button type="button" id="koolclash-btn-del-suburl" onclick="KoolClash.deleteSuburl();" class="btn btn-primary">删除托管 URL</button>
+                <button type="button" id="koolclash-btn-update-sub" onclick="KoolClash.updateRemoteConfig();" class="btn">更新 Clash 托管配置</button>
+                <button type="button" id="koolclash-btn-del-suburl" onclick="KoolClash.deleteSuburl();" class="btn btn-primary">删除托管 URL（保留 Clash 配置）</button>
             </div>
 
             <div id="koolclash-config-dns"></div>
@@ -757,41 +756,6 @@ dns:
                     }
                 });
             },
-            submitSuburl: () => {
-                KoolClash.disableAllButton();
-                document.getElementById('koolclash-btn-save-suburl').innerHTML = `正在提交 Clash 托管配置 URL`;
-                let id = parseInt(Math.random() * 100000000),
-                    postData = JSON.stringify({
-                        "id": id,
-                        "method": "koolclash_sub.sh",
-                        "params": ['save', `${document.getElementById('_koolclash_config_suburl').value}`],
-                        "fields": ""
-                    });
-
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "/_api/",
-                    data: postData,
-                    dataType: "json",
-                    success: (resp) => {
-                        document.getElementById('koolclash-btn-save-suburl').innerHTML = `提交成功！`;
-
-                        setTimeout(() => {
-                            KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-save-suburl').innerHTML = '设置 Clash 托管配置 URL';
-                        }, 2500)
-                    },
-                    error: () => {
-                        document.getElementById('koolclash-btn-save-suburl').innerHTML = `提交失败！`;
-
-                        setTimeout(() => {
-                            KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-save-suburl').innerHTML = '设置 Clash 托管配置 URL';
-                        }, 2500)
-                    }
-                });
-            },
             deleteSuburl: () => {
                 KoolClash.disableAllButton();
                 document.getElementById('koolclash-btn-del-suburl').innerHTML = `正在删除 Clash 托管配置 URL`;
@@ -815,7 +779,7 @@ dns:
 
                         setTimeout(() => {
                             KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-del-suburl').innerHTML = '删除托管 URL';
+                            document.getElementById('koolclash-btn-del-suburl').innerHTML = '删除托管 URL（保留 Clash 配置）';
                         }, 2500)
                     },
                     error: () => {
@@ -823,7 +787,7 @@ dns:
 
                         setTimeout(() => {
                             KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-del-suburl').innerHTML = '删除托管 URL';
+                            document.getElementById('koolclash-btn-del-suburl').innerHTML = '删除托管 URL（保留 Clash 配置）';
                         }, 2500)
                     }
                 });
@@ -835,7 +799,7 @@ dns:
                     postData = JSON.stringify({
                         "id": id,
                         "method": "koolclash_sub.sh",
-                        "params": ['update'],
+                        "params": ['update', `${document.getElementById('_koolclash_config_suburl').value}`],
                         "fields": ""
                     });
 
@@ -850,7 +814,7 @@ dns:
                             document.getElementById('koolclash-btn-update-sub').innerHTML = `你的路由器中没有 curl，不能更新！`;
                             setTimeout(() => {
                                 KoolClash.enableAllButton();
-                                document.getElementById('koolclash-btn-update-sub').innerHTML = '下载最新的 Clash 托管配置';
+                                document.getElementById('koolclash-btn-update-sub').innerHTML = '更新 Clash 托管配置';
                             }, 3500)
                         } else if (resp.result === 'nofallbackdns') {
                             document.getElementById('koolclash-btn-update-sub').innerHTML = '在托管配置中没有找到 DNS 设置，请在下面添加 DNS 配置！';
@@ -859,7 +823,7 @@ dns:
                             document.getElementById('koolclash-btn-update-sub').innerHTML = 'Clash 配置更新成功，重启 Clash 生效！';
                             setTimeout(() => {
                                 KoolClash.enableAllButton();
-                                document.getElementById('koolclash-btn-update-sub').innerHTML = '下载最新的 Clash 托管配置';
+                                document.getElementById('koolclash-btn-update-sub').innerHTML = '更新 Clash 托管配置';
                             }, 2500)
                         }
                     },
@@ -868,7 +832,7 @@ dns:
 
                         setTimeout(() => {
                             KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-update-sub').innerHTML = '下载最新的 Clash 托管配置';
+                            document.getElementById('koolclash-btn-update-sub').innerHTML = '更新 Clash 托管配置';
                         }, 2500)
                     }
                 });
