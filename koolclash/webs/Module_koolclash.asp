@@ -218,7 +218,7 @@
             },
             getIpipnetIP: () => {
                 IP.get(`https://myip.ipip.net?${+(new Date)}`, 'text')
-                    .then(resp => document.getElementById('ip-ipipnet').innerHTML = resp.data);
+                    .then(resp => document.getElementById('ip-ipipnet').innerHTML = resp.data.replace('当前 IP：', '').replace('来自于：', ''));
             },
             getTaobaoIP: (data) => {
                 document.getElementById('ip-taobao').innerHTML = data.ip;
