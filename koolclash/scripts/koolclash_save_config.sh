@@ -4,6 +4,10 @@ export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 
+# From Koolshare DMZ Plugin
+lan_ip=$(uci get network.lan.ipaddr)
+wan_ip=$(ubus call network.interface.wan status | grep \"address\" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+
 if [ -f /tmp/upload/clash.config.yml ]; then
     echo_date "开始上传配置！"
     mkdir -p $KSROOT/koolclash/config/
