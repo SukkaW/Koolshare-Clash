@@ -49,10 +49,18 @@
             margin-left: 4px;
         }
 
+        #koolclash-dns-msg {
+            font-size: 85%;
+            margin-top: 8px
+        }
+
         fieldset .help-block {
             margin: 0;
         }
 
+        label {
+            cursor: default;
+        }
     </style>
     <div class="box">
         <div class="heading">
@@ -75,7 +83,7 @@
     </div>
 
     <div class="box">
-        <div class="heading">KoolClash 运行状态</div>
+        <div class="heading">KoolClash 管理</div>
 
         <div class="content">
             <!-- ### KoolClash 运行状态 ### -->
@@ -83,6 +91,17 @@
             <div class="koolclash-btn-container">
                 <button type="button" id="koolclash-btn-start-clash" onclick="KoolClash.restart()" class="btn btn-success">启动/重启 Clash</button>
                 <button type="button" id="koolclash-btn-stop-clash" onclick="KoolClash.stop()" class="btn">停止 Clash</button>
+                <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn btn-primary">更新 IP 解析库</button>
+            </div>
+        </div>
+
+        <div class="heading">Clash 面板</div>
+        <div class="content">
+            <!-- ### KoolClash 面板 ### -->
+            <div id="koolclash-dashboard"></div>
+
+            <div class="koolclash-btn-container">
+                <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Clash Dashboard</button>
             </div>
         </div>
     </div>
@@ -128,15 +147,6 @@
 
             <div class="koolclash-btn-container">
                 <button type="button" id="koolclash-btn-save-dns-config" onclick="KoolClash.submitDNSConfig();" class="btn btn-primary">提交 Clash DNS 配置</button>
-            </div>
-        </div>
-
-        <div class="heading">组件更新</div>
-
-        <div class="content">
-            <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn">更新 IP 解析库</button>
-                <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Clash Dashboard</button>
             </div>
         </div>
     </div>
@@ -254,11 +264,13 @@
                         title: '<b>Clash 运行状态</b>',
                         text: '<span id="koolclash_status" name="koolclash_status" color="#1bbf35">正在获取 Clash 进程状态...</span>'
                     },
-                    {
-                        title: '<b>Clash 面板</b>',
-                        text: '<p><a href="/koolclash/index.html" target="_blank">Clash Dashboard</a>（请 <span style="font-weight: bold">务必使用 Chrome 浏览器</span> 访问）</p>'
-                    },
                 ]);
+                $('#koolclash-dashboard').forms([
+                    {
+                        title: '<b><a href="/koolclash/index.html" target="_blank">Clash Dashboard</a></b><p>请务必使用 Chrome 浏览器 访问</p>',
+                        text: `<p style="margin-top:12px"><span style="font-weight: bold; color: #444; font-size: 105%;">外部控制设置</span><br><span>Host：路由器 IP</span><br><span>端口：6170</span><br><span>密钥：Clash 配置文件中设置的 secret（没有可不填）</span></p>`
+                    },
+                ])
                 $('#koolclash-config').forms([
                     {
                         title: '<b>Clash 配置上传</b>',
