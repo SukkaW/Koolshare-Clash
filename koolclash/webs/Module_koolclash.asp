@@ -115,7 +115,7 @@
             </p>
 
             <div class="koolclash-btn-container">
-                <a href="/koolclash/index.html" id="koolclash-btn-update-dashboard" class="btn btn-primary" target="_blank">Clash Dashboard</a>
+                <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">Clash Dashboard</a>
                 <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Dashboard</button>
             </div>
         </div>
