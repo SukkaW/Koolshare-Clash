@@ -46,10 +46,7 @@
 
         #koolclash-btn-upload {
             margin-bottom: 8px;
-        }
-
-        #koolclash-file-config {
-            width: 100%;
+            margin-left: 4px;
         }
 
         fieldset .help-block {
@@ -265,7 +262,7 @@
                 $('#koolclash-config').forms([
                     {
                         title: '<b>Clash 配置上传</b>',
-                        suffix: '<input type="file" id="koolclash-file-config" size="50"><br><br><button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-primary">上传配置文件</button>'
+                        suffix: '<input type="file" id="koolclash-file-config" size="50"><button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-primary">上传配置文件</button>'
                     },
                     {
                         title: '<b>后备 Clash DNS 配置 (YAML)</b><br><span id="koolclash-dns-msg"></span>',
