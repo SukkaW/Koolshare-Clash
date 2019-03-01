@@ -156,7 +156,7 @@
             <div class="koolclash-btn-container">
                 <button type="button" id="koolclash-btn-save-suburl" onclick="KoolClash.submitSuburl();" class="btn">设置 Clash 托管配置 URL</button>
                 <button type="button" id="koolclash-btn-update-sub" onclick="KoolClash.updateRemoteConfig();" class="btn">下载最新的 Clash 托管配置</button>
-                <button type="button" id="koolclash-btn-save-suburl" onclick="KoolClash.deleteSuburl();" class="btn btn-primary">删除托管 URL</button>
+                <button type="button" id="koolclash-btn-del-suburl" onclick="KoolClash.deleteSuburl();" class="btn btn-primary">删除托管 URL</button>
             </div>
 
             <div id="koolclash-config-dns"></div>
@@ -296,7 +296,7 @@
                         title: '<b>Clash 托管配置 URL</b><br><small>请注意！务必谨慎使用该功能！</small>',
                         name: 'koolclash_config_suburl',
                         type: 'text',
-                        value: 'https://api.example.com' || '',
+                        value: '',
                     },
                 ]);
                 $('#koolclash-config-dns').forms([
@@ -307,7 +307,9 @@
                         value: '正在加载存储的 Clash DNS Config 配置...',
                         style: 'width: 100%; height: 200px;'
                     },
-                ])
+                ]);
+
+                document.getElementById('_koolclash_config_suburl').setAttribute('placeholder', 'https://api.example.com/clash');
             },
             checkUpdate: () => {
                 let installed = '',
@@ -738,6 +740,122 @@ dns:
                         }, 5500)
                     }
                 });
+            },
+            submitSuburl: () => {
+                KoolClash.disableAllButton();
+                document.getElementById('koolclash-btn-save-suburl').innerHTML = `正在提交 Clash 托管配置 URL`;
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_sub.sh",
+                        "params": ['save', `${document.getElementById('_koolclash_config_suburl').value}`],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        document.getElementById('koolclash-btn-save-suburl').innerHTML = `提交成功！`;
+
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-save-suburl').innerHTML = '设置 Clash 托管配置 URL';
+                        }, 2500)
+                    },
+                    error: () => {
+                        document.getElementById('koolclash-btn-save-suburl').innerHTML = `提交失败！`;
+
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-save-suburl').innerHTML = '设置 Clash 托管配置 URL';
+                        }, 2500)
+                    }
+                });
+            },
+            deleteSuburl: () => {
+                KoolClash.disableAllButton();
+                document.getElementById('koolclash-btn-del-suburl').innerHTML = `正在删除 Clash 托管配置 URL`;
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_sub.sh",
+                        "params": ['del'],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        document.getElementById('koolclash-btn-del-suburl').innerHTML = `删除成功！`;
+                        document.getElementById('_koolclash_config_suburl').value = '';
+
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-del-suburl').innerHTML = '删除托管 URL';
+                        }, 2500)
+                    },
+                    error: () => {
+                        document.getElementById('koolclash-btn-del-suburl').innerHTML = `删除失败！`;
+
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-del-suburl').innerHTML = '删除托管 URL';
+                        }, 2500)
+                    }
+                });
+            },
+            updateRemoteConfig: () => {
+                KoolClash.disableAllButton();
+                document.getElementById('koolclash-btn-update-sub').innerHTML = `正在下载最新托管配置`;
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_sub.sh",
+                        "params": ['update'],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        if (resp.result === 'nocurl') {
+                            document.getElementById('koolclash-btn-update-sub').innerHTML = `你的路由器中没有 curl，不能更新！`;
+                            setTimeout(() => {
+                                KoolClash.enableAllButton();
+                                document.getElementById('koolclash-btn-update-sub').innerHTML = '下载最新的 Clash 托管配置';
+                            }, 3500)
+                        } else if (resp.result === 'nofallbackdns') {
+                            document.getElementById('koolclash-btn-update-sub').innerHTML = '在托管配置中没有找到 DNS 设置，请在下面添加 DNS 配置！';
+                            document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
+                        } else {
+                            document.getElementById('koolclash-btn-update-sub').innerHTML = 'Clash 配置更新成功，重启 Clash 生效！';
+                            setTimeout(() => {
+                                KoolClash.enableAllButton();
+                                document.getElementById('koolclash-btn-update-sub').innerHTML = '下载最新的 Clash 托管配置';
+                            }, 2500)
+                        }
+                    },
+                    error: () => {
+                        document.getElementById('koolclash-btn-update-sub').innerHTML = `Clash 配置更新失败！`;
+
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-update-sub').innerHTML = '下载最新的 Clash 托管配置';
+                        }, 2500)
+                    }
+                });
             }
         };
     </script>
@@ -753,7 +871,13 @@ dns:
                 } else {
                     throw new Error(JSON.stringify(json.error));
                 }
-            }).catch(error => {
+            })
+            .then((res) => {
+                if (window.dbus.koolclash_suburl) {
+                    document.getElementById('_koolclash_config_suburl').value = window.dbus.koolclash_suburl;
+                }
+            })
+            .catch(error => {
                 throw error;
             });
 
