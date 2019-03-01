@@ -54,6 +54,14 @@
             margin-top: 8px
         }
 
+        #koolclash-config-dns {
+            margin-top: 16px;
+        }
+
+        #_koolclash_config_suburl {
+            width: 61.8%;
+        }
+
         fieldset .help-block {
             margin: 0;
         }
@@ -61,6 +69,7 @@
         label {
             cursor: default;
         }
+
     </style>
     <div class="box">
         <div class="heading">
@@ -144,7 +153,12 @@
         <div class="content">
             <!-- ### KoolClash 运行配置设置 ### -->
             <div id="koolclash-config"></div>
+            <div class="koolclash-btn-container">
+                <button type="button" id="koolclash-btn-save-suburl" onclick="KoolClash.submitSuburl();" class="btn btn">设置 Clash 托管 URL</button>
+                <button type="button" id="koolclash-btn-update-sub" onclick="KoolClash.updateRemoteConfig();" class="btn btn-primary">下载最新的 Clash 托管配置</button>
+            </div>
 
+            <div id="koolclash-config-dns"></div>
             <div class="koolclash-btn-container">
                 <button type="button" id="koolclash-btn-save-dns-config" onclick="KoolClash.submitDNSConfig();" class="btn btn-primary">提交 Clash DNS 配置</button>
             </div>
@@ -259,6 +273,7 @@
             // KoolClash.renderUI()
             // 创建 KoolClash 界面
             renderUI: () => {
+                let inputWidth = `min-width: 220px; max-width: 220px`;
                 $('#koolclash-field').forms([
                     {
                         title: '<b>Clash 运行状态</b>',
@@ -277,13 +292,21 @@
                         suffix: '<input type="file" id="koolclash-file-config" size="50"><button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-primary">上传配置文件</button>'
                     },
                     {
+                        title: '<b>Clash 托管配置 URL</b>',
+                        name: 'koolclash_config_suburl',
+                        type: 'text',
+                        value: 'https://api.example.com' || '',
+                    },
+                ]);
+                $('#koolclash-config-dns').forms([
+                    {
                         title: '<b>后备 Clash DNS 配置 (YAML)</b><br><span id="koolclash-dns-msg"></span>',
                         name: 'koolclash-config-dns',
                         type: 'textarea',
                         value: '正在加载存储的 Clash DNS Config 配置...',
                         style: 'width: 100%; height: 200px;'
                     },
-                ]);
+                ])
             },
             checkUpdate: () => {
                 let installed = '',
@@ -481,10 +504,10 @@ dns:
                         }
 
                         if (resp.result === '') {
-                            document.getElementById('koolclash-dns-msg').innerHTML = `没有找到已保存的 DNS 配置`;
+                            document.getElementById('koolclash-dns-msg').innerHTML = `（没有找到已保存的 DNS 配置）`;
                             document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
                         } else {
-                            document.getElementById('koolclash-dns-msg').innerHTML = `之前提交的 DNS 配置`;
+                            document.getElementById('koolclash-dns-msg').innerHTML = `（之前提交的 DNS 配置）`;
                             document.getElementById('_koolclash-config-dns').innerHTML = Base64.decode(resp.result);
                         }
                     },
