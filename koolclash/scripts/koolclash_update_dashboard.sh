@@ -18,12 +18,17 @@ else
     exit 1
 fi
 
+mkdir -p $KSROOT/koolclash/dashboard-backup
+cp -rf $KSROOT/webs/koolclash/* $KSROOT/koolclash/dashboard-backup
+
 $command && unzip $KSROOT/koolclash/dashboard.zip -d $KSROOT/koolclash/
 
-rm -rf $KSROOT/webs/koolclash/*
-mkdir -p $KSROOT/webs/koolclash
+rm -rf $KSROOT/webs/koolclash/* && mkdir -p $KSROOT/webs/koolclash && cp -rf $KSROOT/koolclash/clash-dashboard-gh-pages/* $KSROOT/webs/koolclash && rm -rf $KSROOT/koolclash/dashboard.zip && rm -rf $KSROOT/koolclash/clash-dashboard-gh-pages && http_response 'ok' && exit 0
 
-cp -rf $KSROOT/koolclash/clash-dashboard-gh-pages/* $KSROOT/webs/koolclash && rm -rf $KSROOT/koolclash/dashboard.zip && rm -rf $KSROOT/koolclash/clash-dashboard-gh-pages && http_response 'ok' && exit 0
 http_response 'fail'
+
+rm -rf $KSROOT/webs/koolclash/*
+cp -rf $KSROOT/koolclash/dashboard-backup/* $KSROOT/webs/koolclash
+
 rm -rf $KSROOT/koolclash/dashboard.zip && rm -rf $KSROOT/koolclash/clash-dashboard-gh-pages
-exit 1
+exit 0
