@@ -22,10 +22,12 @@ rm -rf /tmp/upload/clash.config.yml
 echo_date "设置 redir-port 和 allow-lan 属性"
 sed -i '/^redir-port:/ d' $KSROOT/koolclash/config/origin.yml
 sed -i '/^allow-lan:/ d' $KSROOT/koolclash/config/origin.yml
+sed -i '/^external-controller:/ d' $KSROOT/koolclash/config/origin.yml
 
 echo '' | tee -a $KSROOT/koolclash/config/origin.yml
 echo 'redir-port: 23456' | tee -a $KSROOT/koolclash/config/origin.yml
 echo 'allow-lan: true' | tee -a $KSROOT/koolclash/config/origin.yml
+echo "external-controller: ${lan_ip}:6170" | tee -a $KSROOT/koolclash/config/origin.yml
 
 cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
 
