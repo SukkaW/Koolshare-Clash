@@ -107,10 +107,16 @@
         <div class="heading">Clash 面板</div>
         <div class="content">
             <!-- ### KoolClash 面板 ### -->
-            <div id="koolclash-dashboard"></div>
+            <p style="padding: 0 10px 10px 10px">
+                <span style="font-weight: bold; color: #444; font-size: 105%;">外部控制设置</span><br>
+                Host：<span id="koolclash-lan-ip">路由器 IP</span><br>
+                端口：6170<br>
+                密钥：Clash 配置文件中设置的 secret（没有可不填）
+            </p>
 
             <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn btn-primary">更新 Clash Dashboard</button>
+                <a href="/koolclash/index.html" id="koolclash-btn-update-dashboard" class="btn btn-primary" target="_blank">Clash Dashboard</a>
+                <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Dashboard</button>
             </div>
         </div>
     </div>
@@ -281,12 +287,6 @@
                         text: '<span id="koolclash_status" name="koolclash_status" color="#1bbf35">正在获取 Clash 进程状态...</span>'
                     },
                 ]);
-                $('#koolclash-dashboard').forms([
-                    {
-                        title: '<b><a href="/koolclash/index.html" target="_blank">Clash Dashboard</a></b><p>请务必使用 Chrome 浏览器 访问</p>',
-                        text: `<p style="margin-top:12px"><span style="font-weight: bold; color: #444; font-size: 105%;">外部控制设置</span><br><span>Host：路由器 IP</span><br><span>端口：6170</span><br><span>密钥：Clash 配置文件中设置的 secret（没有可不填）</span></p>`
-                    },
-                ])
                 $('#koolclash-config').forms([
                     {
                         title: '<b>Clash 配置上传</b>',
@@ -345,13 +345,13 @@
 
                 document.getElementById('koolclash-version-msg').innerHTML = `当前安装版本&nbsp;:&nbsp;<span id="koolclash-version-installed"></span>&nbsp;&nbsp;|&nbsp;&nbsp;最新发布版本&nbsp;:&nbsp;<span id="koolclash-version-remote"></span>`;
             },
-            // getClashPid
+            // getClashStatus
             // 获取 Clash 进程 PID
-            getClashPid: () => {
+            getClashStatus: () => {
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         "id": id,
-                        "method": "koolclash_get_clash_pid.sh",
+                        "method": "koolclash_status.sh",
                         "params": [],
                         "fields": ""
                     });
@@ -366,7 +366,10 @@
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById('koolclash_status').innerHTML = resp.result;
+
+                        let data = resp.result.split('@');
+                        document.getElementById('koolclash_status').innerHTML = data[0];
+                        document.getElementById('koolclash-lan-ip').innerHTML = data[1];
                     },
                     error: () => {
                         if (softcenter === 1) {
@@ -882,7 +885,7 @@ dns:
             });
 
         KoolClash.renderUI();
-        KoolClash.getClashPid();
+        KoolClash.getClashStatus();
         KoolClash.checkUpdate();
         KoolClash.getDNSConfig();
         KoolClash.checkIP();
