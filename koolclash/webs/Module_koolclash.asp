@@ -439,7 +439,7 @@
                                         document.getElementById('koolclash-btn-upload').classList.remove('btn-primary');
                                         document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
                                     } else {
-                                        document.getElementById("koolclash-btn-upload").innerHTML = 'Clash 配置文件上传完毕！';
+                                        document.getElementById("koolclash-btn-upload").innerHTML = 'Clash 配置文件上传完毕！重启 Clash 后生效新的配置';
                                         setTimeout(() => {
                                             KoolClash.enableAllButton();
                                             document.getElementById('koolclash-btn-upload').innerHTML = '上传配置文件';
@@ -525,6 +525,12 @@ dns:
                     }
                 });
             },
+            tminus: (second) => {
+                setInterval(() => {
+                    second--;
+                    document.getElementById('koolclash-wait-time').innerHTML = `（${second}）`;
+                }, 1000);
+            },
             submitDNSConfig: () => {
                 KoolClash.disableAllButton();
                 document.getElementById('koolclash-btn-save-dns-config').innerHTML = '正在提交...';
@@ -547,7 +553,8 @@ dns:
                             return false;
                         }
 
-                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交成功！页面将会自动刷新！';
+                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交成功！页面将会自动刷新！<span id="koolclash-wait-time"></span>';
+                        KoolClash.tminus(5);
                         setTimeout(() => {
                             window.location.reload();
                         }, 5000)
@@ -563,12 +570,6 @@ dns:
                         }, 4000)
                     }
                 });
-            },
-            tminus: (second) => {
-                setInterval(() => {
-                    second--;
-                    document.getElementById('koolclash-wait-time').innerHTML = `（${second}）`;
-                }, 1000);
             },
             restart: () => {
                 KoolClash.disableAllButton();
@@ -745,7 +746,7 @@ dns:
                         setTimeout(() => {
                             KoolClash.enableAllButton();
                             document.getElementById('koolclash-btn-update-dashboard').innerHTML = '更新 Clash Dashboard';
-                        }, 5500)
+                        }, 5000)
                     },
                     error: () => {
                         document.getElementById('koolclash-btn-update-dashboard').innerHTML = `Clash Dashboard 更新失败！`;
