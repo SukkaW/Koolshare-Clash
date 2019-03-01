@@ -110,7 +110,7 @@
             <div id="koolclash-dashboard"></div>
 
             <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Clash Dashboard</button>
+                <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn btn-primary">更新 Clash Dashboard</button>
             </div>
         </div>
     </div>
@@ -154,8 +154,9 @@
             <!-- ### KoolClash 运行配置设置 ### -->
             <div id="koolclash-config"></div>
             <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-save-suburl" onclick="KoolClash.submitSuburl();" class="btn btn">设置 Clash 托管 URL</button>
-                <button type="button" id="koolclash-btn-update-sub" onclick="KoolClash.updateRemoteConfig();" class="btn btn-primary">下载最新的 Clash 托管配置</button>
+                <button type="button" id="koolclash-btn-save-suburl" onclick="KoolClash.submitSuburl();" class="btn">设置 Clash 托管配置 URL</button>
+                <button type="button" id="koolclash-btn-update-sub" onclick="KoolClash.updateRemoteConfig();" class="btn">下载最新的 Clash 托管配置</button>
+                <button type="button" id="koolclash-btn-save-suburl" onclick="KoolClash.deleteSuburl();" class="btn btn-primary">删除托管 URL</button>
             </div>
 
             <div id="koolclash-config-dns"></div>
@@ -292,7 +293,7 @@
                         suffix: '<input type="file" id="koolclash-file-config" size="50"><button id="koolclash-btn-upload" type="button" onclick="KoolClash.submitClashConfig();" class="btn btn-primary">上传配置文件</button>'
                     },
                     {
-                        title: '<b>Clash 托管配置 URL</b>',
+                        title: '<b>Clash 托管配置 URL</b><br><small>请注意！务必谨慎使用该功能！</small>',
                         name: 'koolclash_config_suburl',
                         type: 'text',
                         value: 'https://api.example.com' || '',
@@ -742,6 +743,20 @@ dns:
     </script>
 
     <script>
+        window.dbus = {}
+
+        fetch(`/_api/koolclash`, { method: 'GET' })
+            .then((resp) => Promise.all([resp.ok, resp.status, resp.json(), resp.headers]))
+            .then(([ok, status, data, headers]) => {
+                if (ok) {
+                    window.dbus = data.result[0];
+                } else {
+                    throw new Error(JSON.stringify(json.error));
+                }
+            }).catch(error => {
+                throw error;
+            });
+
         KoolClash.renderUI();
         KoolClash.getClashPid();
         KoolClash.checkUpdate();
