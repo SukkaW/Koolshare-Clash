@@ -80,6 +80,7 @@
         }
 
         #koolclash-nav-overview:checked~.nav-tabs .koolclash-nav-overview>a,
+        #koolclash-nav-dashboard:checked~.nav-tabs .koolclash-nav-dashboard>a,
         #koolclash-nav-config:checked~.nav-tabs .koolclash-nav-config>a,
         #koolclash-nav-firewall:checked~.nav-tabs .koolclash-nav-firewall>a,
         #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-log>a {
@@ -94,6 +95,7 @@
         }
 
         #koolclash-nav-overview:checked~.tab-content>#koolclash-content-overview,
+        #koolclash-nav-dashboard:checked~.tab-content>#koolclash-content-dashboard,
         #koolclash-nav-config:checked~.tab-content>#koolclash-content-config,
         #koolclash-nav-firewall:checked~.tab-content>#koolclash-content-firewall,
         #koolclash-nav-log:checked~.tab-content>#koolclash-content-log {
@@ -124,6 +126,7 @@
 
 
     <input class="koolclash-nav-radio" id="koolclash-nav-overview" type="radio" name="nav-tab" checked>
+    <input class="koolclash-nav-radio" id="koolclash-nav-dashboard" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-config" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-firewall" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-log" type="radio" name="nav-tab">
@@ -132,16 +135,24 @@
         <li>
             <label class="koolclash-nav-overview koolclash-nav-label" for="koolclash-nav-overview">
                 <a>
-                    <i class="icon-system"></i>
+                    <i class="icon-info"></i>
                     运行状态
+                </a>
+            </label>
+        </li>
+        <li>
+            <label class="koolclash-nav-dashboard koolclash-nav-label" for="koolclash-nav-dashboard">
+                <a>
+                    <i class="icon-tools"></i>
+                    Clash 面板
                 </a>
             </label>
         </li>
         <li>
             <label class="koolclash-nav-config koolclash-nav-label" for="koolclash-nav-config">
                 <a>
-                    <i class="icon-tools"></i>
-                    Clash 配置
+                    <i class="icon-system"></i>
+                    配置文件
                 </a>
             </label>
         </li>
@@ -156,7 +167,7 @@
         <li>
             <label class="koolclash-nav-log koolclash-nav-label" for="koolclash-nav-log">
                 <a>
-                    <i class="icon-info"></i>
+                    <i class="icon-hourglass"></i>
                     操作日志
                 </a>
             </label>
@@ -174,22 +185,6 @@
                         <button type="button" id="koolclash-btn-start-clash" onclick="KoolClash.restart()" class="btn btn-success">启动/重启 Clash</button>
                         <button type="button" id="koolclash-btn-stop-clash" onclick="KoolClash.stop()" class="btn">停止 Clash</button>
                         <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn btn-primary">更新 IP 解析库</button>
-                    </div>
-                </div>
-
-                <div class="heading">Clash 面板</div>
-                <div class="content">
-                    <!-- ### KoolClash 面板 ### -->
-                    <p style="padding: 0 10px 10px 10px">
-                        <span style="font-weight: bold; color: #444; font-size: 105%;">外部控制设置</span><br>
-                        Host：<span id="koolclash-lan-ip">路由器 IP</span><br>
-                        端口：6170<br>
-                        密钥：Clash 配置文件中设置的 secret（没有可不填）
-                    </p>
-
-                    <div class="koolclash-btn-container">
-                        <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">访问 Clash Dashboard</a>
-                        <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Clash Dashboard</button>
                     </div>
                 </div>
             </div>
@@ -226,6 +221,25 @@
                 </div>
             </div>
 
+        </div>
+        <div id="koolclash-content-dashboard">
+            <div class="box">
+                <div class="heading">Clash 面板</div>
+                <div class="content">
+                    <!-- ### KoolClash 面板 ### -->
+                    <p style="padding: 0 10px 10px 10px">
+                        <span style="font-weight: bold; color: #444; font-size: 105%;">外部控制设置</span><br>
+                        Host：<span id="koolclash-lan-ip">路由器 IP</span><br>
+                        端口：6170<br>
+                        密钥：Clash 配置文件中设置的 secret（没有可不填）
+                    </p>
+
+                    <div class="koolclash-btn-container">
+                        <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">访问 Clash Dashboard</a>
+                        <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Clash Dashboard</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="koolclash-content-config">
 
