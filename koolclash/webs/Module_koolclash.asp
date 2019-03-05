@@ -70,7 +70,23 @@
             cursor: default;
         }
 
+        label.koolclash-nav-label {
+            padding: 0;
+            cursor: pointer;
+        }
+
+        #koolclash-nav-overview:checked ~ .nav-tabs .koolclash-nav-overview a,
+        #koolclash-nav-config:checked ~ .nav-tabs .koolclash-nav-config a,
+        #koolclash-nav-firewall:checked ~ .nav-tabs .koolclash-nav-firewall a,
+        #koolclash-nav-log:checked ~ .nav-tabs .koolclash-nav-log a {
+            border-bottom: 2px solid #f36c21;
+            background: transparent;
+            z-index: 999;
+            color: #777777;
+        }
+
     </style>
+
     <div class="box">
         <div class="heading">
             <a style="padding-left: 0; color: #0099FF; font-size: 20px;" href="https://koolclash.js.org" target="_blank">KoolClash</a>
@@ -90,6 +106,47 @@
             </div>
         </div>
     </div>
+
+
+    <input class="koolclash-nav-radio" id="koolclash-nav-overview" type="radio" name="nav-tab" style="display: none">
+    <input class="koolclash-nav-radio" id="koolclash-nav-config" type="radio" name="nav-tab" style="display: none">
+    <input class="koolclash-nav-radio" id="koolclash-nav-firewall" type="radio" name="nav-tab" style="display: none">
+    <input class="koolclash-nav-radio" id="koolclash-nav-log" type="radio" name="nav-tab" style="display: none">
+
+    <ul class="nav nav-tabs">
+        <li>
+            <label class="koolclash-nav-overview koolclash-nav-label" for="koolclash-nav-overview">
+                <a href="javascript:void(0);">
+                    <i class="icon-system"></i>
+                    运行状态
+                </a>
+            </label>
+        </li>
+        <li>
+            <label class="koolclash-nav-config koolclash-nav-label" for="koolclash-nav-config">
+                <a href="javascript:void(0);">
+                    <i class="icon-tools"></i>
+                    Clash 配置
+                </a>
+            </label>
+        </li>
+        <li>
+            <label class="koolclash-nav-firewall koolclash-nav-label" for="koolclash-nav-firewall">
+                <a href="javascript:void(0);">
+                    <i class="icon-lock"></i>
+                    访问控制
+                </a>
+            </label>
+        </li>
+        <li>
+            <label class="koolclash-nav-log koolclash-nav-label" for="koolclash-nav-log">
+                <a href="javascript:void(0);">
+                    <i class="icon-info"></i>
+                    操作日志
+                </a>
+            </label>
+        </li>
+    </ul>
 
     <div class="box">
         <div class="heading">KoolClash 管理</div>
