@@ -62,6 +62,10 @@
             width: 61.8%;
         }
 
+        #koolclash-version-msg {
+            font-size: 14px;
+        }
+
         fieldset .help-block {
             margin: 0;
         }
@@ -70,103 +74,221 @@
             cursor: default;
         }
 
+        label.koolclash-nav-label {
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .koolclash-nav-radio {
+            display: none;
+        }
+
+        #koolclash-nav-overview:checked~.nav-tabs .koolclash-nav-overview>a,
+        #koolclash-nav-dashboard:checked~.nav-tabs .koolclash-nav-dashboard>a,
+        #koolclash-nav-config:checked~.nav-tabs .koolclash-nav-config>a,
+        #koolclash-nav-firewall:checked~.nav-tabs .koolclash-nav-firewall>a,
+        #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-log>a {
+            border-bottom: 2px solid #f36c21;
+            background: transparent;
+            z-index: 999;
+            color: #777777;
+        }
+
+        .tab-content>* {
+            display: none;
+        }
+
+        #koolclash-nav-overview:checked~.tab-content>#koolclash-content-overview,
+        #koolclash-nav-dashboard:checked~.tab-content>#koolclash-content-dashboard,
+        #koolclash-nav-config:checked~.tab-content>#koolclash-content-config,
+        #koolclash-nav-firewall:checked~.tab-content>#koolclash-content-firewall,
+        #koolclash-nav-log:checked~.tab-content>#koolclash-content-log {
+            display: block;
+        }
+
     </style>
+
     <div class="box">
         <div class="heading">
-            <a style="padding-left: 0; color: #0099FF; font-size: 20px;" href="https://koolclash.js.org" target="_blank">KoolClash</a>
+            <a style="padding-left: 0; color: #0099FF; font-size: 20px;" href="https://koolclash.js.org" target="_blank">KoolClash - Clash for Koolshare OpenWrt/LEDE</a>
             <a href="#/soft-center.asp" class="btn" style="float: right; margin-right: 5px; border-radius:3px; margin-top: 0px;">返回</a>
+            <br>
+            <span id="koolclash-version-msg"></span>
             <!--<a href="https://github.com/koolshare/ledesoft/blob/master/v2ray/Changelog.txt" target="_blank"
                 class="btn btn-primary" style="float:right;border-radius:3px;margin-right:5px;margin-top:0px;">更新日志</a>-->
             <!--<button type="button" id="updateBtn" onclick="check_update()" class="btn btn-primary" style="float:right;border-radius:3px;margin-right:5px;margin-top:0px;">检查更新 <i class="icon-upgrade"></i></button>-->
         </div>
         <div class="content">
-            <div class="col" style="line-height:30px;">
-                <p id="koolclash-version-msg"></p>
+            <div class="col" style="line-height: 30px;">
+                <p style="margin-top: 4px">Clash 是一个基于规则的代理程序，兼容 Shadowsocks、Vmess 等协议，拥有像 Surge 一样强大的代理规则。</p>
+                <p>KoolClash 是 Clash 在 Koolshare OpenWrt 上的客户端。</p>
 
-                <p style="margin-top: 10px">Clash 是一个基于规则的代理程序，兼容 Shadowsocks、Vmess 等协议，拥有像 Surge 一样强大的代理规则。</p>
-                <p>KoolClash 是 Clash 在 Koolshare OpenWrt 上的客户端</p>
-
-                <p style="margin-top: 10px"><a href="https://github.com/Dreamacro/clash">Clash on GitHub</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://github.com/SukkaW/Koolshare-Clash" target="_blank">KoolClash on GitHub</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://koolclash.js.org" target="_blank">KoolClash 使用文档</a></p>
+                <p style="margin-top: 12px"><a href="https://github.com/Dreamacro/clash">Clash on GitHub</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://koolclash.js.org" target="_blank">KoolClash 使用文档</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://github.com/SukkaW/Koolshare-Clash/releases" target="_blank">KoolClash 更新日志</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://github.com/SukkaW/Koolshare-Clash" target="_blank">KoolClash on GitHub</a></p>
             </div>
         </div>
     </div>
 
-    <div class="box">
-        <div class="heading">KoolClash 管理</div>
 
-        <div class="content">
-            <!-- ### KoolClash 运行状态 ### -->
-            <div id="koolclash-field"></div>
-            <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-start-clash" onclick="KoolClash.restart()" class="btn btn-success">启动/重启 Clash</button>
-                <button type="button" id="koolclash-btn-stop-clash" onclick="KoolClash.stop()" class="btn">停止 Clash</button>
-                <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn btn-primary">更新 IP 解析库</button>
-            </div>
-        </div>
+    <input class="koolclash-nav-radio" id="koolclash-nav-overview" type="radio" name="nav-tab" checked>
+    <input class="koolclash-nav-radio" id="koolclash-nav-dashboard" type="radio" name="nav-tab">
+    <input class="koolclash-nav-radio" id="koolclash-nav-config" type="radio" name="nav-tab">
+    <input class="koolclash-nav-radio" id="koolclash-nav-firewall" type="radio" name="nav-tab">
+    <input class="koolclash-nav-radio" id="koolclash-nav-log" type="radio" name="nav-tab">
 
-        <div class="heading">Clash 面板</div>
-        <div class="content">
-            <!-- ### KoolClash 面板 ### -->
-            <p style="padding: 0 10px 10px 10px">
-                <span style="font-weight: bold; color: #444; font-size: 105%;">外部控制设置</span><br>
-                Host：<span id="koolclash-lan-ip">路由器 IP</span><br>
-                端口：6170<br>
-                密钥：Clash 配置文件中设置的 secret（没有可不填）
-            </p>
+    <ul class="nav nav-tabs">
+        <li>
+            <label class="koolclash-nav-overview koolclash-nav-label" for="koolclash-nav-overview">
+                <a>
+                    <i class="icon-info"></i>
+                    运行状态
+                </a>
+            </label>
+        </li>
+        <li>
+            <label class="koolclash-nav-dashboard koolclash-nav-label" for="koolclash-nav-dashboard">
+                <a>
+                    <i class="icon-tools"></i>
+                    Clash 面板
+                </a>
+            </label>
+        </li>
+        <li>
+            <label class="koolclash-nav-config koolclash-nav-label" for="koolclash-nav-config">
+                <a>
+                    <i class="icon-system"></i>
+                    配置文件
+                </a>
+            </label>
+        </li>
+        <li>
+            <label class="koolclash-nav-firewall koolclash-nav-label" for="koolclash-nav-firewall">
+                <a>
+                    <i class="icon-lock"></i>
+                    访问控制
+                </a>
+            </label>
+        </li>
+        <li>
+            <label class="koolclash-nav-log koolclash-nav-label" for="koolclash-nav-log">
+                <a>
+                    <i class="icon-hourglass"></i>
+                    操作日志
+                </a>
+            </label>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="koolclash-content-overview">
+            <div class="box">
+                <div class="heading">KoolClash 管理</div>
 
-            <div class="koolclash-btn-container">
-                <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">访问 Clash Dashboard</a>
-                <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Clash Dashboard</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="msg_success" class="alert alert-success icon" style="display:none;"></div>
-    <div id="msg_error" class="alert alert-error icon" style="display:none;"></div>
-    <div id="msg_warning" class="alert alert-warning icon" style="display:none;"></div>
-
-    <div id="koolclash-ip" class="box">
-        <div class="heading" style="padding-right: 20px;">
-            <div style="display: flex;">
-                <div style="width: 61.8%">IP 地址检查</div>
-                <div style="width: 31.2%">网站访问检查</div>
-            </div>
-        </div>
-
-        <div class="content">
-            <!-- ### KoolClash IP ### -->
-            <div style="display: flex;">
-                <div style="width: 61.8%">
-                    <p><span class="ip-title">IPIP&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-ipipnet"></span></p>
-                    <p><span class="ip-title">淘宝&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-taobao"></span>&nbsp;<span id="ip-taobao-ipip"></span></p>
-                    <p><span class="ip-title">IP.SB&nbsp;海外</span>:&nbsp;<span id="ip-ipsb"></span>&nbsp;<span id="ip-ipsb-geo"></span></p>
-                    <p><span class="ip-title">ipify&nbsp;&nbsp;海外</span>:&nbsp;<span id="ip-ipify"></span>&nbsp;<span id="ip-ipify-ipip"></span></p>
+                <div class="content">
+                    <!-- ### KoolClash 运行状态 ### -->
+                    <div id="koolclash-field"></div>
+                    <div class="koolclash-btn-container">
+                        <button type="button" id="koolclash-btn-start-clash" onclick="KoolClash.restart()" class="btn btn-success">启动/重启 Clash</button>
+                        <button type="button" id="koolclash-btn-stop-clash" onclick="KoolClash.stop()" class="btn btn-danger">停止 Clash</button>
+                        <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn">更新 IP 解析库</button>
+                    </div>
                 </div>
-                <div style="width: 38.2%">
-                    <p><span class="ip-title">百度搜索</span>&nbsp;:&nbsp;<span id="http-baidu"></span></p>
-                    <p><span class="ip-title">网易 163</span>&nbsp;:&nbsp;<span id="http-163"></span></p>
-                    <p><span class="ip-title">GitHub</span>&nbsp;:&nbsp;<span id="http-github"></span></p>
-                    <p><span class="ip-title">YouTube</span>&nbsp;:&nbsp;<span id="http-youtube"></span></p>
+            </div>
+
+            <div id="msg_success" class="alert alert-success icon" style="display:none;"></div>
+            <div id="msg_error" class="alert alert-error icon" style="display:none;"></div>
+            <div id="msg_warning" class="alert alert-warning icon" style="display:none;"></div>
+
+            <div id="koolclash-ip" class="box">
+                <div class="heading" style="padding-right: 20px;">
+                    <div style="display: flex;">
+                        <div style="width: 61.8%">IP 地址检查</div>
+                        <div style="width: 31.2%">网站访问检查</div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <!-- ### KoolClash IP ### -->
+                    <div style="display: flex;">
+                        <div style="width: 61.8%">
+                            <p><span class="ip-title">IPIP&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-ipipnet"></span></p>
+                            <p><span class="ip-title">淘宝&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-taobao"></span>&nbsp;<span id="ip-taobao-ipip"></span></p>
+                            <p><span class="ip-title">IP.SB&nbsp;海外</span>:&nbsp;<span id="ip-ipsb"></span>&nbsp;<span id="ip-ipsb-geo"></span></p>
+                            <p><span class="ip-title">ipify&nbsp;&nbsp;海外</span>:&nbsp;<span id="ip-ipify"></span>&nbsp;<span id="ip-ipify-ipip"></span></p>
+                        </div>
+                        <div style="width: 38.2%">
+                            <p><span class="ip-title">百度搜索</span>&nbsp;:&nbsp;<span id="http-baidu"></span></p>
+                            <p><span class="ip-title">网易 163</span>&nbsp;:&nbsp;<span id="http-163"></span></p>
+                            <p><span class="ip-title">GitHub</span>&nbsp;:&nbsp;<span id="http-github"></span></p>
+                            <p><span class="ip-title">YouTube</span>&nbsp;:&nbsp;<span id="http-youtube"></span></p>
+                        </div>
+                    </div>
+                    <p><span style="float: right">Powered by <a href="https://ip.skk.moe" target="_blank">ip.skk.moe</a></span></p>
                 </div>
             </div>
-            <p><span style="float: right">Powered by <a href="https://ip.skk.moe" target="_blank">ip.skk.moe</a></span></p>
+
         </div>
-    </div>
+        <div id="koolclash-content-dashboard">
+            <div class="box">
+                <div class="heading">Clash 外部控制设置</div>
+                <div class="content">
+                    <!-- ### KoolClash 面板 ### -->
+                    <div id="koolclash-dashboard-info"></div>
 
-    <div class="box">
-        <div class="heading">KoolClash 配置</div>
+                    <div>
+                        <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">访问 Clash Dashboard</a>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="heading">更新 Clash 面板</div>
+                <div class="content">
+                    <!-- ### KoolClash 面板 ### -->
+                    <div style="padding: 0 10px 10px 6px">
+                        <!--<p>暂无 Clash Dashboard 版本信息，请点击「检查更新」获取版本信息！</p>-->
+                        <!--https://api.github.com/repos/Dreamacro/clash-dashboard/commits/master-->
+                        <p>「检查更新」功能还在开发中，目前仅「更新 Clash Dashboard」可用！</p>
+                    </div>
 
-        <div class="content">
-            <!-- ### KoolClash 运行配置设置 ### -->
-            <div id="koolclash-config"></div>
-            <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-update-sub" onclick="KoolClash.updateRemoteConfig();" class="btn">更新 Clash 托管配置</button>
-                <button type="button" id="koolclash-btn-del-suburl" onclick="KoolClash.deleteSuburl();" class="btn btn-primary">删除托管 URL（保留 Clash 配置）</button>
+                    <div>
+                        <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn btn-success">更新 Clash Dashboard</button>
+                        <button type="button" id="koolclash-btn-check-dashboard" onclick="KoolClash.checkUpdateDashboard()" class="btn">检查更新</button>
+                    </div>
+                </div>
             </div>
 
-            <div id="koolclash-config-dns"></div>
-            <div class="koolclash-btn-container">
-                <button type="button" id="koolclash-btn-save-dns-config" onclick="KoolClash.submitDNSConfig();" class="btn btn-primary">提交 Clash DNS 配置</button>
+        </div>
+        <div id="koolclash-content-config">
+            <div class="box">
+                <div class="heading">KoolClash 配置</div>
+
+                <div class="content">
+                    <!-- ### KoolClash 运行配置设置 ### -->
+                    <div id="koolclash-config"></div>
+                    <div class="koolclash-btn-container">
+                        <button type="button" id="koolclash-btn-update-sub" onclick="KoolClash.updateRemoteConfig();" class="btn">更新 Clash 托管配置</button>
+                        <button type="button" id="koolclash-btn-del-suburl" onclick="KoolClash.deleteSuburl();" class="btn btn-danger">删除托管 URL（保留 Clash 配置）</button>
+                    </div>
+
+                    <div id="koolclash-config-dns"></div>
+                    <div class="koolclash-btn-container">
+                        <button type="button" id="koolclash-btn-save-dns-config" onclick="KoolClash.submitDNSConfig();" class="btn btn-primary">提交 Clash DNS 配置</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="koolclash-content-firewall">
+            <div class="box">
+                <div class="heading">功能开发中</div>
+                <div class="content">
+                    访问控制 还在开发中。将会提供对局域网内设备的连接控制、端口控制，和劫持局域网内 DNS 的选项。
+                </div>
+            </div>
+        </div>
+        <div id="koolclash-content-log">
+            <div class="box">
+                <div class="heading">功能开发中</div>
+                <div class="content">
+                    操作日志 还在开发中。
+                </div>
             </div>
         </div>
     </div>
@@ -286,6 +408,21 @@
                         text: '<span id="koolclash_status" name="koolclash_status" color="#1bbf35">正在获取 Clash 进程状态...</span>'
                     },
                 ]);
+                $('#koolclash-dashboard-info').forms([
+                    {
+                        title: '<b>Host</b>',
+                        text: '<span id="koolclash-lan-ip">路由器 LAN IP</span>'
+                    },
+                    {
+                        title: '<b>端口</b>',
+                        text: '6170'
+                    },
+                    {
+                        title: '<b>密钥</b>',
+                        text: 'Clash 配置文件中设置的 secret（没有可不填）'
+                    },
+                ]);
+
                 $('#koolclash-config').forms([
                     {
                         title: '<b>Clash 配置上传</b>',
@@ -300,7 +437,8 @@
                 ]);
                 $('#koolclash-config-dns').forms([
                     {
-                        title: '<b>后备 Clash DNS 配置 (YAML)</b><br><span id="koolclash-dns-msg"></span>',
+                        title: '<b>后备 Clash DNS 配置 (YAML)</b>',
+                        suffix: '<p id="koolclash-dns-msg" style="margin-top: 10px; margin-bottom: 6px"></p>',
                         name: 'koolclash-config-dns',
                         type: 'textarea',
                         value: '正在加载存储的 Clash DNS Config 配置...',
@@ -434,7 +572,7 @@
                                         return false;
                                     }
                                     if (resp.result === 'nofallbackdns') {
-                                        document.getElementById('koolclash-btn-upload').innerHTML = '在 Clash 配置文件中没有找到 DNS 设置，请在下面添加 DNS 配置！';
+                                        document.getElementById('koolclash-btn-upload').innerHTML = '在 Clash 配置文件中没有找到 DNS 设置，请在下面添加 DNS 后备配置！';
                                         document.getElementById('koolclash-btn-upload').classList.remove('btn-primary');
                                         document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
                                     } else {
@@ -472,7 +610,7 @@
                     }
                 });
             },
-            defaultDNSConfig: `# 没有找到保存的 Clash DNS 配置，推荐使用以下的配置
+            defaultDNSConfig: `# 没有找到保存的 Clash DNS 后备配置，推荐使用以下的配置
 dns:
   enable: true
   ipv6: false
@@ -537,7 +675,7 @@ dns:
                     postData = JSON.stringify({
                         "id": id,
                         "method": "koolclash_save_dns_config.sh",
-                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash DNS 配置，推荐使用以下的配置\n', ''))}`],
+                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash DNS 后备配置，推荐使用以下的配置\n', ''))}`],
                         "fields": ""
                     });
 
