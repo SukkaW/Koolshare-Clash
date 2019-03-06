@@ -231,13 +231,7 @@
                 <div class="heading">Clash 外部控制设置</div>
                 <div class="content">
                     <!-- ### KoolClash 面板 ### -->
-                    <div style="padding: 0 10px 10px 6px">
-                        <p>
-                            Host：<span id="koolclash-lan-ip">路由器 IP</span><br>
-                            端口：6170<br>
-                            密钥：Clash 配置文件中设置的 secret（没有可不填）
-                        </p>
-                    </div>
+                    <div id="koolclash-dashboard-info"></div>
 
                     <div>
                         <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">访问 Clash Dashboard</a>
@@ -413,6 +407,21 @@
                         text: '<span id="koolclash_status" name="koolclash_status" color="#1bbf35">正在获取 Clash 进程状态...</span>'
                     },
                 ]);
+                $('#koolclash-dashboard-info').forms([
+                    {
+                        title: '<b>Host</b>',
+                        text: '<span id="koolclash-lan-ip">路由器 LAN IP</span>'
+                    },
+                    {
+                        title: '<b>端口</b>',
+                        text: '6170'
+                    },
+                    {
+                        title: '<b>密钥</b>',
+                        text: 'Clash 配置文件中设置的 secret（没有可不填）'
+                    },
+                ]);
+
                 $('#koolclash-config').forms([
                     {
                         title: '<b>Clash 配置上传</b>',
@@ -562,7 +571,7 @@
                                         return false;
                                     }
                                     if (resp.result === 'nofallbackdns') {
-                                        document.getElementById('koolclash-btn-upload').innerHTML = '在 Clash 配置文件中没有找到 DNS 设置，请在下面添加 DNS 配置！';
+                                        document.getElementById('koolclash-btn-upload').innerHTML = '在 Clash 配置文件中没有找到 DNS 设置，请在下面添加 DNS 后备配置！';
                                         document.getElementById('koolclash-btn-upload').classList.remove('btn-primary');
                                         document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
                                     } else {
@@ -600,7 +609,7 @@
                     }
                 });
             },
-            defaultDNSConfig: `# 没有找到保存的 Clash DNS 配置，推荐使用以下的配置
+            defaultDNSConfig: `# 没有找到保存的 Clash DNS 后备配置，推荐使用以下的配置
 dns:
   enable: true
   ipv6: false
@@ -665,7 +674,7 @@ dns:
                     postData = JSON.stringify({
                         "id": id,
                         "method": "koolclash_save_dns_config.sh",
-                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash DNS 配置，推荐使用以下的配置\n', ''))}`],
+                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash DNS 后备配置，推荐使用以下的配置\n', ''))}`],
                         "fields": ""
                     });
 
