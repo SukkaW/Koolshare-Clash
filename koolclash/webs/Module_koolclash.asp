@@ -244,6 +244,7 @@
                     <!-- ### KoolClash 面板 ### -->
                     <div style="padding: 0 10px 10px 6px">
                         <!--<p>暂无 Clash Dashboard 版本信息，请点击「检查更新」获取版本信息！</p>-->
+                        <!--https://api.github.com/repos/Dreamacro/clash-dashboard/commits/master-->
                         <p>「检查更新」功能还在开发中，目前仅「更新 Clash Dashboard」可用！</p>
                     </div>
 
