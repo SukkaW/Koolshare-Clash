@@ -242,7 +242,6 @@
             </div>
         </div>
         <div id="koolclash-content-config">
-
             <div class="box">
                 <div class="heading">KoolClash 配置</div>
 
@@ -258,6 +257,22 @@
                     <div class="koolclash-btn-container">
                         <button type="button" id="koolclash-btn-save-dns-config" onclick="KoolClash.submitDNSConfig();" class="btn btn-primary">提交 Clash DNS 配置</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div id="koolclash-content-firewall">
+            <div class="box">
+                <div class="heading">功能开发中</div>
+                <div class="content">
+                    访问控制 还在开发中。将会提供对局域网内设备的连接控制、端口控制，和劫持局域网内 DNS 的选项。
+                </div>
+            </div>
+        </div>
+        <div id="koolclash-content-log">
+            <div class="box">
+                <div class="heading">功能开发中</div>
+                <div class="content">
+                    操作日志 还在开发中。
                 </div>
             </div>
         </div>
