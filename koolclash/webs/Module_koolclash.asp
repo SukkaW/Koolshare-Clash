@@ -187,8 +187,8 @@
                     <div id="koolclash-field"></div>
                     <div class="koolclash-btn-container">
                         <button type="button" id="koolclash-btn-start-clash" onclick="KoolClash.restart()" class="btn btn-success">启动/重启 Clash</button>
-                        <button type="button" id="koolclash-btn-stop-clash" onclick="KoolClash.stop()" class="btn">停止 Clash</button>
-                        <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn btn-primary">更新 IP 解析库</button>
+                        <button type="button" id="koolclash-btn-stop-clash" onclick="KoolClash.stop()" class="btn btn-danger">停止 Clash</button>
+                        <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn">更新 IP 解析库</button>
                     </div>
                 </div>
             </div>
@@ -228,22 +228,38 @@
         </div>
         <div id="koolclash-content-dashboard">
             <div class="box">
-                <div class="heading">Clash 面板</div>
+                <div class="heading">Clash 外部控制设置</div>
                 <div class="content">
                     <!-- ### KoolClash 面板 ### -->
-                    <p style="padding: 0 10px 10px 10px">
-                        <span style="font-weight: bold; color: #444; font-size: 105%;">外部控制设置</span><br>
-                        Host：<span id="koolclash-lan-ip">路由器 IP</span><br>
-                        端口：6170<br>
-                        密钥：Clash 配置文件中设置的 secret（没有可不填）
-                    </p>
+                    <div style="padding: 0 10px 10px 6px">
+                        <p>
+                            Host：<span id="koolclash-lan-ip">路由器 IP</span><br>
+                            端口：6170<br>
+                            密钥：Clash 配置文件中设置的 secret（没有可不填）
+                        </p>
+                    </div>
 
-                    <div class="koolclash-btn-container">
+                    <div>
                         <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">访问 Clash Dashboard</a>
-                        <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn">更新 Clash Dashboard</button>
                     </div>
                 </div>
             </div>
+            <div class="box">
+                <div class="heading">更新 Clash 面板</div>
+                <div class="content">
+                    <!-- ### KoolClash 面板 ### -->
+                    <div style="padding: 0 10px 10px 6px">
+                        <!--<p>暂无 Clash Dashboard 版本信息，请点击「检查更新」获取版本信息！</p>-->
+                        <p>「检查更新」功能还在开发中，目前仅「更新 Clash Dashboard」可用！</p>
+                    </div>
+
+                    <div>
+                        <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn btn-success">更新 Clash Dashboard</button>
+                        <button type="button" id="koolclash-btn-check-dashboard" onclick="KoolClash.checkUpdateDashboard()" class="btn">检查更新</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div id="koolclash-content-config">
             <div class="box">
@@ -254,7 +270,7 @@
                     <div id="koolclash-config"></div>
                     <div class="koolclash-btn-container">
                         <button type="button" id="koolclash-btn-update-sub" onclick="KoolClash.updateRemoteConfig();" class="btn">更新 Clash 托管配置</button>
-                        <button type="button" id="koolclash-btn-del-suburl" onclick="KoolClash.deleteSuburl();" class="btn btn-primary">删除托管 URL（保留 Clash 配置）</button>
+                        <button type="button" id="koolclash-btn-del-suburl" onclick="KoolClash.deleteSuburl();" class="btn btn-danger">删除托管 URL（保留 Clash 配置）</button>
                     </div>
 
                     <div id="koolclash-config-dns"></div>
@@ -411,7 +427,8 @@
                 ]);
                 $('#koolclash-config-dns').forms([
                     {
-                        title: '<b>后备 Clash DNS 配置 (YAML)</b><br><span id="koolclash-dns-msg"></span>',
+                        title: '<b>后备 Clash DNS 配置 (YAML)</b>',
+                        suffix: '<p id="koolclash-dns-msg" style="margin-top: 10px; margin-bottom: 6px"></p>',
                         name: 'koolclash-config-dns',
                         type: 'textarea',
                         value: '正在加载存储的 Clash DNS Config 配置...',
