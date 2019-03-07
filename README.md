@@ -58,9 +58,10 @@ Read the [detailed installation instructions (written in Chinese)](https://koolc
 ## Build
 
 ```bash
-$ https://github.com/SukkaW/Koolshare-Clash
+$ git clone https://github.com/SukkaW/Koolshare-Clash.git
 $ cd Koolshare-Clash
 $ ./build.sh
+# Get koolclash.tar.gz
 ```
 
 ## Clash on Other Platforms
