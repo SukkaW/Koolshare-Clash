@@ -84,7 +84,6 @@
         }
 
         #koolclash-nav-overview:checked~.nav-tabs .koolclash-nav-overview>a,
-        #koolclash-nav-dashboard:checked~.nav-tabs .koolclash-nav-dashboard>a,
         #koolclash-nav-config:checked~.nav-tabs .koolclash-nav-config>a,
         #koolclash-nav-firewall:checked~.nav-tabs .koolclash-nav-firewall>a,
         #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-log>a {
@@ -99,7 +98,6 @@
         }
 
         #koolclash-nav-overview:checked~.tab-content>#koolclash-content-overview,
-        #koolclash-nav-dashboard:checked~.tab-content>#koolclash-content-dashboard,
         #koolclash-nav-config:checked~.tab-content>#koolclash-content-config,
         #koolclash-nav-firewall:checked~.tab-content>#koolclash-content-firewall,
         #koolclash-nav-log:checked~.tab-content>#koolclash-content-log {
@@ -130,7 +128,6 @@
 
 
     <input class="koolclash-nav-radio" id="koolclash-nav-overview" type="radio" name="nav-tab" checked>
-    <input class="koolclash-nav-radio" id="koolclash-nav-dashboard" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-config" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-firewall" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-log" type="radio" name="nav-tab">
@@ -141,14 +138,6 @@
                 <a>
                     <i class="icon-info"></i>
                     运行状态
-                </a>
-            </label>
-        </li>
-        <li>
-            <label class="koolclash-nav-dashboard koolclash-nav-label" for="koolclash-nav-dashboard">
-                <a>
-                    <i class="icon-tools"></i>
-                    Clash 面板
                 </a>
             </label>
         </li>
@@ -225,32 +214,13 @@
                 </div>
             </div>
 
-        </div>
-        <div id="koolclash-content-dashboard">
             <div class="box">
-                <div class="heading">Clash 外部控制设置</div>
+                <div class="heading">Clash 控制面板</div>
                 <div class="content">
                     <!-- ### KoolClash 面板 ### -->
                     <div id="koolclash-dashboard-info"></div>
-
                     <div>
                         <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">访问 Clash Dashboard</a>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <div class="heading">更新 Clash 面板</div>
-                <div class="content">
-                    <!-- ### KoolClash 面板 ### -->
-                    <div style="padding: 0 10px 10px 6px">
-                        <!--<p>暂无 Clash Dashboard 版本信息，请点击「检查更新」获取版本信息！</p>-->
-                        <!--https://api.github.com/repos/Dreamacro/clash-dashboard/commits/master-->
-                        <p>「检查更新」功能还在开发中，目前仅「更新 Clash Dashboard」可用！</p>
-                    </div>
-
-                    <div>
-                        <button type="button" id="koolclash-btn-update-dashboard" onclick="KoolClash.updateDashboard()" class="btn btn-success">更新 Clash Dashboard</button>
-                        <button type="button" id="koolclash-btn-check-dashboard" onclick="KoolClash.checkUpdateDashboard()" class="btn">检查更新</button>
                     </div>
                 </div>
             </div>
@@ -469,7 +439,7 @@
                                 document.getElementById('koolclash-version-msg').innerHTML = `当前安装版本&nbsp;:&nbsp;${installed}&nbsp;&nbsp;/&nbsp;&nbsp;最新发布版本&nbsp;:&nbsp;${remote}`;
 
                                 if (installed !== remote) {
-                                    document.getElementById('koolclash-version-msg').innerHTML = `当前安装版本&nbsp;:&nbsp;${installed}&nbsp;&nbsp;|&nbsp;&nbsp;最新发布版本&nbsp;:&nbsp;${remote}<br>发现「当前安装版本」与「最新发布版本」版本号不同，可能是 KoolClash 有新版本发布，请前往 <a href="https://github.com/SukkaW/Koolshare-Clash/releases" target="_blank">GitHub Release</a> 查看更新日志`;
+                                    document.getElementById('koolclash-version-msg').innerHTML = `当前安装版本&nbsp;:&nbsp;${installed}&nbsp;&nbsp;|&nbsp;&nbsp;最新发布版本&nbsp;:&nbsp;${remote}<br>发现「当前安装版本」与「最新发布版本」版本号不同，可能是 KoolClash 有新版本发布，请前往 <a href="https://github.com/SukkaW/Koolshare-Clash/releases" target="_blank" style="padding: 0; color: navy">GitHub Release</a> 查看更新日志`;
                                 }
                             }
                         });
@@ -854,46 +824,6 @@ dns:
                     }
                 });
             },
-            updateDashboard: () => {
-                KoolClash.disableAllButton();
-                document.getElementById('koolclash-btn-update-dashboard').innerHTML = `开始下载最新的 clash-dashboard`;
-                let id = parseInt(Math.random() * 100000000),
-                    postData = JSON.stringify({
-                        "id": id,
-                        "method": "koolclash_update_dashboard.sh",
-                        "params": [],
-                        "fields": ""
-                    });
-
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "/_api/",
-                    data: postData,
-                    dataType: "json",
-                    success: (resp) => {
-                        if (resp.result === 'nodl') {
-                            document.getElementById('koolclash-btn-update-dashboard').innerHTML = `你的路由器中既没有 curl 也没有 wget，不能下载更新！`;
-                        } else if (resp.result === 'fail') {
-                            document.getElementById('koolclash-btn-update-dashboard').innerHTML = `Clash Dashboard 更新失败！`;
-                        } else {
-                            document.getElementById('koolclash-btn-update-dashboard').innerHTML = `Clash Dashboard 更新成功！`;
-                        }
-
-                        setTimeout(() => {
-                            KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-update-dashboard').innerHTML = '更新 Clash Dashboard';
-                        }, 5000)
-                    },
-                    error: () => {
-                        document.getElementById('koolclash-btn-update-dashboard').innerHTML = `Clash Dashboard 更新失败！`;
-                        setTimeout(() => {
-                            KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-update-dashboard').innerHTML = '更新 Clash Dashboard';
-                        }, 3000)
-                    }
-                });
-            },
             deleteSuburl: () => {
                 KoolClash.disableAllButton();
                 document.getElementById('koolclash-btn-del-suburl').innerHTML = `正在删除 Clash 托管配置 URL`;
@@ -974,7 +904,7 @@ dns:
                         }, 2500)
                     }
                 });
-            }
+            },
         };
     </script>
 
