@@ -890,6 +890,12 @@ dns:
                                 KoolClash.enableAllButton();
                                 document.getElementById('koolclash-btn-update-sub').innerHTML = '更新 Clash 托管配置';
                             }, 3500)
+                        } else if (resp.result === 'fail') {
+                            document.getElementById('koolclash-btn-update-sub').innerHTML = `Clash 托管配置下载失败！已经自动恢复到旧的配置文件！`;
+                            setTimeout(() => {
+                                KoolClash.enableAllButton();
+                                document.getElementById('koolclash-btn-update-sub').innerHTML = '更新 Clash 托管配置';
+                            }, 4000)
                         } else if (resp.result === 'nofallbackdns') {
                             document.getElementById('koolclash-btn-update-sub').innerHTML = '在托管配置中没有找到 DNS 设置，请在下面添加 DNS 配置！';
                             document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
@@ -902,7 +908,7 @@ dns:
                         }
                     },
                     error: () => {
-                        document.getElementById('koolclash-btn-update-sub').innerHTML = `Clash 配置更新失败！`;
+                        document.getElementById('koolclash-btn-update-sub').innerHTML = `Clash 托管配置更新失败！`;
 
                         setTimeout(() => {
                             KoolClash.enableAllButton();

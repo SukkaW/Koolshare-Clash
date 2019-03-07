@@ -8,6 +8,8 @@ eval $(dbus export koolclash_)
 lan_ip=$(uci get network.lan.ipaddr)
 wan_ip=$(ubus call network.interface.wan status | grep \"address\" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 
+fallbackdns=$(cat $KSROOT/koolclash/config/dns.yml)
+
 case $2 in
 del)
     dbus remove koolclash_suburl
@@ -28,9 +30,7 @@ update)
         exit 1
     fi
 
-    hasconfig=$(cat $KSROOT/koolclash/config/origin.yml | grep "port")
-
-    if [ ! -n "$hasconfig" ]; then
+    if [ $(yq r $KSROOT/koolclash/config/origin.yml port) == "null" ]; then
         rm -rf $KSROOT/koolclash/config/origin.yml
         cp $KSROOT/koolclash/config/origin-backup.yml $KSROOT/koolclash/config/origin.yml
         rm -rf $KSROOT/koolclash/config/origin-backup.yml
@@ -39,32 +39,40 @@ update)
         rm -rf $KSROOT/koolclash/config/origin-backup.yml
 
         echo_date "设置 redir-port 和 allow-lan 属性"
-        sed -i '/^redir-port:/ d' $KSROOT/koolclash/config/origin.yml
-        sed -i '/^allow-lan:/ d' $KSROOT/koolclash/config/origin.yml
-        sed -i '/^external-controller:/ d' $KSROOT/koolclash/config/origin.yml
+        # 覆盖配置文件中的 redir-port 和 allow-lan 的配置
+        yq w -i $KSROOT/koolclash/config/origin.yml redir-port 23456
+        yq w -i $KSROOT/koolclash/config/origin.yml allow-lan true
 
-        echo '' | tee -a $KSROOT/koolclash/config/origin.yml
-        echo 'redir-port: 23456' | tee -a $KSROOT/koolclash/config/origin.yml
-        echo 'allow-lan: true' | tee -a $KSROOT/koolclash/config/origin.yml
-        echo "external-controller: ${lan_ip}:6170" | tee -a $KSROOT/koolclash/config/origin.yml
+        echo_date "设置 Clash 外部控制器监听 ${lan_ip}:6170"
+        yq w -i $KSROOT/koolclash/config/origin.yml external-controller ${lan_ip}:6170
 
         sed -i '/^\-\-\-$/ d' $KSROOT/koolclash/config/origin.yml
         sed -i '/^\.\.\.$/ d' $KSROOT/koolclash/config/origin.yml
 
         cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
 
-        hasdns=$(cat $KSROOT/koolclash/config/config.yml | grep "dns:")
-        fallbackdns=$(cat $KSROOT/koolclash/config/dns.yml)
-        if [[ "$hasdns" != "dns:" ]]; then
+        # 判断是否存在 DNS 字段、DNS 是否启用、DNS 是否使用 redir-host 模式
+        if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
+            # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
+            yq w -i $KSROOT/koolclash/config/config.yml dns.listen "0.0.0.0:53"
+            echo_date "Clash 配置文件上传成功！"
+            http_response 'success'
+        else
+            echo_date "在 Clash 配置文件中没有找到 DNS 配置！"
             if [ ! -n "$fallbackdns" ]; then
+                echo_date "没有找到后备 DNS 配置！请前往「配置文件」提交后备 DNS 配置！"
                 http_response 'nofallbackdns'
             else
-                echo '' | tee -a $KSROOT/koolclash/config/config.yml
-                cat $KSROOT/koolclash/config/dns.yml | tee -a $KSROOT/koolclash/config/config.yml
+                echo_date "找到后备 DNS 配置！合并到 Clash 配置文件中..."
+                # 将后备 DNS 配置以覆盖的方式与 config.yml 合并
+                yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
+
+                # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
+                yq w -i $KSROOT/koolclash/config/config.yml dns.listen "0.0.0.0:53"
+
+                echo_date "Clash 配置文件上传成功！"
                 http_response 'success'
             fi
-        else
-            http_response 'success'
         fi
     fi
     ;;
