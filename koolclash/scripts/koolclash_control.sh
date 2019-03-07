@@ -23,7 +23,7 @@ start_clash() {
     dbus set koolclash_enable=1
 
     # 启动 Clash 进程
-    clash-linux-amd64 -d $KSROOT/koolclash/config/
+    clash -d $KSROOT/koolclash/config/
 }
 
 stop_clash() {
@@ -33,9 +33,9 @@ stop_clash() {
     sleep 1
 
     # 关闭 Clash 进程
-    if [ -n "$(pidof clash-linux-amd64)" ]; then
+    if [ -n "$(pidof clash)" ]; then
         echo_date 关闭 Clash 进程...
-        killall clash-linux-amd64
+        killall clash
     fi
 
     /etc/init.d/dnsmasq restart

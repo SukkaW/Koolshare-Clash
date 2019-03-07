@@ -8,7 +8,7 @@ wan_ip=$(ubus call network.interface.wan status | grep \"address\" | grep -oE '[
 
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 
-pid=`pidof clash-linux-amd64`
+pid=`pidof clash`
 date=`echo_date`
 
 if [ -n "$pid" ];then

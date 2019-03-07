@@ -21,6 +21,8 @@ x86_64)
     fw867=$(cat /etc/banner | grep fw867)
     if [ -d "/koolshare" ] && [ -n "$fw867" ]; then
         echo_date "固件平台【koolshare OpenWRT/LEDE x86_64】符合安装要求，开始安装插件！"
+        cp -rf /tmp/koolclash/bin/clash-linux-amd64 $KSROOT/bin/clash
+        cp -rf /tmp/koolclash/bin/yq_linux_amd64 $KSROOT/bin/yq
     else
         echo_date "本 Clash 插件用于 koolshare OpenWRT/LEDE x86_64 固件平台，其它固件未做适配！！！"
         echo_date "退出安装！"
@@ -64,7 +66,7 @@ cd /tmp
 
 echo_date "KoolClash: 复制安装包内的文件到路由器..."
 
-cp -rf /tmp/koolclash/bin/* $KSROOT/bin/
+#cp -rf /tmp/koolclash/bin/* $KSROOT/bin/
 cp -rf /tmp/koolclash/scripts/* $KSROOT/scripts/
 cp -rf /tmp/koolclash/init.d/* $KSROOT/init.d/
 cp -rf /tmp/koolclash/webs/* $KSROOT/webs/
