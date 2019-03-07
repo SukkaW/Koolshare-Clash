@@ -238,7 +238,7 @@
 
                     <div id="koolclash-config-dns"></div>
                     <div class="koolclash-btn-container">
-                        <button type="button" id="koolclash-btn-save-dns-config" onclick="KoolClash.submitDNSConfig();" class="btn btn-primary">提交 Clash DNS 配置</button>
+                        <button type="button" id="koolclash-btn-save-dns-config" onclick="KoolClash.submitDNSConfig();" class="btn btn-primary">提交 Clash 后备 DNS 设置</button>
                     </div>
                 </div>
             </div>
@@ -542,9 +542,6 @@
                                 data: postData,
                                 dataType: "json",
                                 success: (resp) => {
-                                    if (softcenter === 1) {
-                                        return false;
-                                    }
                                     if (resp.result === 'notfound') {
                                         document.getElementById('koolclash-btn-upload').innerHTML = '上传的配置文件找不到了！请重试！';
                                         setTimeout(() => {
@@ -664,24 +661,25 @@ dns:
                     data: postData,
                     dataType: "json",
                     success: (resp) => {
-                        if (softcenter === 1) {
-                            return false;
+                        if (resp.result === 'nofallbackdns') {
+                            document.getElementById('koolclash-btn-save-dns-config').innerHTML = '不能提交 空的 DNS 后备配置！';
+                            setTimeout(() => {
+                                KoolClash.enableAllButton();
+                                document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交 Clash 后备 DNS 设置';
+                            }, 4000)
+                        } else {
+                            document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交成功！页面将会自动刷新！<span id="koolclash-wait-time"></span>';
+                            KoolClash.tminus(5);
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 5000)
                         }
-
-                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交成功！页面将会自动刷新！<span id="koolclash-wait-time"></span>';
-                        KoolClash.tminus(5);
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 5000)
                     },
                     error: () => {
-                        if (softcenter === 1) {
-                            return false;
-                        }
-                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '保存失败！请重试';
+                        document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交失败！请重试';
                         setTimeout(() => {
                             KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交 Clash DNS 配置';
+                            document.getElementById('koolclash-btn-save-dns-config').innerHTML = '提交 Clash 后备 DNS 设置';
                         }, 4000)
                     }
                 });
