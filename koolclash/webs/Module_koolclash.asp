@@ -177,7 +177,7 @@
                     <div class="koolclash-btn-container">
                         <button type="button" id="koolclash-btn-start-clash" onclick="KoolClash.restart()" class="btn btn-success">启动/重启 Clash</button>
                         <button type="button" id="koolclash-btn-stop-clash" onclick="KoolClash.stop()" class="btn btn-danger">停止 Clash</button>
-                        <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn">更新 IP 解析库</button>
+                        <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn" style="float: right">更新 IP 解析库</button>
                     </div>
                 </div>
             </div>
@@ -215,13 +215,11 @@
             </div>
 
             <div class="box">
-                <div class="heading">Clash 控制面板</div>
+                <div class="heading" style="padding-bottom: 4px">Clash 外部控制</div>
                 <div class="content">
                     <!-- ### KoolClash 面板 ### -->
                     <div id="koolclash-dashboard-info"></div>
-                    <div>
-                        <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">访问 Clash Dashboard</a>
-                    </div>
+                    <a href="/koolclash/index.html" class="btn btn-primary" target="_blank" style="float: right; margin-right: 5px; border-radius: 3px; margin-top: 0px;">访问 Clash 面板</a>
                 </div>
             </div>
 
@@ -389,7 +387,7 @@
                     },
                     {
                         title: '<b>密钥</b>',
-                        text: 'Clash 配置文件中设置的 secret（没有可不填）'
+                        text: '<span id="koolclash-dashboard-info-secret">Clash 配置文件中设置的 secret（没有可不填）</span>'
                     },
                 ]);
 
@@ -477,6 +475,7 @@
                         let data = resp.result.split('@');
                         document.getElementById('koolclash_status').innerHTML = data[0];
                         document.getElementById('koolclash-lan-ip').innerHTML = data[1];
+                        document.getElementById('koolclash-dashboard-info-secret').innerHTML = (data[2] === 'null') ? `` : data[2];
                     },
                     error: () => {
                         if (softcenter === 1) {
