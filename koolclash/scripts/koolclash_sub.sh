@@ -48,6 +48,9 @@ update)
         echo 'allow-lan: true' | tee -a $KSROOT/koolclash/config/origin.yml
         echo "external-controller: ${lan_ip}:6170" | tee -a $KSROOT/koolclash/config/origin.yml
 
+        sed -i '/^\-\-\-$/ d' $KSROOT/koolclash/config/origin.yml
+sed -i '/^\.\.\.$/ d' $KSROOT/koolclash/config/origin.yml
+
         cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
 
         hasdns=$(cat $KSROOT/koolclash/config/config.yml | grep "dns:")
