@@ -21,6 +21,8 @@ x86_64)
     fw867=$(cat /etc/banner | grep fw867)
     if [ -d "/koolshare" ] && [ -n "$fw867" ]; then
         echo_date "固件平台【koolshare OpenWRT/LEDE x86_64】符合安装要求，开始安装插件！"
+        rm -rf $KSROOT/bin/clash >/dev/null 2>&1
+        rm -rf $KSROOT/bin/yq >/dev/null 2>&1
         cp -rf /tmp/koolclash/bin/clash-linux-amd64 $KSROOT/bin/clash
         cp -rf /tmp/koolclash/bin/yq_linux_amd64 $KSROOT/bin/yq
     else
@@ -50,7 +52,6 @@ fi
 echo_date "KoolClash: 清理旧版文件..."
 rm -rf $KSROOT/scripts/koolclash_* >/dev/null 2>&1
 rm -rf $KSROOT/init.d/S99koolclash.sh >/dev/null 2>&1
-rm -rf $KSROOT/bin/clash-* >/dev/null 2>&1
 rm -rf $KSROOT/webs/Module_koolclash.asp >/dev/null 2>&1
 rm -rf $KSROOT/webs/res/icon-koolclash* >/dev/null 2>&1
 rm -rf $KSROOT/webs/res/koolclash_* >/dev/null 2>&1
