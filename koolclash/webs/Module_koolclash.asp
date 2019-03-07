@@ -416,6 +416,14 @@
 
                 document.getElementById('_koolclash_config_suburl').setAttribute('placeholder', 'https://api.example.com/clash');
             },
+            // 选择 Tab
+            // 注意选择的方式是使用 input 的 ID
+            selectTab: (inputId) => {
+                for (let i of document.getElementsByClassName('koolclash-nav-radio')) {
+                    i.removeAttribute('checked');
+                    document.getElementById(inputId).setAttribute('checked', '');
+                }
+            },
             checkUpdate: () => {
                 let installed = '',
                     remote = '';
@@ -517,9 +525,6 @@
                     processData: false,
                     contentType: false,
                     success: (resp) => {
-                        if (softcenter === 1) {
-                            return false;
-                        }
                         document.getElementById('koolclash-btn-upload').innerHTML = '正在上传 Clash 配置...';
                         (() => {
                             let id = parseInt(Math.random() * 100000000),
@@ -540,12 +545,20 @@
                                     if (softcenter === 1) {
                                         return false;
                                     }
-                                    if (resp.result === 'nofallbackdns') {
-                                        document.getElementById('koolclash-btn-upload').innerHTML = '在 Clash 配置文件中没有找到 DNS 设置，请在下面添加 DNS 后备配置！';
+                                    if (resp.result === 'notfound') {
+                                        document.getElementById('koolclash-btn-upload').innerHTML = '上传的配置文件找不到了！请重试！';
+                                        setTimeout(() => {
+                                            KoolClash.enableAllButton();
+                                            document.getElementById('koolclash-btn-upload').innerHTML = '上传配置文件';
+                                        }, 3000)
+                                    } else if (resp.result === 'nofallbackdns') {
+                                        document.getElementById('koolclash-btn-upload').innerHTML = '在配置文件中没有找到 DNS 设置，请添加 DNS 后备配置！';
+                                        // KoolClash.selectTab('koolclash-nav-config')
                                         document.getElementById('koolclash-btn-upload').classList.remove('btn-primary');
+                                        document.getElementById('koolclash-btn-upload').classList.add('btn-danger');
                                         document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
                                     } else {
-                                        document.getElementById("koolclash-btn-upload").innerHTML = 'Clash 配置文件上传完毕！重启 Clash 后生效新的配置';
+                                        document.getElementById("koolclash-btn-upload").innerHTML = '配置文件上传完毕！重启 Clash 后生效新的配置';
                                         setTimeout(() => {
                                             KoolClash.enableAllButton();
                                             document.getElementById('koolclash-btn-upload').innerHTML = '上传配置文件';
@@ -553,10 +566,7 @@
                                     }
                                 },
                                 error: () => {
-                                    if (softcenter === 1) {
-                                        return false;
-                                    }
-                                    document.getElementById('koolclash-btn-upload').innerHTML = 'Clash 配置上传失败！';
+                                    document.getElementById('koolclash-btn-upload').innerHTML = '配置文件上传失败！';
 
                                     setTimeout(() => {
                                         KoolClash.enableAllButton();
@@ -570,11 +580,11 @@
                         if (softcenter === 1) {
                             return false;
                         }
-                        document.getElementById('koolclash-btn-save-config').innerHTML = '上传失败，请重试';
+                        document.getElementById('koolclash-btn-save-config').innerHTML = '配置文件上传失败，请重试';
 
                         setTimeout(() => {
                             KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-upload').innerHTML = '上传';
+                            document.getElementById('koolclash-btn-upload').innerHTML = '上传配置文件';
                         }, 4000)
                     }
                 });
@@ -592,7 +602,6 @@ dns:
     - tls://dns.rubyfish.cn:853
   fallback:
     - tls://1.0.0.1:853
-    - tls://1.1.1.1:853
     - tls://8.8.4.4:853
 `,
             getDNSConfig: () => {
