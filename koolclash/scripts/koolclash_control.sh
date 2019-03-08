@@ -16,7 +16,7 @@ start_clash() {
 
     /etc/init.d/dnsmasq restart
 
-    sleep 2
+    sleep 1
 
     [ ! -L "/etc/rc.d/S99koolclash.sh" ] && ln -sf $KSROOT/init.d/S99koolclash.sh /etc/rc.d/S99koolclash.sh
 
@@ -52,7 +52,7 @@ write_nat_start() {
 	  delete firewall.ks_koolclash
 	  set firewall.ks_koolclash=include
 	  set firewall.ks_koolclash.type=script
-	  set firewall.ks_koolclash.path=/koolshare/scripts/dmz_config.sh
+	  set firewall.ks_koolclash.path=/koolshare/scripts/koolclash_control.sh
 	  set firewall.ks_koolclash.family=any
 	  set firewall.ks_koolclash.reload=1
 	  commit firewall
@@ -75,16 +75,15 @@ start)
             remove_nat_start
             stop_clash
         else
-            hasdns=$(cat $KSROOT/koolclash/config/config.yml | grep "dns:")
-            if [[ "$hasdns" != "dns:" ]]; then
-                stop_clash
-                remove_nat_start
-            else
+            if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
                 remove_nat_start
                 stop_clash
                 sleep 1
                 write_nat_start
                 start_clash
+            else
+                stop_clash
+                remove_nat_start
             fi
         fi
     else
@@ -112,18 +111,17 @@ start)
         stop_clash
         remove_nat_start
     else
-        hasdns=$(cat $KSROOT/koolclash/config/config.yml | grep "dns:")
-        if [[ "$hasdns" != "dns:" ]]; then
-            http_response 'nodns'
-            stop_clash
-            remove_nat_start
-        else
+        if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
             remove_nat_start
             http_response 'success'
             stop_clash
             sleep 1
             write_nat_start
             start_clash
+        else
+            http_response 'nodns'
+            stop_clash
+            remove_nat_start
         fi
     fi
     ;;
