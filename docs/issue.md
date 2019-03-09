@@ -6,11 +6,10 @@
 - iptables 操作也有可能存在问题，因此你在使用 Clash 时有可能被锁在路由器外面。不过 KoolClash 在操作 iptables 时有放行 22 端口、不影响 SSH 登陆。可以通过这两条命令删除 KoolClash 添加的 iptables 规则：
 
 ```bash
-iptables -t nat -D PREROUTING -p tcp --dport 22 -j ACCEPT
-iptables -t nat -D PREROUTING -p tcp -j REDIRECT --to-ports 23456
+iptables -t nat -F koolclash
 ```
 
 - 如果你修改了 dnsmasq 监听的端口，在卸载 KoolClash 以后别忘了改回 53。
 - 因为 KoolClash 仍然不稳定，建议使用独立的设备（如果你是通过虚拟机跑软路由，则新建一个虚拟机独立运行）、调整网络拓扑来运行 KoolClash。
-- 上传 Clash 配置文件之前需要修改一下 `external-controller` 监听的 IP，推荐为 `[LEDE/OpenWrt IP]:[端口]`。KoolClash 以后会增加对外部控制器相关配置的修改。
-- KoolClash 判断用户上传的配置文件中 是否有 DNS 字段 其实是非常傻瓜的。建议用户自己在上传配置前自行检查配置文件中的 DNS 设置
+- ~~上传 Clash 配置文件之前需要修改一下 `external-controller` 监听的 IP，推荐为 `[LEDE/OpenWrt IP]:[端口]`。KoolClash 以后会增加对外部控制器相关配置的修改。~~KoolClash 默认会在上传 Clash 配置文件、更新托管时将配置文件修改为将 `external-controller` 监听在 LAN IP 上。以后会修改为开放自定义。
+- KoolClash 判断用户上传的配置文件中 是否有 DNS 字段 其实是 ~~非常~~ 比较傻瓜的。建议用户自己在上传配置前自行检查配置文件中的 DNS 设置。

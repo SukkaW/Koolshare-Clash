@@ -15,11 +15,13 @@ Clash 的规则依赖 Clash 接管 DNS 解析，所以首先需要修改 LEDE/Op
 
 ![](img/usage-2.png)
 
-?> KoolClash 尚不支持自动从托管配置自动下载更新 Clash 配置文件，需要用户自行手动上传。
+?> KoolClash 也已经支持自动从托管配置自动下载更新 Clash 配置文件，但是这个功能请务必谨慎使用。
 
-## 设置 Clash DNS 配置
+## 设置 Clash 自定义 DNS 配置
 
-如果你正在使用的是由公共代理服务提供商提供的客户端配置、且没有提供 DNS 的设置，你可以添加 DNS 配置：
+如果你当前没有上传 Clash 配置文件、或者没有添加 Clash 托管配置 URL 并下载，KoolClash 不会让你添加自定义 DNS 配置。
+
+KoolClash 会自动检查你上传的 Clash 配置文件有没有包含 DNS 配置、DNS 配置合不合法，KoolClash 会强制你你添加自定义 DNS 配置：
 
 ![](img/usage-2.png)
 
@@ -48,11 +50,8 @@ dns:
 # (3) 在 Clash 的 DNS 支持 dns2docks 之前，不建议在 fallback 中使用常规方式进行解析（即直接配置 IP）
 ```
 
-KoolClash 会自动检查你上传的 Clash 配置文件有没有包含 DNS 配置，只有目前 Clash 配置文件中没有包含 DNS 配置时才会将你提交的 DNS 配置附在 Clash 配置文件之中。
+如果你上传的 Clash 配置文件包含合法的 DNS 配置，此时 KoolClash 不需要你添加自定义 DNS 配置也能运行。但是你如果想要覆盖 Clash 配置文件中的 DNS 配置，你依然能够通过提交自定义 DNS 配置来进行覆盖。
 
-?> 提交完 DNS 配置以后，建议重新上传一次 Clash 配置文件。
-
-?> 这里的 DNS 配置相当于一个后备。正如前文所说，只有在你上传的 Clash 文件不带 DNS 设置时才会生效。
 
 ## 启动 Clash
 
