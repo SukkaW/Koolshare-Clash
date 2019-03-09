@@ -27,3 +27,6 @@ dbus remove softcenter_module_koolclash_title
 dbus remove softcenter_module_koolclash_version
 
 dbus remove koolclash_enable
+dbus remove koolclash_version
+dbus remove koolclash_suburl
+dbus remove koolclash_dnsmode
