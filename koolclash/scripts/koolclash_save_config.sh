@@ -41,15 +41,21 @@ cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
 if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
     # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
     yq w -i $KSROOT/koolclash/config/config.yml dns.listen "0.0.0.0:53"
+    # 设置 DNS Mode 为 1
+    dbus set koolclash_dnsmode=1
     echo_date "Clash 配置文件上传成功！"
     http_response 'success'
 else
     echo_date "在 Clash 配置文件中没有找到 DNS 配置！"
     if [ ! -n "$fallbackdns" ]; then
         echo_date "没有找到后备 DNS 配置！请前往「配置文件」提交后备 DNS 配置！"
+        # 设置 DNS Mode 为 3
+        dbus set koolclash_dnsmode=3
         http_response 'nofallbackdns'
     else
         echo_date "找到后备 DNS 配置！合并到 Clash 配置文件中..."
+
+        dbus set koolclash_dnsmode=4
         # 将后备 DNS 配置以覆盖的方式与 config.yml 合并
         yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
 

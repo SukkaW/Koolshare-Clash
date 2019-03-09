@@ -15,14 +15,14 @@ date=$(echo_date)
 if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
     secret=''
 else
-    secret=$(yq r /koolshare/koolclash/config/origin.yml secret)
+    secret=$(yq r /koolshare/koolclash/config/config.yml secret)
 fi
 
 if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
     # 没有找到 Clash 配置文件，不显示 DNS 配置输入，dnsmode 为 0
     dbus set koolclash_dnsmode=0
     dnsmode=0
-elif [ $(yq r $KSROOT/koolclash/config/origin.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/origin.yml dns.enhanced-mode) == 'redir-host' ] && [$koolclash_dnsmode = 2]; then
+elif [ $koolclash_dnsmode = 2 ]; then
     # Clash 配置文件存在且 DNS 配置合法，但是用户选择了自定义 DNS 配置，显示 DNS 配置输入，dnsmode 为 2
     dnsmode=2
 elif [ $(yq r $KSROOT/koolclash/config/origin.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/origin.yml dns.enhanced-mode) == 'redir-host' ]; then
