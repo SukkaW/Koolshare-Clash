@@ -177,7 +177,6 @@
                     <div class="koolclash-btn-container">
                         <button type="button" id="koolclash-btn-start-clash" onclick="KoolClash.restart()" class="btn btn-success">启动/重启 Clash</button>
                         <button type="button" id="koolclash-btn-stop-clash" onclick="KoolClash.stop()" class="btn btn-danger">停止 Clash</button>
-                        <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn" style="float: right">更新 IP 解析库</button>
                     </div>
                 </div>
             </div>
@@ -850,46 +849,6 @@ dns:
                         setTimeout(() => {
                             window.location.reload();
                         }, 15000)
-                    }
-                });
-            },
-            updateIPDB: () => {
-                KoolClash.disableAllButton();
-                document.getElementById('koolclash-btn-update-ipdb').innerHTML = `开始下载最新 IP 解析库并更新`;
-                let id = parseInt(Math.random() * 100000000),
-                    postData = JSON.stringify({
-                        "id": id,
-                        "method": "koolclash_update_ipdb.sh",
-                        "params": [],
-                        "fields": ""
-                    });
-
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "/_api/",
-                    data: postData,
-                    dataType: "json",
-                    success: (resp) => {
-                        if (resp.result === 'nodl') {
-                            document.getElementById('koolclash-btn-update-ipdb').innerHTML = `你的路由器中既没有 curl 也没有 wget，不能下载更新！`;
-                        } else if (resp.result === 'fail') {
-                            document.getElementById('koolclash-btn-update-ipdb').innerHTML = `IP 解析库更新失败！`;
-                        } else {
-                            document.getElementById('koolclash-btn-update-ipdb').innerHTML = `IP 解析库更新成功，重新启动 Clash 即可生效！`;
-                        }
-
-                        setTimeout(() => {
-                            KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-update-ipdb').innerHTML = '更新 IP 解析库';
-                        }, 5500)
-                    },
-                    error: () => {
-                        document.getElementById('koolclash-btn-update-ipdb').innerHTML = `IP 解析库更新失败！`;
-                        setTimeout(() => {
-                            KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-update-ipdb').innerHTML = '更新 IP 解析库';
-                        }, 3000)
                     }
                 });
             },

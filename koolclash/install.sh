@@ -71,9 +71,7 @@ echo_date "KoolClash: 复制安装包内的文件到路由器..."
 cp -rf /tmp/koolclash/scripts/* $KSROOT/scripts/
 cp -rf /tmp/koolclash/init.d/* $KSROOT/init.d/
 cp -rf /tmp/koolclash/webs/* $KSROOT/webs/
-if [ ! -f $KSROOT/koolclash/config/Country.mmdb ]; then
-    cp -rf /tmp/koolclash/koolclash/config/Country.mmdb $KSROOT/koolclash/config/Country.mmdb
-fi
+cp -rf /tmp/koolclash/koolclash/config/Country.mmdb $KSROOT/koolclash/config/Country.mmdb\
 cp /tmp/koolclash/install.sh $KSROOT/scripts/koolclash_install.sh
 cp /tmp/koolclash/uninstall.sh $KSROOT/scripts/uninstall_koolclash.sh
 # 删除 Luci 缓存
