@@ -4,8 +4,8 @@ export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
 eval $(dbus export koolclash_)
 
-lan_ip=$(uci get network.lan.ipaddr)
-wan_ip=$(ubus call network.interface.wan status | grep \"address\" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+#lan_ip=$(uci get network.lan.ipaddr)
+#wan_ip=$(ubus call network.interface.wan status | grep \"address\" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 
@@ -13,8 +13,10 @@ pid=$(pidof clash)
 date=$(echo_date)
 
 if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+    host=''
     secret=''
 else
+    host=$(yq r /koolshare/koolclash/config/config.yml external-controller)
     secret=$(yq r /koolshare/koolclash/config/config.yml secret)
 fi
 
@@ -45,4 +47,4 @@ else
     text="<span style='color: red'>$date Clash 进程未在运行！</span>"
 fi
 
-http_response "$text@$lan_ip@$secret@$dnsmode"
+http_response "$text@$dnsmode@$host@$secret"
