@@ -400,7 +400,8 @@
                     {
                         title: '<b>密钥</b>',
                         name: 'koolclash_dashboard_secret',
-                        type: 'text',
+                        type: 'password',
+                        autocomplete: 'off',
                         value: ''
                     },
                 ]);
@@ -576,6 +577,17 @@
                 for (let i of btnList) {
                     i.removeAttribute('disabled');
                 }
+            },
+            submitExternalControl: () => {
+                let id = parseInt(Math.random() * 100000000);
+                let postData = JSON.stringify({
+                    "id": id,
+                    "method": "koolclash_save_control.sh",
+                    "params": [`${document.getElementById('_koolclash_dashboard_host').value}`, `${document.getElementById('_koolclash_dashboard_port').value}`, `${document.getElementById('_koolclash_dashboard_secret').value}`],
+                    "fields": ""
+                });
+
+                console.log(postData);
             },
             submitClashConfig: () => {
                 KoolClash.disableAllButton();
