@@ -393,16 +393,11 @@
                     },
                     {
                         title: '<b>端口</b>',
-                        name: 'koolclash_dashboard_port',
-                        type: 'text',
-                        value: ''
+                        text: '6170'
                     },
                     {
                         title: '<b>密钥</b>',
-                        name: 'koolclash_dashboard_secret',
-                        type: 'password',
-                        autocomplete: 'off',
-                        value: ''
+                        text: 'Clash 配置文件中的 secret'
                     },
                 ]);
                 $('#koolclash-config').forms([
@@ -513,8 +508,6 @@
 
                         document.getElementById('koolclash_status').innerHTML = pid_text;
                         document.getElementById('_koolclash_dashboard_host').value = control_host;
-                        document.getElementById('_koolclash_dashboard_port').value = control_port;
-                        document.getElementById('_koolclash_dashboard_secret').value = (secret === 'null') ? `` : secret;
 
                         /*
                          * 0 没有找到 config.yml
@@ -579,15 +572,36 @@
                 }
             },
             submitExternalControl: () => {
+                KoolClash.disableAllButton();
+
                 let id = parseInt(Math.random() * 100000000);
                 let postData = JSON.stringify({
                     "id": id,
                     "method": "koolclash_save_control.sh",
-                    "params": [`${document.getElementById('_koolclash_dashboard_host').value}`, `${document.getElementById('_koolclash_dashboard_port').value}`, `${document.getElementById('_koolclash_dashboard_secret').value}`],
+                    "params": [`${document.getElementById('_koolclash_dashboard_host').value}`],
                     "fields": ""
                 });
 
-                console.log(postData);
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        document.getElementById('koolclash-btn-submit-control').innerHTML = '外部控制 IP 设置成功！页面将会自动刷新！';
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000)
+                    },
+                    error: () => {
+                        document.getElementById('koolclash-btn-submit-control').innerHTML = '外部控制 IP 设置失败！';
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-submit-control').innerHTML = '提交外部控制设置';
+                        }, 3000)
+                    }
+                });
             },
             submitClashConfig: () => {
                 KoolClash.disableAllButton();

@@ -4,6 +4,8 @@ export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 
+eval $(dbus export koolclash_)
+
 # 从 DMZ 插件抄来的获取 LAN/WAN IP
 lan_ip=$(uci get network.lan.ipaddr)
 wan_ip=$(ubus call network.interface.wan status | grep \"address\" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
@@ -29,8 +31,14 @@ echo_date "设置 redir-port 和 allow-lan 属性"
 yq w -i $KSROOT/koolclash/config/origin.yml redir-port 23456
 yq w -i $KSROOT/koolclash/config/origin.yml allow-lan true
 
-echo_date "设置 Clash 外部控制器监听 ${lan_ip}:6170"
-yq w -i $KSROOT/koolclash/config/origin.yml external-controller ${lan_ip}:6170
+# 如果没有外部监听控制就使用 LAN IP:6170
+if [ ! -n "$koolclash_api_host" ]; then
+    dbus remove koolclash_api_host
+    ext_control_ip=$lan_ip
+else
+    ext_control_ip=$koolclash_api_host
+fi
+yq w -i $KSROOT/koolclash/config/origin.yml external-controller "$ext_control_ip:6170"
 
 sed -i '/^\-\-\-$/ d' $KSROOT/koolclash/config/origin.yml
 sed -i '/^\.\.\.$/ d' $KSROOT/koolclash/config/origin.yml

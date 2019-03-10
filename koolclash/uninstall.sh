@@ -20,13 +20,14 @@ rm -rf $KSROOT/webs/res/koolclash_*
 
 rm -rf /tmp/luci-*
 
+dbus remove koolclash_enable
+dbus remove koolclash_version
+dbus remove koolclash_suburl
+dbus remove koolclash_dnsmode
+dbus remove koolclash_ext_control
+
 dbus remove softcenter_module_koolclash_description
 dbus remove softcenter_module_koolclash_install
 dbus remove softcenter_module_koolclash_name
 dbus remove softcenter_module_koolclash_title
 dbus remove softcenter_module_koolclash_version
-
-dbus remove koolclash_enable
-dbus remove koolclash_version
-dbus remove koolclash_suburl
-dbus remove koolclash_dnsmode
