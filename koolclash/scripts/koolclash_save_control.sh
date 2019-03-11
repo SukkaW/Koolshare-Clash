@@ -2,6 +2,7 @@
 
 export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
+source $KSROOT/bin/helper.sh
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 eval $(dbus export koolclash_)
 
