@@ -130,7 +130,7 @@ start_koolclash() {
     restart_dnsmasq
     dbus set koolclash_enable=1
     echo_date -------------------------------- KoolClash 启动完毕 --------------------------------
-    echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------
+    echo_date ------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------
 }
 
 stop_koolclash() {
@@ -142,7 +142,7 @@ stop_koolclash() {
     kill_process
     dbus set koolclash_enable=0
     echo_date -------------------------------- KoolClash 停止完毕 --------------------------------
-    echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------
+    echo_date ------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------
 }
 
 # used by rc.d and firewall include
@@ -150,18 +150,20 @@ case $1 in
 start)
     if [ "$koolclash_enable" == "1" ]; then
         if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-            echo_date "没有配置文件！"
-            stop_koolclash
+            echo_date "没有找到 Clash 的配置文件！自动停止 Clash！" | tee /tmp/upload/koolclash_log.txt
+            stop_koolclash | tee /tmp/upload/koolclash_log.txt
+            echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
         else
             if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
-                start_koolclash
+                start_koolclash | tee /tmp/upload/koolclash_log.txt
+                echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
             else
-                echo_date "DNS 配置不合法！"
-                stop_koolclash
+                echo_date "没有找到 DNS 配置或 DNS 配置不合法！自动停止 Clash！" | tee /tmp/upload/koolclash_log.txt
+                stop_koolclash | tee/tmp/upload/koolclash_log.txt
+                echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
             fi
         fi
     else
-        echo_date "DNS 配置不合法！"
         stop_koolclash
     fi
     ;;
@@ -189,6 +191,7 @@ esac
 case $2 in
 start)
     if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+        echo_date "没有找到 Clash 的配置文件！自动停止 Clash！" | tee /tmp/upload/koolclash_log.txt
         http_response 'noconfig'
         stop_koolclash | tee /tmp/upload/koolclash_log.txt
         echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
@@ -198,6 +201,7 @@ start)
             start_koolclash | tee /tmp/upload/koolclash_log.txt
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
         else
+            echo_date "没有找到 DNS 配置或 DNS 配置不合法！自动停止 Clash！" | tee /tmp/upload/koolclash_log.txt
             http_response 'nodns'
             stop_koolclash | tee/tmp/upload/koolclash_log.txt
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
