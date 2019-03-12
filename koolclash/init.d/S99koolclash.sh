@@ -15,9 +15,13 @@ source /koolshare/scripts/base.sh
 eval $(dbus export koolclash_)
 
 start() {
-    [ "$koolclash_enable" == "1" ] && sh /koolshare/scripts/koolclash_sontrol.sh stop
+    if [ "$koolclash_enable" == "1" ]; then
+        sh /koolshare/scripts/koolclash_sontrol.sh start >/tmp/upload/koolclash_log.txt
+        echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
+    fi
 }
 
 stop() {
-    sh /koolshare/scripts/koolclash_sontrol.sh stop
+    sh /koolshare/scripts/koolclash_sontrol.sh stop >/tmp/upload/koolclash_log.txt
+    echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
 }

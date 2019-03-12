@@ -104,6 +104,14 @@
             display: block;
         }
 
+        #_koolclash_log {
+            max-width: 100%;
+            min-width: 100%;
+            margin: 0;
+            min-height: 300px;
+            max-height: 500px;
+        }
+
     </style>
 
     <div class="box">
@@ -131,6 +139,10 @@
     <input class="koolclash-nav-radio" id="koolclash-nav-config" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-firewall" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-log" type="radio" name="nav-tab">
+
+    <div id="msg_success" class="alert alert-success icon" style="display: none;"></div>
+    <div id="msg_error" class="alert alert-error icon" style="display: none;"></div>
+    <div id="msg_warning" class="alert alert-warning icon" style="display: none;"></div>
 
     <ul class="nav nav-tabs">
         <li>
@@ -180,10 +192,6 @@
                     </div>
                 </div>
             </div>
-
-            <div id="msg_success" class="alert alert-success icon" style="display:none;"></div>
-            <div id="msg_error" class="alert alert-error icon" style="display:none;"></div>
-            <div id="msg_warning" class="alert alert-warning icon" style="display:none;"></div>
 
             <div id="koolclash-ip" class="box">
                 <div class="heading" style="padding-right: 20px;">
@@ -263,7 +271,7 @@
             <div class="box">
                 <div class="heading">功能开发中</div>
                 <div class="content">
-                    操作日志 还在开发中。
+                    <textarea class="as-script" name="koolclash_log" id="_koolclash_log" readonly wrap="off" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                 </div>
             </div>
         </div>
@@ -836,6 +844,8 @@ dns:
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_success').show();
                             $('#msg_warning').show();
+                            KoolClash.selectTab('koolclash-nav-log');
+                            KoolClash.getLog();
                             KoolClash.tminus(20);
                             setTimeout(() => {
                                 window.location.reload();
@@ -847,10 +857,12 @@ dns:
                         document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                         $('#msg_error').show();
                         $('#msg_warning').show();
-                        KoolClash.tminus(15);
+                        KoolClash.selectTab('koolclash-nav-log');
+                        KoolClash.getLog();
+                        KoolClash.tminus(20);
                         setTimeout(() => {
                             window.location.reload();
-                        }, 15000)
+                        }, 20000)
                     }
                 });
             },
@@ -878,6 +890,8 @@ dns:
                         document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                         $('#msg_success').show();
                         $('#msg_warning').show();
+                        KoolClash.selectTab('koolclash-nav-log');
+                        KoolClash.getLog();
                         KoolClash.tminus(15);
                         setTimeout(() => {
                             window.location.reload();
@@ -887,6 +901,8 @@ dns:
                         $('#msg_warning').hide();
                         document.getElementById('msg_error').innerHTML = `Clash (可能)关闭失败！请在页面自动刷新之后检查 Clash 运行状态！<span id="koolclash-wait-time"></span>`;
                         document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
+                        KoolClash.selectTab('koolclash-nav-log');
+                        KoolClash.getLog();
                         $('#msg_error').show();
                         $('#msg_warning').show();
                         KoolClash.tminus(15);
@@ -987,7 +1003,49 @@ dns:
                     }
                 });
             },
-        };
+            getLog: () => {
+                if (typeof _responseLen === undefined) {
+                    let _responseLen = 0;
+                } else {
+                    _responseLen = 0;
+                }
+
+                $.ajax({
+                    url: '/_temp/koolclash_log.txt',
+                    type: 'GET',
+                    cache: false,
+                    dataType: 'text',
+                    success: (response) => {
+                        var retArea = E("_koolclash_log");
+                        if (response.search("XU6J03M6") !== -1) {
+                            retArea.value = response.replace("XU6J03M6", " ");
+                            retArea.scrollTop = retArea.scrollHeight;
+                            return true;
+                        }
+                        if (_responseLen === response.length) {
+                            noChange++;
+                        } else {
+                            noChange = 0;
+                        }
+                        if (noChange > 1000) {
+                            KoolClash.selectTab('koolclash-nav-overview');
+                            return false;
+                        } else {
+                            setTimeout(() => {
+                                KoolClash.getLog();
+                            }, 500);
+                        }
+                        retArea.value = response.replace("XU6J03M6", " ");
+                        retArea.scrollTop = retArea.scrollHeight;
+                        _responseLen = response.length;
+                    },
+                    error: function () {
+                        E("_koolclash_log").value = "获取日志失败！";
+                        return false;
+                    }
+                });
+            },
+        }
 
         function verifyFields(r) {
             // when check/uncheck wireguard_switch
