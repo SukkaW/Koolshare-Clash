@@ -1,19 +1,19 @@
 #! /bin/sh
 export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
-eval $(dbus export clash)
+eval $(dbus export koolclash)
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 
 # 判断路由架构和平台
 # Modified from koolss plugin (https://github.com/koolshare/ledesoft/blob/master/koolclash/koolss/install.sh)
 case $(uname -m) in
 armv7l)
-    echo_date "本 Clash 插件用于 koolshare OpenWRT/LEDE x86_64 固件平台，arm 平台尚未适配！！！"
+    echo_date "KoolClash 插件用于 koolshare OpenWRT/LEDE x86_64 固件平台，arm 平台尚未适配！！！"
     echo_date "退出安装！"
     exit 1
     ;;
 mips)
-    echo_date "本 Clash 插件用于 koolshare OpenWRT/LEDE x86_64 固件平台，mips 平台尚未适配！！！"
+    echo_date "KoolClash 插件用于 koolshare OpenWRT/LEDE x86_64 固件平台，mips 平台尚未适配！！！"
     echo_date "退出安装！"
     exit 1
     ;;
@@ -26,26 +26,25 @@ x86_64)
         cp -rf /tmp/koolclash/bin/clash-linux-amd64 $KSROOT/bin/clash
         cp -rf /tmp/koolclash/bin/yq_linux_amd64 $KSROOT/bin/yq
     else
-        echo_date "本 Clash 插件用于 koolshare OpenWRT/LEDE x86_64 固件平台，其它固件未做适配！！！"
+        echo_date "KoolClash 插件用于 koolshare OpenWRT/LEDE x86_64 固件平台，其它固件未做适配！！！"
         echo_date "退出安装！"
         exit 1
     fi
     ;;
 *)
-    echo_date "本 Clash 插件用于 koolshare OpenWRT/LEDE x86_64 固件平台，其它固件未做适配！！！"
+    echo_date "KoolClash 插件用于 koolshare OpenWRT/LEDE x86_64 固件平台，其它固件未做适配！！！"
     echo_date "退出安装！"
     exit 1
     ;;
 esac
 
-# 停止 KoolClash
-if [ -d "$KSROOT/koolclash" ]; then
+if [ -n "$(pidof clash)" ]; then
+    # 停止 KoolClash
     echo_date '停止 KoolClash 以更新。注意更新完成以后 KoolClash 不会自动恢复，需要手动启动 Clash！'
-    sleep 2
     echo_date '【更新 KoolClash 过程中可能会出现「软件中心异常」的提示，是正常现象！】'
-    sleep 1
     echo_date '【请不要刷新或关闭页面，务必等待安装完成、页面自动跳转！】'
-    sh $KSROOT/scripts/koolclash_control.sh stop >/dev/null 2>&1
+    sleep 2
+    sh $KSROOT/scripts/koolclash_control.sh stop
 fi
 
 # 清理 旧文件夹
@@ -87,7 +86,7 @@ local_version=$(cat $KSROOT/webs/res/koolclash_.version)
 echo_date "KoolClash: 设置版本号为 $local_version..."
 dbus set koolclash_version=$local_version
 
-sleep 2
+sleep 1
 
 echo_date "KoolClash: 删除相关安装包..."
 rm -rf /tmp/koolclash* >/dev/null 2>&1

@@ -31,7 +31,7 @@ case $3 in
         yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
 
         # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
-        yq w -i $KSROOT/koolclash/config/config.yml dns.listen 0.0.0.0:53
+        yq w -i $KSROOT/koolclash/config/config.yml dns.listen 0.0.0.0:23453
 
         echo_date "后备 DNS 设置提交成功！"
         http_response 'success'
@@ -42,7 +42,7 @@ case $3 in
     if [ $(yq r $KSROOT/koolclash/config/origin.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/origin.yml dns.enhanced-mode) == 'redir-host' ] && [ ! -n "$fallbackdns" ]; then
         # origin.yml 都有 DNS 配置了又提交空的 DNS，就当做想换回 dnsmode 1 了
         dbus set koolclash_dnsmode=1
-        yq w -i $KSROOT/koolclash/config/config.yml dns.listen 0.0.0.0:53
+        yq w -i $KSROOT/koolclash/config/config.yml dns.listen 0.0.0.0:23453
         echo_date "自定义 DNS 设置提交成功！"
         http_response 'success'
     else
@@ -58,7 +58,7 @@ case $3 in
             yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
 
             # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
-            yq w -i $KSROOT/koolclash/config/config.yml dns.listen 0.0.0.0:53
+            yq w -i $KSROOT/koolclash/config/config.yml dns.listen 0.0.0.0:23453
 
             echo_date "后备 DNS 设置提交成功！"
             http_response 'success'

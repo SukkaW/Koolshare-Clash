@@ -5,12 +5,6 @@ source $KSROOT/scripts/base.sh
 eval $(dbus export koolclash_)
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 
-NAME=clash
-PIDFILE=/var/run/$NAME.pid
-#This is the command to be run, give the full pathname
-DAEMON=/usr/local/bin/bar
-DAEMON_OPTS="-d $KSROOT/koolclash/config/"
-
 #--------------------------------------------------------------------------
 restore_dnsmasq_conf() {
     # delete server setting in dnsmasq.conf
@@ -20,7 +14,7 @@ restore_dnsmasq_conf() {
     #pc_delete "no-poll" "/etc/dnsmasq.conf"
 
     echo_date "删除 KoolClash 的 dnsmasq 配置..."
-    #rm -rf /tmp/dnsmasq.d/koolclash.conf
+    rm -rf /tmp/dnsmasq.d/koolclash.conf
 }
 
 restore_start_file() {
@@ -42,14 +36,15 @@ kill_process() {
 
 create_dnsmasq_conf() {
     touch /tmp/dnsmasq.d/koolclash.conf
-
+    echo_date "修改 dnsmasq 配置使 dnsmasq 将所有的 DNS 请求转发给 Clash"
     echo "no-resolv" >>/tmp/dnsmasq.d/koolclash.conf
-    echo "server=127.0.0.1# 23453" >>/tmp/dnsmasq.d/koolclash.conf
+    echo "server=127.0.0.1#23453" >>/tmp/dnsmasq.d/koolclash.conf
+    echo "cache-size=0" >>/tmp/dnsmasq.d/koolclash.conf
 }
 
 restart_dnsmasq() {
     # Restart dnsmasq
-    echo_date 重启dnsmasq服务...
+    echo_date "重启 dnsmasq"
     /etc/init.d/dnsmasq restart >/dev/null 2>&1
 }
 
@@ -81,10 +76,11 @@ start_clash_process() {
 
 #--------------------------------------------------------------------------
 flush_nat() {
-    echo_date "尝试先清除已存在的iptables规则，防止重复添加"
+    iptables -t nat -D PREROUTING -p tcp -j koolclash >/dev/null 2>&1
+
+    echo_date "删除 KoolClash 添加的 iptables 规则"
     # flush iptables rules
-    iptables -t nat -F koolclash
-    iptables -t nat -X koolclash
+    iptables -t nat -F koolclash && iptables -t nat -X koolclash >/dev/null 2>&1
 
     #chromecast_nu=$(iptables -t nat -L PREROUTING -v -n --line-numbers | grep "dpt:53" | awk '{print $1}')
     #[ $(dbus get koolproxy_enable) -ne 1 ] && iptables -t nat -D PREROUTING $chromecast_nu >/dev/null 2>&1
@@ -103,7 +99,7 @@ apply_nat_rules() {
     iptables -t nat -N koolclash
     iptables -t nat -A koolclash -p tcp --dport 22 -j ACCEPT
     iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
-    iptables -t nat -I OUTPUT -p tcp -j koolclash
+    iptables -t nat -I PREROUTING -p tcp -j koolclash
 }
 
 # =======================================================================================================
@@ -118,31 +114,35 @@ load_nat() {
 start_koolclash() {
     # get_status >> /tmp/ss_start.txt
     # used by web for start/restart; or by system for startup by S99koolss.sh in rc.d
-    echo_date -------------------- KoolClash: Clash on Koolshare OpenWrt ----------------------------
+    echo_date ----------------- KoolClash: Clash on Koolshare OpenWrt -------------------------
     [ -n "$ONSTART" ] && echo_date 路由器开机触发 KoolClash 启动！ || echo_date web 提交操作触发 KoolClash 启动！
     echo_date ---------------------------------------------------------------------------------------
     # stop first
-    #restore_dnsmasq_conf
+    restore_dnsmasq_conf
     flush_nat
     restore_start_file
     kill_process
     echo_date ---------------------------------------------------------------------------------------
-    #create_dnsmasq_conf
+    create_dnsmasq_conf
     auto_start
     start_clash_process
     load_nat
     restart_dnsmasq
-    echo_date ------------------------- KoolClash 启动完毕 -------------------------
+    dbus set koolclash_enable=1
+    echo_date -------------------------------- KoolClash 启动完毕 --------------------------------
+    echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------
 }
 
 stop_koolclash() {
     echo_date -------------------- KoolClash: Clash on Koolshare OpenWrt ----------------------------
-    #restore_dnsmasq_conf
+    restore_dnsmasq_conf
     restart_dnsmasq
     flush_nat
     restore_start_file
     kill_process
-    echo_date ------------------------- KoolClash 停止完毕 -------------------------
+    dbus set koolclash_enable=0
+    echo_date -------------------------------- KoolClash 停止完毕 --------------------------------
+    echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------
 }
 
 # used by rc.d and firewall include
@@ -189,20 +189,24 @@ esac
 case $2 in
 start)
     if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-        stop_koolclash
         http_response 'noconfig'
+        stop_koolclash | tee /tmp/upload/koolclash_log.txt
+        echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
     else
         if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
-            start_koolclash
             http_response 'success'
+            start_koolclash | tee /tmp/upload/koolclash_log.txt
+            echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
         else
-            stop_koolclash
             http_response 'nodns'
+            stop_koolclash | tee/tmp/upload/koolclash_log.txt
+            echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
         fi
     fi
     ;;
 stop)
-    stop_koolclash
     http_response 'success'
+    stop_koolclash | tee /tmp/upload/koolclash_log.txt
+    echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
     ;;
 esac

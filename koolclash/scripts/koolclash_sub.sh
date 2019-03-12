@@ -54,7 +54,7 @@ update)
         # 判断是否存在 DNS 字段、DNS 是否启用、DNS 是否使用 redir-host 模式
         if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
             # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
-            yq w -i $KSROOT/koolclash/config/config.yml dns.listen "0.0.0.0:53"
+            yq w -i $KSROOT/koolclash/config/config.yml dns.listen "0.0.0.0:23453"
             echo_date "Clash 配置文件上传成功！"
             http_response 'success'
         else
@@ -68,7 +68,7 @@ update)
                 yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
 
                 # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
-                yq w -i $KSROOT/koolclash/config/config.yml dns.listen "0.0.0.0:53"
+                yq w -i $KSROOT/koolclash/config/config.yml dns.listen "0.0.0.0:23453"
 
                 echo_date "Clash 配置文件上传成功！"
                 http_response 'success'
