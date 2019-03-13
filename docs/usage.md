@@ -2,12 +2,15 @@
 
 ## 修改 dnsmasq 监听端口
 
+> 0.10.0-beta 版本之后
+
+Clash 的规则依赖 Clash 接管 DNS 解析，KoolClash 会自动设置 dnsmasq 将所有 DNS 请求转发给 Clash。用户不再需要进行任何额外操作。
+
+> 0.10.0-beta 版本以前
+
 Clash 的规则依赖 Clash 接管 DNS 解析，所以首先需要修改 LEDE/OpenWrt 中 dnsmasq 监听的端口。在「网络 - DHCP/DNS - 服务器设置 - 高级设置」中，找到「DNS 服务器端口」，修改为除了 53 以外任何不冲突的端口，「保存并应用」。
 
 ![](img/usage-1.png)
-
-!> 如果你的 DNS 设置为 LEDE/OpenWrt 的 IP（有很大可能性你就是这么做的），那么这项操作会立刻影响到你的互联网连接（无法正常进行域名解析）你可以修改你的上网设备（或宿主机网络）的 DNS 设置为其它公共 DNS 来暂时恢复网络。  
-但是在启用 KoolClash 以后你应该将你的上网设备（或宿主机网络）的 DNS 设置为 LEDE/OpenWrt 的 IP。
 
 ## 上传 Clash 配置文件
 
