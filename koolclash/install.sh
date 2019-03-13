@@ -45,12 +45,15 @@ if [ -n "$(pidof clash)" ]; then
     echo_date '【请不要刷新或关闭页面，务必等待安装完成、页面自动跳转！】'
     sleep 2
     sh $KSROOT/scripts/koolclash_control.sh stop
+    echo_date '【KoolClash 更新后需要手动重新启动 Clash 进程！】'
+    sleep 3
 fi
 
 # 清理 旧文件夹
 echo_date "KoolClash: 清理旧版文件..."
 rm -rf $KSROOT/scripts/koolclash_* >/dev/null 2>&1
 rm -rf $KSROOT/init.d/S99koolclash.sh >/dev/null 2>&1
+find /etc/rc.d/ -name *koolclash.sh* | xargs rm -rf
 rm -rf $KSROOT/webs/Module_koolclash.asp >/dev/null 2>&1
 rm -rf $KSROOT/webs/res/icon-koolclash* >/dev/null 2>&1
 rm -rf $KSROOT/webs/res/koolclash_* >/dev/null 2>&1
@@ -91,7 +94,7 @@ sleep 1
 echo_date "KoolClash: 删除相关安装包..."
 rm -rf /tmp/koolclash* >/dev/null 2>&1
 
-echo_date "KoolClash: 设置一些安装信息..."
+echo_date "KoolClash: 设置插件信息..."
 
 dbus set softcenter_module_koolclash_description="基于规则的代理程序 Clash"
 dbus set softcenter_module_koolclash_install=1
