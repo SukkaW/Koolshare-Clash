@@ -830,7 +830,7 @@ dns:
                             }, 15000)
                         } else if (resp.result === 'nodns') {
                             $('#msg_warning').hide();
-                            document.getElementById('msg_error').innerHTML = `在 Clash 配置文件中没有找到 DNS 设置或 DNS 配置不合法！请在页面自动刷新之后(重新)上传 Clash 配置文件！<span id="koolclash-wait-time"></span>`;
+                            document.getElementById('msg_error').innerHTML = `在 Clash 配置文件中没有找到正确的 DNS 设置或 Clash 配置文件存在语法错误！请在页面自动刷新之后(重新)上传 Clash 配置文件！<span id="koolclash-wait-time"></span>`;
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_error').show();
                             $('#msg_warning').show();

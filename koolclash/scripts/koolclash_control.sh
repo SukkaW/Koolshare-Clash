@@ -133,12 +133,10 @@ start_koolclash() {
     sleep 2
     if [ ! -n "$(pidof clash)" ]; then
         # 停止 KoolClash
-        echo_date '【Clash 进程没有启动！】'
-        echo_date '可能是因为 Clash 配置文件不合法，也有可能是其它原因！'
+        echo_date '【Clash 进程没有启动！Clash 配置文件可能存在错误，也有可能是其它原因！】'
+        echo_date '【即将关闭 KoolClash 并还原所有操作】'
         echo_date -------------------------------- KoolClash 启动中断 --------------------------------
         sleep 2
-        echo_date '【正在关闭 KoolClash 并还原所有操作】'
-        echo_date ---------------------------------------------------------------------------------------
         restore_dnsmasq_conf
         restart_dnsmasq
         flush_nat
@@ -146,6 +144,7 @@ start_koolclash() {
         kill_process
         dbus set koolclash_enable=0
         echo_date -------------------------------- KoolClash 停止完毕 --------------------------------
+        echo_date ------------- 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ -------------
         exit 1
     fi
 
@@ -240,7 +239,7 @@ start)
             echo_date ------------- 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------- >>/tmp/upload/koolclash_log.txt
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
         else
-            echo_date "没有找到 DNS 配置或 DNS 配置不合法！自动停止 Clash！" >/tmp/upload/koolclash_log.txt
+            echo_date "没有找到正确的 DNS 配置或 Clash 配置文件存在错误！自动停止 Clash！" >/tmp/upload/koolclash_log.txt
             http_response 'nodns'
             stop_koolclash >>/tmp/upload/koolclash_log.txt
             echo_date ------------- 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------- >>/tmp/upload/koolclash_log.txt
