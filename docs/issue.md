@@ -11,5 +11,6 @@ iptables -t nat -F koolclash && iptables -t nat -X koolclash
 
 - ~~如果你修改了 dnsmasq 监听的端口，在卸载 KoolClash 以后别忘了改回 53。~~
 - 因为 KoolClash 仍然不稳定，建议使用独立的设备（如果你是通过虚拟机跑软路由，则新建一个虚拟机独立运行）、调整网络拓扑来运行 KoolClash。
-- ~~上传 Clash 配置文件之前需要修改一下 `external-controller` 监听的 IP，推荐为 `[LEDE/OpenWrt IP]:[端口]`。KoolClash 以后会增加对外部控制器相关配置的修改。~~KoolClash 默认会在上传 Clash 配置文件、更新托管时将配置文件修改为将 `external-controller` 监听在 LAN IP 上。以后会修改为开放自定义。
+- ~~上传 Clash 配置文件之前需要修改一下 `external-controller` 监听的 IP，推荐为 `[LEDE/OpenWrt IP]:[端口]`。KoolClash 以后会增加对外部控制器相关配置的修改。KoolClash 默认会在上传 Clash 配置文件、更新托管时将配置文件修改为将 `external-controller` 监听在 LAN IP 上。以后会修改为开放自定义。~~
 - KoolClash 判断用户上传的配置文件中 是否有 DNS 字段 其实是 ~~非常~~ 比较傻瓜的。建议用户自己在上传配置前自行检查配置文件中的 DNS 设置。
+- Clash 的透明代理存在问题——客户端获得的 IP 地址和代理服务器实际连接的地址可能完全不同，并且客户端获得的 IP 可能也完全不会被用到。这意味着 KoolClash 可能并不是最好的透明代理方案，需要取舍。
