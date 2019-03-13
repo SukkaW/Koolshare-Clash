@@ -129,6 +129,26 @@ start_koolclash() {
     create_dnsmasq_conf
     auto_start
     start_clash_process
+
+    sleep 2
+    if [ ! -n "$(pidof clash)" ]; then
+        # 停止 KoolClash
+        echo_date '【Clash 进程没有启动！】'
+        echo_date '可能是因为 Clash 配置文件不合法，也有可能是其它原因！'
+        echo_date -------------------------------- KoolClash 启动中断 --------------------------------
+        sleep 2
+        echo_date '【正在关闭 KoolClash 并还原所有操作】'
+        echo_date ---------------------------------------------------------------------------------------
+        restore_dnsmasq_conf
+        restart_dnsmasq
+        flush_nat
+        restore_start_file
+        kill_process
+        dbus set koolclash_enable=0
+        echo_date -------------------------------- KoolClash 停止完毕 --------------------------------
+        exit 1
+    fi
+
     load_nat
     restart_dnsmasq
     dbus set koolclash_enable=1
