@@ -60,8 +60,10 @@ Read the [detailed installation instructions (written in Chinese)](https://koolc
 ```bash
 $ git clone https://github.com/SukkaW/Koolshare-Clash.git
 $ cd Koolshare-Clash
-$ ./build.sh
-# Get koolclash.tar.gz
+$ ./build # Get usage information
+$ ./build pack # Build the package
+$ ./build ipdb # Update Country.mmdb to latest
+$ ./build dashboard # Update clash-dashboard to latest
 ```
 
 ## Clash on Other Platforms

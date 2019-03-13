@@ -58,7 +58,10 @@
 ```bash
 $ https://github.com/SukkaW/Koolshare-Clash
 $ cd Koolshare-Clash
-$ ./build.sh
+$ ./build # Get usage information
+$ ./build pack # Build the package
+$ ./build ipdb # Update Country.mmdb to latest
+$ ./build dashboard # Update clash-dashboard to latest
 ```
 
 ## Clash 在其它平台上的客户端
