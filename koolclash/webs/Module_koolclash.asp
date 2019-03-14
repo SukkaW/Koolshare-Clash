@@ -269,7 +269,7 @@
         </div>
         <div id="koolclash-content-log">
             <div class="box">
-                <div class="heading">功能开发中</div>
+                <div class="heading">KoolClash 操作日志</div>
                 <div class="content">
                     <textarea class="as-script" name="koolclash_log" id="_koolclash_log" readonly wrap="off" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                 </div>
@@ -279,17 +279,16 @@
 
     <script>
         if (typeof IP !== 'undefined' || typeof HTTP !== 'undefined' || typeof noop !== 'undefined' || typeof KoolClash !== 'undefined') {
-            console.clear();
             window.location.reload();
         }
-    </script>
-    <script>
+
         if (typeof softcenter === undefined) {
             let softcenter = 0;
         } else {
             softcenter = 0;
         }
-
+    </script>
+    <script>
         // IP 检查
         let IP = {
             get: (url, type) =>
@@ -514,6 +513,7 @@
                         let control_host = control_data.split(':')[0],
                             control_port = control_data.split(':')[1];
 
+                        control_host = (control_host.length === 0) ? `请先上传 Clash 配置文件！` : control_host;
                         document.getElementById('koolclash_status').innerHTML = pid_text;
                         document.getElementById('_koolclash_dashboard_host').value = control_host;
 
@@ -824,6 +824,8 @@ dns:
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_error').show();
                             $('#msg_warning').show();
+                            KoolClash.selectTab('koolclash-nav-log');
+                            KoolClash.getLog();
                             KoolClash.tminus(15);
                             setTimeout(() => {
                                 window.location.reload();
@@ -834,6 +836,8 @@ dns:
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_error').show();
                             $('#msg_warning').show();
+                            KoolClash.selectTab('koolclash-nav-log');
+                            KoolClash.getLog();
                             KoolClash.tminus(15);
                             setTimeout(() => {
                                 window.location.reload();
