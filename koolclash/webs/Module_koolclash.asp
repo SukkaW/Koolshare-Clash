@@ -249,7 +249,7 @@
                 </div>
             </div>
             <div class="box">
-                <div class="heading">KoolClash 配置文件</div>
+                <div class="heading">DNS 配置</div>
                 <div class="content">
                     <!-- ### KoolClash DNS 设置 ### -->
                     <div id="koolclash-config-dns"></div>
