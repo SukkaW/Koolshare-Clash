@@ -1,11 +1,12 @@
 <h1 align="center">
-    <img src="https://koolclash.js.org/img/koolclash.png" alt="Clash" width="150">
+    <img src="https://koolclash.js.org/img/koolclash.png" alt="Clash" width="120">
     <br>KoolClash
 </h1>
 
 <p align="center">
-A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://github.com/Dreamacro/clash" target="_blank">Clash</a>.<br>
-<a href="https://koolclash.js.org">Documentation (简体中文)</a> |
+A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://github.com/Dreamacro/clash" target="_blank">Clash</a>.
+<br>
+<a href="https://koolclash.js.org">Documentation(zh-Hans)</a> |
 <a href="https://github.com/SukkaW/Koolshare-Clash/releases">Download</a>
 </p>
 
@@ -13,9 +14,6 @@ A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://g
     <!--<a href="https://travis-ci.org/SukkaW/KoolShare-Clash">
         <img src="https://img.shields.io/travis/SukkaW/KoolShare-Clash.svg?style=flat-square" alt="Travis-CI">
     </a>-->
-    <a href="https://skk.moe" target="_blank">
-        <img alt="Author" src="https://img.shields.io/badge/Author-Sukka-b68469.svg?style=flat-square"/>
-    </a>
     <a href="https://github.com/SukkaW/Koolshare-Clash/releases" target="_blank">
         <img src="https://img.shields.io/github/release/SukkaW/Koolshare-Clash/all.svg?style=flat-square">
     </a>
@@ -27,9 +25,11 @@ A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://g
     </a>
 </p>
 
----
+<p align="center">
+    <img src="https://i.loli.net/2019/03/15/5c8a7f20cf5e4.png">
+</p>
 
-<h3 align="center">!!!ATTENTION!!!<br>KoolClash IS STILL UNSTABLE! USE AT YOUR OWN RISK!</h2>
+<p></p>
 
 ## Keywords
 
