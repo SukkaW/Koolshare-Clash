@@ -27,10 +27,6 @@
     </a>
 </p>
 
----
-
-<h3 align="center">!!!注意!!!<br>这个项目仍然不稳定！请自负使用风险！</h2>
-
 ## 名词解释
 
 - Clash：一个 GO 开发的、基于规则的多平台代理客户端，兼容 Shadowsocks、V2Ray 等协议，拥有像 Surge 一样强大的代理规则。[GitHub](https://github.com/Dreamacro/clash)
