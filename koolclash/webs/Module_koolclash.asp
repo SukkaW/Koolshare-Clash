@@ -249,7 +249,7 @@
                 </div>
             </div>
             <div class="box">
-                <div class="heading">DNS 配置</div>
+                <div class="heading">自定义 DNS 配置</div>
                 <div class="content">
                     <!-- ### KoolClash DNS 设置 ### -->
                     <div id="koolclash-config-dns"></div>
@@ -985,6 +985,7 @@ dns:
                         } else if (resp.result === 'nofallbackdns') {
                             document.getElementById('koolclash-btn-update-sub').innerHTML = '在托管配置中没有找到 DNS 设置，请在下面添加 DNS 配置！';
                             document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
+                            $('#koolclash-btn-save-dns-config').show();
                             document.getElementById('_koolclash-dns-config-switch').checked = true;
                             document.getElementById('_koolclash-dns-config-switch').setAttribute('disabled', '');
                             $('#_koolclash-config-dns').show();
