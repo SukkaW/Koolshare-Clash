@@ -12,6 +12,7 @@ rm -rf $KSROOT/koolclash
 rm -rf $KSROOT/scripts/koolclash_*
 rm -rf $KSROOT/init.d/S99koolclash.sh
 rm -rf $KSROOT/bin/clash
+rm -rf $KSROOT/bin/clash-linux-amd64
 rm -rf $KSROOT/bin/yq
 rm -rf $KSROOT/webs/Module_koolclash.asp
 rm -rf $KSROOT/webs/koolclash
