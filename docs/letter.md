@@ -10,12 +10,12 @@
 
 您的用户向你提交技术请求，则是因为 KoolClash 插件在介绍中提及用户使用 KoolClash 插件可能存在违反您制订的服务条款与条件的行为。本文介绍 KoolClash 一些技术细节，并对上述提到的行为进行解释。
 
-如果您不知道什么是 Clash，您可以参看 [Clash 项目的 GitHub](https://github.com/Dreamacro/clash)。但是简单来说，Clash 就是一种基于规则的多平台代理客户端——截止至我写完本文时——兼容 Shadowsocks 和 V2Ray 的协议。
+如果您不知道什么是 Clash，您可以参看 [Clash 项目的 GitHub](https://github.com/Dreamacro/clash)。但是简单来说，Clash 就是一种基于规则的多平台代理客户端——截止至我写完本文时——兼容 Shadowsocks 和 Vmess 的协议。
 
 OpenWrt 作为一个 Linux 类发行版、专门用于路由器的固件。Koolshare OpenWRT 是由 Koolshare 论坛释出的修改版 OpenWRT 路由器固件、增加了 Koolshare 特有的软件中心功能，可以很方便地通过图形化界面配置插件。而 KoolClash 就是为 Koolshare OpenWRT 开发的的插件，目的是让 Clash 运行在 Koolshare OpenWRT 平台上。
 
 
-为了 KoolClash 的运行需要，KoolClash 会修改 Clash 配置的以下内容：
+为了 KoolClash 的运行需要，KoolClash 会修改 Clash 配置的以下内容（这部分配置在 Clash 中被描述为「General 配置」）：
 
 - 透明代理端口 - 以确保不会和现有端口冲突
 - 外部控制监听 - 以确保路由器域外依然可以访问 Clash 的控制端口
