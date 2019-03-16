@@ -278,19 +278,14 @@
     </div>
 
     <script>
-        if (typeof IP !== 'undefined' || typeof HTTP !== 'undefined' || typeof noop !== 'undefined' || typeof KoolClash !== 'undefined') {
-            window.location.reload();
-        }
-
         if (typeof softcenter === undefined) {
             let softcenter = 0;
         } else {
             softcenter = 0;
         }
-    </script>
-    <script>
+
         // IP 检查
-        let IP = {
+        var IP = {
             get: (url, type) =>
                 fetch(url, { method: 'GET' }).then((resp) => {
                     if (type === 'text')
@@ -352,7 +347,7 @@
         // 将淘宝的 jsonp 回调给 IP 函数
         window.ipCallback = (data) => IP.getTaobaoIP(data);
         // 网站访问检查
-        let HTTP = {
+        var HTTP = {
             checker: (domain, cbElID) => {
                 let img = new Image;
                 let timeout = setTimeout(() => {
@@ -380,7 +375,7 @@
             }
         };
 
-        let KoolClash = {
+        var KoolClash = {
             // KoolClash.renderUI()
             // 创建 KoolClash 界面
             renderUI: () => {
