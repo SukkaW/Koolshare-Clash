@@ -13,18 +13,25 @@ dashboard)
 	echo '----------------------------------------'
     ;;
 pack)
-    mkdir -p koolclash-build
-	cp -rf koolclash/* koolclash-build
+    mkdir -p koolclash-build/koolclash
+	cp -rf koolclash/* koolclash-build/koolclash
+
+	cd koolclash-build
+
     upx=$(which upx)
+
 	if [ "x$upx" != "x" ] && [ -x $upx ]; then
-        upx ./koolclash-build/bin/*
+        upx ./koolclash/bin/*
     else
 		echo '----------------------------------------'
         echo "You should install upx first!"
 		echo '----------------------------------------'
         exit 1
     fi
-	tar zcvf koolclash.tar.gz koolclash
+
+	tar zcvf ../koolclash.tar.gz koolclash
+	cd ..
+	rm -rf koolclash-build
 	echo '----------------------------------------'
 	echo 'Build the latest version'
 	echo '----------------------------------------'
