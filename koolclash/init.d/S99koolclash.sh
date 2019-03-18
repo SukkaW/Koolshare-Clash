@@ -19,7 +19,7 @@ alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 start() {
     touch /tmp/upload/koolclash_log.txt
     if [ "$koolclash_enable" == "1" ]; then
-        sh /koolshare/scripts/koolclash_sontrol.sh start >/tmp/upload/koolclash_log.txt
+        sh /koolshare/scripts/koolclash_control.sh start >/tmp/upload/koolclash_log.txt
         echo_date "KoolClash 开机启动成功" >>/tmp/upload/koolclash_log.txt
         echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
     else
@@ -30,7 +30,7 @@ start() {
 
 stop() {
     touch /tmp/upload/koolclash_log.txt
-    sh /koolshare/scripts/koolclash_sontrol.sh stop >/tmp/upload/koolclash_log.txt
+    sh /koolshare/scripts/koolclash_control.sh stop >/tmp/upload/koolclash_log.txt
     echo_date "KoolClash 成功停止" >>/tmp/upload/koolclash_log.txt
     echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
 }
