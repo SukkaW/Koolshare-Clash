@@ -4,6 +4,7 @@ export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
 eval $(dbus export koolclash_)
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
+lan_ip=$(uci get network.lan.ipaddr)
 
 #--------------------------------------------------------------------------
 restore_dnsmasq_conf() {
@@ -79,43 +80,54 @@ start_clash_process() {
 
 #--------------------------------------------------------------------------
 flush_nat() {
-    iptables -t nat -D PREROUTING -p tcp -j koolclash >/dev/null 2>&1
-
     echo_date "删除 KoolClash 添加的 iptables 规则"
+
+    iptables -t nat -D PREROUTING -p tcp -j koolclash >/dev/null 2>&1
+    iptables -t mangle -D PREROUTING -p tcp -j koolclash >/dev/null 2>&1
+
+    nat_indexs=$(iptables -nvL PREROUTING -t nat | sed 1,2d | sed -n '/clash/=' | sort -r)
+    for nat_index in $nat_indexs; do
+        iptables -t nat -D PREROUTING $nat_index >/dev/null 2>&1
+    done
+
+    mangle_indexs=$(iptables -nvL PREROUTING -t mangle | sed 1,2d | sed -n '/clash/=' | sort -r)
+    for mangle_index in $mangle_indexs; do
+        iptables -t mangle -D PREROUTING $mangle_index >/dev/null 2>&1
+    done
+
     # flush iptables rules
-    iptables -t nat -F koolclash && iptables -t nat -X koolclash >/dev/null 2>&1
+    iptables -t nat -F koolclash >/dev/null 2>&1 && iptables -t nat -X koolclash >/dev/null 2>&1
+    iptables -t mangle -F koolclash >/dev/null 2>&1 && iptables -t mangle -X koolclash >/dev/null 2>&1
 
     #chromecast_nu=$(iptables -t nat -L PREROUTING -v -n --line-numbers | grep "dpt:53" | awk '{print $1}')
     #[ $(dbus get koolproxy_enable) -ne 1 ] && iptables -t nat -D PREROUTING $chromecast_nu >/dev/null 2>&1
 
     #flush_ipset
-	echo_date "删除 KoolClash 添加的 ipsets 名单"
-	ipset -F koolclash_white >/dev/null 2>&1 && ipset -X koolclash_white >/dev/null 2>&1
-	ipset -F koolclash_black >/dev/null 2>&1 && ipset -X koolclash_black >/dev/null 2>&1
+    echo_date "删除 KoolClash 添加的 ipsets 名单"
+    ipset -F koolclash_white >/dev/null 2>&1 && ipset -X koolclash_white >/dev/null 2>&1
+    #ipset -F koolclash_black >/dev/null 2>&1 && ipset -X koolclash_black >/dev/null 2>&1
 }
 
 #--------------------------------------------------------------------------
-creat_ipset(){
-	echo_date "创建 ipset 名单"
-	ipset -! create koolclash_white nethash && ipset flush koolclash_white
-	ipset -! create koolclash_black nethash && ipset flush koolclash_black
+creat_ipset() {
+    echo_date "创建 ipset 名单"
+    ipset -! create koolclash_white nethash && ipset flush koolclash_white
+    #ipset -! create koolclash_black nethash && ipset flush koolclash_black
 }
 
 #--------------------------------------------------------------------------
-add_white_black_ip(){
-	# black ip/cidr
-	ip_tg="149.154.0.0/16 91.108.4.0/22 91.108.56.0/24 109.239.140.0/24 67.198.55.0/24"
-	for ip in $ip_tg
-	do
-		ipset -! add koolclash_black $ip >/dev/null 2>&1
-	done
-	
-	# white ip/cidr	
-	ip_lan="0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 192.168.0.0/16 224.0.0.0/4 240.0.0.0/4 223.5.5.5 223.6.6.6 114.114.114.114 114.114.115.115 1.2.4.8 210.2.4.8 112.124.47.27 114.215.126.16 180.76.76.76 119.29.29.29"
-	for ip in $ip_lan
-	do
-		ipset -! add koolclash_white $ip >/dev/null 2>&1
-	done
+add_white_black_ip() {
+    # black ip/cidr
+    #ip_tg="149.154.0.0/16 91.108.4.0/22 91.108.56.0/24 109.239.140.0/24 67.198.55.0/24"
+    #for ip in $ip_tg; do
+    #    ipset -! add koolclash_black $ip >/dev/null 2>&1
+    #done
+
+    # white ip/cidr
+    ip_white="0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 192.168.0.0/16 224.0.0.0/4 240.0.0.0/4 $lan_ip"
+    for ip in $ip_white; do
+        ipset -! add koolclash_white $ip >/dev/null 2>&1
+    done
 }
 
 #--------------------------------------------------------------------------
@@ -129,22 +141,26 @@ apply_nat_rules() {
     # iptables -t mangle -A koolclash -j $(get_action_chain $ss_acl_default_mode)
 
     iptables -t nat -N koolclash
-    # 白名单控制
-	iptables -t nat -A koolclash -m set --match-set koolclash_white dst -j ACCEPT
-    # 22端口不走NAT
+    iptables -t mangle -N koolclash
+
+    # IP Whitelist
+    # 包括路由器本机 IP
+    iptables -t nat -A koolclash -m set --match-set koolclash_white dst -j ACCEPT
+    # Free 22 SSH
     iptables -t nat -A koolclash -p tcp --dport 22 -j ACCEPT
-    # IP/CIDR/黑域名 黑名单控制（走ss）
-	iptables -t nat -A koolclash -p tcp -m set --match-set koolclash_black dst -j REDIRECT --to-ports 23456
-    # 重定所有流量到透明代理端口
+    #iptables -t nat -A koolclash -p tcp -m set --match-set koolclash_black dst -j REDIRECT --to-ports 23456
+    # Redirect all tcp traffic to 23456
     iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
-    iptables -t nat -I PREROUTING -p tcp -j koolclash
+
+    iptables -t nat -A PREROUTING -p tcp -j koolclash
+    iptables -t mangle -A PREROUTING -j koolclash
 }
 
 # =======================================================================================================
 load_nat() {
     echo_date "开始加载 nat 规则!"
     #flush_nat
-    #creat_ipset
+    creat_ipset
     add_white_black_ip
     apply_nat_rules
     #chromecast
@@ -184,7 +200,6 @@ start_koolclash() {
         exit 1
     fi
 
-    creat_ipset
     load_nat
     restart_dnsmasq
     dbus set koolclash_enable=1
@@ -291,4 +306,3 @@ stop)
     echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
     ;;
 esac
-	
