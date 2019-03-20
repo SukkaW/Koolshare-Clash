@@ -86,7 +86,8 @@
         #koolclash-nav-overview:checked~.nav-tabs .koolclash-nav-overview>a,
         #koolclash-nav-config:checked~.nav-tabs .koolclash-nav-config>a,
         #koolclash-nav-firewall:checked~.nav-tabs .koolclash-nav-firewall>a,
-        #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-log>a {
+        #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-log>a,
+        #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-debug>a {
             border-bottom: 2px solid #f36c21;
             background: transparent;
             z-index: 999;
@@ -100,7 +101,8 @@
         #koolclash-nav-overview:checked~.tab-content>#koolclash-content-overview,
         #koolclash-nav-config:checked~.tab-content>#koolclash-content-config,
         #koolclash-nav-firewall:checked~.tab-content>#koolclash-content-firewall,
-        #koolclash-nav-log:checked~.tab-content>#koolclash-content-log {
+        #koolclash-nav-log:checked~.tab-content>#koolclash-content-log,
+        #koolclash-nav-debug:checked~.tab-content>#koolclash-content-debug {
             display: block;
         }
 
@@ -110,6 +112,15 @@
             margin: 0;
             min-height: 300px;
             max-height: 500px;
+            font-family: Consolas, "Panic Sans", "DejaVu Sans Mono", Monaco, "Bitstream Vera Sans Mono", 'Andale Mono', Menlo, monospace !important;
+        }
+
+        #_koolclash_debug_info {
+            max-width: 100%;
+            min-width: 100%;
+            margin: 0;
+            min-height: 600px;
+            font-family: Consolas, "Panic Sans", "DejaVu Sans Mono", Monaco, "Bitstream Vera Sans Mono", 'Andale Mono', Menlo, monospace !important;
         }
 
     </style>
@@ -139,6 +150,7 @@
     <input class="koolclash-nav-radio" id="koolclash-nav-config" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-firewall" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-log" type="radio" name="nav-tab">
+    <input class="koolclash-nav-radio" id="koolclash-nav-debug" type="radio" name="nav-tab">
 
     <div id="msg_success" class="alert alert-success icon" style="display: none;"></div>
     <div id="msg_error" class="alert alert-error icon" style="display: none;"></div>
@@ -174,6 +186,14 @@
                 <a>
                     <i class="icon-hourglass"></i>
                     操作日志
+                </a>
+            </label>
+        </li>
+        <li>
+            <label class="koolclash-nav-log koolclash-nav-label" for="koolclash-nav-debug">
+                <a>
+                    <i class="icon-warning"></i>
+                    调试工具
                 </a>
             </label>
         </li>
@@ -272,6 +292,18 @@
                 <div class="heading">KoolClash 操作日志</div>
                 <div class="content">
                     <textarea class="as-script" name="koolclash_log" id="_koolclash_log" readonly wrap="off" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                </div>
+            </div>
+        </div>
+        <div id="koolclash-content-debug">
+            <div class="box">
+                <div class="heading">KoolClash 调试工具</div>
+                <div class="content">
+                    <p>KoolClash 的调试工具，可以输出 KoolClash 的相关信息、参数。在反馈 KoolClash 的使用问题时附上相关信息可以帮助开发者更好的定位问题。</p>
+
+                    <button type="button" id="koolclash-btn-debug" onclick="KoolClash.debugInfo();" class="btn btn-danger" style="margin-top: 6px; margin-bottom: 12px">获取 KoolClash 调试信息</button>
+
+                    <textarea class="as-script" name="koolclash_debug_info" id="_koolclash_debug_info" readonly wrap="off" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                 </div>
             </div>
         </div>
@@ -1044,6 +1076,74 @@ dns:
                         return false;
                     }
                 });
+            },
+            debugInfo: () => {
+                KoolClash.disableAllButton();
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_debug.sh",
+                        "params": [""],
+                        "fields": ""
+                    });
+
+                fetch(`/_api/`, {
+                    body: postData,
+                    method: 'POST',
+                    cache: 'no-cache',
+                }).then((resp) => Promise.all([resp.ok, resp.status, resp.json(), resp.headers]))
+                    .then(([ok, status, data, headers]) => {
+                        if (ok) {
+                            return data.result.split('@');
+                        } else {
+                            throw new Error(JSON.stringify(json.error));
+                        }
+                    })
+                    .then((data) => {
+                        document.getElementById('_koolclash_debug_info').value = `
+======================== KoolClash 调试工具 ========================
+调试信息生成于 ${new Date().toString()}
+-------------------- Koolshare OpenWrt 基本信息 --------------------
+固件版本：${data[1]}
+路由器 LAN IP：${data[0]}
+------------------------ KoolClash 基本信息 ------------------------
+KoolClash 版本：${window.dbus.koolclash_version}
+KoolClash 当前状态：${(window.dbus.koolclash_enable === '1') ? `Clash 进程正在运行` : `Clash 进程未在运行`}
+用户指定 Clash 外部控制 Host：${(window.dbus.koolclash_api_host) ? koolclash_api_host : `未改动`}
+------------------------ Clash 配置文件信息 ------------------------
+Clash 原始配置文件是否存在：${data[2]}
+Clash 运行配置文件是否存在：${data[3]}
+Clash 透明代理端口：${data[15]}
+Clash 是否允许局域网连接：${data[4]}
+Clash 外部控制监听地址：${data[5]}
+--------------------- Clash 配置文件 DNS 配置 ----------------------
+Clash DNS 是否启用：${data[6]}
+Clash DNS 解析 IPv6：${(data[7] === 'null') ? `false` : data[7]}
+Clash DNS 增强模式：${data[8]}
+Clash DNS 监听：${data[9]}
+KoolClash 当前 DNS 模式：${dbus.koolclash_dnsmode}
+-------------------- KoolClash 自定义 DNS 配置 ---------------------
+${Base64.decode(data[10])}
+------------------------- iptables 条目 ---------------------------
+-------------------------------------------------------------------
+iptables mangle 中 Clash 相关条目
+-------------------------------------------------------------------
+${Base64.decode(Base64.decode(data[11]))}
+-------------------------------------------------------------------
+iptables nat 中 Clash 相关条目
+-------------------------------------------------------------------
+${Base64.decode(Base64.decode(data[12]))}
+-------------------------------------------------------------------
+iptables mangle 中 Clash 链
+-------------------------------------------------------------------
+${Base64.decode(Base64.decode(data[13]))}
+-------------------------------------------------------------------
+iptables nat 中 Clash 链
+-------------------------------------------------------------------
+${Base64.decode(Base64.decode(data[14]))}
+===================================================================
+`;
+                    })
             },
         }
 
