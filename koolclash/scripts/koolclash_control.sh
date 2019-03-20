@@ -153,7 +153,7 @@ apply_nat_rules() {
     iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
 
     iptables -t nat -A PREROUTING -p tcp -j koolclash
-    iptables -t mangle -A PREROUTING -j koolclash
+    iptables -t mangle -A PREROUTING -p tcp -j koolclash
 }
 
 # =======================================================================================================

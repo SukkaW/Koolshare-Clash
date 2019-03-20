@@ -87,7 +87,7 @@
         #koolclash-nav-config:checked~.nav-tabs .koolclash-nav-config>a,
         #koolclash-nav-firewall:checked~.nav-tabs .koolclash-nav-firewall>a,
         #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-log>a,
-        #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-debug>a {
+        #koolclash-nav-debug:checked~.nav-tabs .koolclash-nav-debug>a {
             border-bottom: 2px solid #f36c21;
             background: transparent;
             z-index: 999;
@@ -190,7 +190,7 @@
             </label>
         </li>
         <li>
-            <label class="koolclash-nav-log koolclash-nav-label" for="koolclash-nav-debug">
+            <label class="koolclash-nav-debug koolclash-nav-label" for="koolclash-nav-debug">
                 <a>
                     <i class="icon-warning"></i>
                     调试工具
@@ -1094,7 +1094,7 @@ dns:
                 }).then((resp) => Promise.all([resp.ok, resp.status, resp.json(), resp.headers]))
                     .then(([ok, status, data, headers]) => {
                         if (ok) {
-                            return data.result.split('@');
+                            return JSON.parse(data.result);
                         } else {
                             throw new Error(JSON.stringify(json.error));
                         }
@@ -1104,45 +1104,46 @@ dns:
 ======================== KoolClash 调试工具 ========================
 调试信息生成于 ${new Date().toString()}
 -------------------- Koolshare OpenWrt 基本信息 --------------------
-固件版本：${data[1]}
-路由器 LAN IP：${data[0]}
+固件版本：${data.koolshare_version}
+路由器 LAN IP：${data.lan_ip}
 ------------------------ KoolClash 基本信息 ------------------------
 KoolClash 版本：${window.dbus.koolclash_version}
 KoolClash 当前状态：${(window.dbus.koolclash_enable === '1') ? `Clash 进程正在运行` : `Clash 进程未在运行`}
 用户指定 Clash 外部控制 Host：${(window.dbus.koolclash_api_host) ? koolclash_api_host : `未改动`}
 ------------------------ Clash 配置文件信息 ------------------------
-Clash 原始配置文件是否存在：${data[2]}
-Clash 运行配置文件是否存在：${data[3]}
-Clash 透明代理端口：${data[15]}
-Clash 是否允许局域网连接：${data[4]}
-Clash 外部控制监听地址：${data[5]}
+Clash 原始配置文件是否存在：${data.origin_exists}
+Clash 运行配置文件是否存在：${data.config_exists}
+Clash 透明代理端口：${data.clash_redir}
+Clash 是否允许局域网连接：${data.clash_allow_lan}
+Clash 外部控制监听地址：${data.clash_ext_controller}
 --------------------- Clash 配置文件 DNS 配置 ----------------------
-Clash DNS 是否启用：${data[6]}
-Clash DNS 解析 IPv6：${(data[7] === 'null') ? `false` : data[7]}
-Clash DNS 增强模式：${data[8]}
-Clash DNS 监听：${data[9]}
+Clash DNS 是否启用：${data.clash_dns_enable}
+Clash DNS 解析 IPv6：${(data.clash_dns_ipv6 === 'null') ? `false` : data.clash_dns_ipv6}
+Clash DNS 增强模式：${data.clash_dns_mode}
+Clash DNS 监听：${data.clash_dns_listen}
 KoolClash 当前 DNS 模式：${dbus.koolclash_dnsmode}
 -------------------- KoolClash 自定义 DNS 配置 ---------------------
-${Base64.decode(data[10])}
+${Base64.decode(data.fallbackdns)}
 ------------------------- iptables 条目 ---------------------------
 -------------------------------------------------------------------
 iptables mangle 中 Clash 相关条目
 -------------------------------------------------------------------
-${Base64.decode(Base64.decode(data[11]))}
+${Base64.decode(Base64.decode(data.iptables_mangle))}
 -------------------------------------------------------------------
 iptables nat 中 Clash 相关条目
 -------------------------------------------------------------------
-${Base64.decode(Base64.decode(data[12]))}
+${Base64.decode(Base64.decode(data.iptables_nat))}
 -------------------------------------------------------------------
 iptables mangle 中 Clash 链
 -------------------------------------------------------------------
-${Base64.decode(Base64.decode(data[13]))}
+${Base64.decode(Base64.decode(data.iptables_mangle_clash))}
 -------------------------------------------------------------------
 iptables nat 中 Clash 链
 -------------------------------------------------------------------
-${Base64.decode(Base64.decode(data[14]))}
+${Base64.decode(Base64.decode(data.iptables_nat_clash))}
 ===================================================================
 `;
+                        KoolClash.enableAllButton();
                     })
             },
         }
