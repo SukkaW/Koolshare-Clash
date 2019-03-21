@@ -8,33 +8,33 @@ dashboard)
     cp -rf clash-dashboard-gh-pages/* koolclash/webs/koolclash
     rm -rf gh-pages.zip
     rm -rf clash-dashboard-gh-pages
-	echo '----------------------------------------'
-	echo 'Update to latest clash-dashboard'
-	echo '----------------------------------------'
+    echo '----------------------------------------'
+    echo 'Update to latest clash-dashboard'
+    echo '----------------------------------------'
     ;;
 pack)
     mkdir -p koolclash-build/koolclash
-	cp -rf koolclash/* koolclash-build/koolclash
+    cp -rf koolclash/* koolclash-build/koolclash
 
-	cd koolclash-build
+    cd koolclash-build
 
     upx=$(which upx)
 
-	if [ "x$upx" != "x" ] && [ -x $upx ]; then
+    if [ "x$upx" != "x" ] && [ -x $upx ]; then
         upx ./koolclash/bin/*
     else
-		echo '----------------------------------------'
+        echo '----------------------------------------'
         echo "You should install upx first!"
-		echo '----------------------------------------'
+        echo '----------------------------------------'
         exit 1
     fi
 
-	tar zcvf ../koolclash.tar.gz koolclash
-	cd ..
-	rm -rf koolclash-build
-	echo '----------------------------------------'
-	echo 'Build the latest version'
-	echo '----------------------------------------'
+    tar zcvf ../koolclash.tar.gz koolclash
+    cd ..
+    rm -rf koolclash-build
+    echo '----------------------------------------'
+    echo 'Build the latest version'
+    echo '----------------------------------------'
     ;;
 ipdb)
     wget https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz -O ipdb.tar.gz
@@ -44,19 +44,19 @@ ipdb)
     cp -rf geolite/GeoLite2-Country_*/GeoLite2-Country.mmdb koolclash/koolclash/config/Country.mmdb
     rm -rf ipdb.tar.gz
     rm -rf geolite
-	echo '----------------------------------------'
-	echo 'Update the ipdb to latest'
-	echo '----------------------------------------'
+    echo '----------------------------------------'
+    echo 'Update the ipdb to latest'
+    echo '----------------------------------------'
     ;;
 *)
-	echo '=================================================='
-	echo '              KoolClash Build Tools'
-	echo '--------------------------------------------------'
-	echo 'Usage: build [option]'
-	echo ''
-	echo "dashboard\tUpdate clash-dashboard to latest"
-	echo "ipdb\t\tUpdate GeoLite to latest"
-	echo "pack\t\tBuild the package"
-	echo '=================================================='
+    echo '=================================================='
+    echo '              KoolClash Build Tools'
+    echo '--------------------------------------------------'
+    echo 'Usage: build [option]'
+    echo ''
+    echo "dashboard\tUpdate clash-dashboard to latest"
+    echo "ipdb\t\tUpdate GeoLite to latest"
+    echo "pack\t\tBuild the package"
+    echo '=================================================='
     ;;
 esac
