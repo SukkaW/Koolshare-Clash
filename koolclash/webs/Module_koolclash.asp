@@ -232,7 +232,7 @@
                         </div>
                         <div style="width: 38.2%">
                             <p><span class="ip-title">百度搜索</span>&nbsp;:&nbsp;<span id="http-baidu"></span></p>
-                            <p><span class="ip-title">网易 163</span>&nbsp;:&nbsp;<span id="http-163"></span></p>
+                            <p><span class="ip-title">网易云音乐</span>&nbsp;:&nbsp;<span id="http-163"></span></p>
                             <p><span class="ip-title">GitHub</span>&nbsp;:&nbsp;<span id="http-github"></span></p>
                             <p><span class="ip-title">YouTube</span>&nbsp;:&nbsp;<span id="http-youtube"></span></p>
                         </div>
@@ -401,7 +401,7 @@
             },
             runcheck: () => {
                 HTTP.checker('www.baidu.com', 'http-baidu');
-                HTTP.checker('www.163.com', 'http-163');
+                HTTP.checker('s1.music.126.net/style', 'http-163');
                 HTTP.checker('github.com', 'http-github');
                 HTTP.checker('www.youtube.com', 'http-youtube');
             }
