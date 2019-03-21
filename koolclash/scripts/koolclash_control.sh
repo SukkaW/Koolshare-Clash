@@ -169,15 +169,15 @@ load_nat() {
 start_koolclash() {
     # get_status >> /tmp/ss_start.txt
     # used by web for start/restart; or by system for startup by S99koolss.sh in rc.d
-    echo_date ----------------- KoolClash: Clash on Koolshare OpenWrt -------------------------
+    echo_date --------------------- KoolClash: Clash on Koolshare OpenWrt ---------------------
     [ -n "$ONSTART" ] && echo_date 路由器开机触发 KoolClash 启动！ || echo_date web 提交操作触发 KoolClash 启动！
-    echo_date ---------------------------------------------------------------------------------------
+    echo_date ---------------------------------------------------------------------------------
     # stop first
     restore_dnsmasq_conf
     flush_nat
     restore_start_file
     kill_process
-    echo_date ---------------------------------------------------------------------------------------
+    echo_date ---------------------------------------------------------------------------------
     create_dnsmasq_conf
     auto_start
     start_clash_process
@@ -187,7 +187,7 @@ start_koolclash() {
         # 停止 KoolClash
         echo_date '【Clash 进程没有启动！Clash 配置文件可能存在错误，也有可能是其它原因！】'
         echo_date '【即将关闭 KoolClash 并还原所有操作】'
-        echo_date -------------------------------- KoolClash 启动中断 --------------------------------
+        echo_date ------------------------------- KoolClash 启动中断 -------------------------------
         sleep 2
         restore_dnsmasq_conf
         restart_dnsmasq
@@ -195,26 +195,26 @@ start_koolclash() {
         restore_start_file
         kill_process
         dbus set koolclash_enable=0
-        echo_date -------------------------------- KoolClash 停止完毕 --------------------------------
-        echo_date ------------- 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ -------------
+        echo_date ------------------------------- KoolClash 停止完毕 -------------------------------
+        echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------
         exit 1
     fi
 
     load_nat
     restart_dnsmasq
     dbus set koolclash_enable=1
-    echo_date -------------------------------- KoolClash 启动完毕 --------------------------------
+    echo_date ------------------------------- KoolClash 启动完毕 -------------------------------
 }
 
 stop_koolclash() {
-    echo_date -------------------- KoolClash: Clash on Koolshare OpenWrt ----------------------------
+    echo_date --------------------- KoolClash: Clash on Koolshare OpenWrt ---------------------
     restore_dnsmasq_conf
     restart_dnsmasq
     flush_nat
     restore_start_file
     kill_process
     dbus set koolclash_enable=0
-    echo_date -------------------------------- KoolClash 停止完毕 --------------------------------
+    echo_date ------------------------------- KoolClash 停止完毕 -------------------------------
 }
 
 # used by rc.d and firewall include
@@ -279,22 +279,22 @@ case $2 in
 start)
     touch /tmp/upload/koolclash_log.txt
     if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-        echo_date "没有找到 Clash 的配置文件！自动停止 Clash！" >/tmp/upload/koolclash_log.txt
+        echo_date "【没有找到 Clash 的配置文件！自动停止 Clash！】" >/tmp/upload/koolclash_log.txt
         http_response 'noconfig'
         stop_koolclash >>/tmp/upload/koolclash_log.txt
-        echo_date ------------- 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------- >>/tmp/upload/koolclash_log.txt
+        echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
         echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
     else
         if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
             http_response 'success'
             start_koolclash >/tmp/upload/koolclash_log.txt
-            echo_date ------------- 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------- >>/tmp/upload/koolclash_log.txt
+            echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
         else
-            echo_date "没有找到正确的 DNS 配置或 Clash 配置文件存在错误！自动停止 Clash！" >/tmp/upload/koolclash_log.txt
+            echo_date "【没有找到正确的 DNS 配置或 Clash 配置文件存在错误！自动停止 Clash！】" >/tmp/upload/koolclash_log.txt
             http_response 'nodns'
             stop_koolclash >>/tmp/upload/koolclash_log.txt
-            echo_date ------------- 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------- >>/tmp/upload/koolclash_log.txt
+            echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
         fi
     fi
@@ -302,7 +302,7 @@ start)
 stop)
     http_response 'success'
     stop_koolclash >/tmp/upload/koolclash_log.txt
-    echo_date ------------- 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------- >>/tmp/upload/koolclash_log.txt
+    echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
     echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
     ;;
 esac

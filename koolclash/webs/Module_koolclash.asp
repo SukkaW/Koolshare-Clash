@@ -1125,21 +1125,16 @@ KoolClash 当前 DNS 模式：${dbus.koolclash_dnsmode}
 -------------------- KoolClash 自定义 DNS 配置 ---------------------
 ${Base64.decode(data.fallbackdns)}
 ------------------------- iptables 条目 ---------------------------
--------------------------------------------------------------------
-iptables mangle 中 Clash 相关条目
--------------------------------------------------------------------
+ * iptables mangle 中 Clash 相关条目
 ${Base64.decode(Base64.decode(data.iptables_mangle))}
--------------------------------------------------------------------
-iptables nat 中 Clash 相关条目
--------------------------------------------------------------------
+
+ * iptables nat 中 Clash 相关条目
 ${Base64.decode(Base64.decode(data.iptables_nat))}
--------------------------------------------------------------------
-iptables mangle 中 Clash 链
--------------------------------------------------------------------
+
+ * iptables mangle 中 koolclash 链
 ${Base64.decode(Base64.decode(data.iptables_mangle_clash))}
--------------------------------------------------------------------
-iptables nat 中 Clash 链
--------------------------------------------------------------------
+
+ * iptables nat 中 koolclash 链
 ${Base64.decode(Base64.decode(data.iptables_nat_clash))}
 ===================================================================
 `;
