@@ -281,9 +281,12 @@
         </div>
         <div id="koolclash-content-firewall">
             <div class="box">
-                <div class="heading">功能开发中</div>
+                <div class="heading">IP/CIDR 白名单</div>
                 <div class="content">
-                    访问控制 还在开发中。将会提供对局域网内设备的连接控制、端口控制，和劫持局域网内 DNS 的选项。
+                    <div id="koolclash-firewall-ipset"></div>
+                    <div class="koolclash-btn-container">
+                        <button type="button" id="koolclash-btn-submit-white-ip" onclick="KoolClash.submitWhiteIP();" class="btn btn-primary">提交</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -464,8 +467,18 @@
                         style: 'width: 100%; height: 200px;'
                     },
                 ]);
+                $('#koolclash-firewall-ipset').forms([
+                    {
+                        title: '流量不发往 Clash 透明代理的 IP/CIDR 地址（已经包括局域网 IP，无需重复提交），一行一个，例如：<br>119.29.29.29<br>210.2.4.0/24',
+                        name: 'koolclash_firewall_white_ipset',
+                        type: 'textarea',
+                        value: '', // Base64.decode(dbus.ss_wan_black_ip) || '',
+                        style: 'width: 80%; height: 160px;'
+                    },
+                ]);
 
                 document.getElementById('_koolclash_config_suburl').setAttribute('placeholder', 'https://api.example.com/clash');
+                document.getElementById('_koolclash_firewall_white_ipset').value = '';
             },
             // 选择 Tab
             // 注意选择的方式是使用 input 的 ID
@@ -514,7 +527,7 @@
             getClashStatus: () => {
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
-                        "id": id,
+                        id,
                         "method": "koolclash_status.sh",
                         "params": [],
                         "fields": ""
@@ -611,7 +624,7 @@
 
                 let id = parseInt(Math.random() * 100000000);
                 let postData = JSON.stringify({
-                    "id": id,
+                    id,
                     "method": "koolclash_save_control.sh",
                     "params": [`${document.getElementById('_koolclash_dashboard_host').value}`],
                     "fields": ""
@@ -657,7 +670,7 @@
                         (() => {
                             let id = parseInt(Math.random() * 100000000),
                                 postData = JSON.stringify({
-                                    "id": id,
+                                    id,
                                     "method": "koolclash_save_config.sh",
                                     "params": [],
                                     "fields": ""
@@ -736,7 +749,7 @@ dns:
             getDNSConfig: () => {
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
-                        "id": id,
+                        id,
                         "method": "koolclash_get_dns_config.sh",
                         "params": [],
                         "fields": ""
@@ -781,14 +794,14 @@ dns:
 
                 if (window.dbus.koolclash_dnsmode === '1' && document.getElementById('_koolclash-dns-config-switch').checked) {
                     postData = JSON.stringify({
-                        "id": id,
+                        id,
                         "method": "koolclash_save_dns_config.sh",
                         "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash 自定义 DNS 配置，推荐使用以下的配置\n', ''))}`, '1'],
                         "fields": ""
                     });
                 } else {
                     postData = JSON.stringify({
-                        "id": id,
+                        id,
                         "method": "koolclash_save_dns_config.sh",
                         "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash 自定义 DNS 配置，推荐使用以下的配置\n', ''))}`, '0'],
                         "fields": ""
@@ -832,7 +845,7 @@ dns:
 
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
-                        "id": id,
+                        id,
                         "method": "koolclash_control.sh",
                         "params": ['start'],
                         "fields": ""
@@ -903,7 +916,7 @@ dns:
                 $('#msg_warning').show();
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
-                        "id": id,
+                        id,
                         "method": "koolclash_control.sh",
                         "params": ['stop'],
                         "fields": ""
@@ -948,7 +961,7 @@ dns:
                 document.getElementById('koolclash-btn-del-suburl').innerHTML = `正在删除 Clash 托管配置 URL`;
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
-                        "id": id,
+                        id,
                         "method": "koolclash_sub.sh",
                         "params": ['del'],
                         "fields": ""
@@ -984,7 +997,7 @@ dns:
                 document.getElementById('koolclash-btn-update-sub').innerHTML = `正在下载最新托管配置`;
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
-                        "id": id,
+                        id,
                         "method": "koolclash_sub.sh",
                         "params": ['update', `${document.getElementById('_koolclash_config_suburl').value}`],
                         "fields": ""
@@ -1081,7 +1094,7 @@ dns:
                 KoolClash.disableAllButton();
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
-                        "id": id,
+                        id,
                         "method": "koolclash_debug.sh",
                         "params": [""],
                         "fields": ""
@@ -1141,6 +1154,42 @@ ${Base64.decode(Base64.decode(data.iptables_nat_clash))}
                         KoolClash.enableAllButton();
                     })
             },
+            submitWhiteIP: () => {
+                KoolClash.disableAllButton();
+                let data = Base64.encode(document.getElementById('_koolclash_firewall_white_ipset').value);
+
+                document.getElementById('koolclash-btn-submit-white-ip').innerHTML = `正在提交`;
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        id,
+                        "method": "koolclash_firewall.sh",
+                        "params": ['white', `${data}`],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        document.getElementById('koolclash-btn-submit-white-ip').innerHTML = `提交成功，下次启动 Clash 时生效！`;
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-submit-white-ip').innerHTML = '提交';
+                        }, 2500)
+                    },
+                    error: () => {
+                        document.getElementById('koolclash-btn-submit-white-ip').innerHTML = `提交失败，请重试！`;
+
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-submit-white-ip').innerHTML = '提交';
+                        }, 2500)
+                    }
+                });
+            }
         }
 
         function verifyFields(r) {
@@ -1173,6 +1222,10 @@ ${Base64.decode(Base64.decode(data.iptables_nat_clash))}
             .then((res) => {
                 if (window.dbus.koolclash_suburl) {
                     document.getElementById('_koolclash_config_suburl').value = window.dbus.koolclash_suburl;
+                }
+
+                if (window.dbus.koolclash_firewall_whiteip_base64) {
+                    document.getElementById('_koolclash_firewall_white_ipset').value = Base64.decode(window.dbus.koolclash_firewall_whiteip_base64);
                 }
             })
             .catch(error => {
