@@ -124,10 +124,19 @@ add_white_black_ip() {
     #done
 
     # white ip/cidr
-    ip_white="0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 192.168.0.0/16 224.0.0.0/4 240.0.0.0/4 $lan_ip"
-    for ip in $ip_white; do
+    echo_date '应用局域网 IP 白名单'
+    ip_lan="0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 192.168.0.0/16 224.0.0.0/4 240.0.0.0/4 $lan_ip"
+    for ip in $ip_lan; do
         ipset -! add koolclash_white $ip >/dev/null 2>&1
     done
+
+    if [ ! -z $koolclash_firewall_whiteip_base64 ]; then
+        ip_white=$(echo $koolclash_firewall_whiteip_base64 | base64_decode | sed '/\#/d')
+        echo_date '应用 IP/CIDR 白名单'
+        for ip in $ip_white; do
+            ipset -! add koolclash_white $ip >/dev/null 2>&1
+        done
+    fi
 }
 
 #--------------------------------------------------------------------------
