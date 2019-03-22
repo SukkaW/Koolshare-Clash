@@ -40,13 +40,15 @@ esac
 
 if [ -n "$(pidof clash)" ]; then
     # 停止 KoolClash
-    echo_date '停止 KoolClash 以更新。注意更新完成以后 KoolClash 不会自动恢复，需要手动启动 Clash！'
-    echo_date '【更新 KoolClash 过程中可能会出现「软件中心异常」的提示，是正常现象！】'
-    echo_date '【请不要刷新或关闭页面，务必等待安装完成、页面自动跳转！】'
-    sleep 2
+    koolclash_reenable_after_install=1
+    echo_date "KoolClash: 检测到 Clash 正在运行..."
+    echo_date "KoolClash: 停止 Clash 以更新/安装 KoolClash..."
+    echo_date 'KoolClash:【更新 KoolClash 过程中可能会出现「软件中心异常」的提示，是正常现象！】'
+    echo_date 'KoolClash:【请不要刷新或关闭页面，务必等待安装完成、页面自动跳转！】'
+    sleep 4
     sh $KSROOT/scripts/koolclash_control.sh stop
-    echo_date '【KoolClash 更新后需要手动重新启动 Clash 进程！】'
-    sleep 3
+    sleep 1
+    echo_date "KoolClash: Clash 已经停止，继续更新/安装..."
 fi
 
 # 清理 旧文件夹
@@ -103,4 +105,15 @@ dbus set softcenter_module_koolclash_title=koolclash
 dbus set softcenter_module_koolclash_version=$local_version
 
 sleep 1
+
+if [ "$koolclash_reenable_after_install" == "1" ]; then
+    echo_date 'KoolClash: 重启 Clash...'
+    sleep 2
+    sh $KSROOT/scripts/koolclash_control.sh start_after_install
+    sleep 1
+    echo_date 'KoolClash: Clash 重启完成...'
+fi
+
 echo_date "KoolClash: 插件安装完成..."
+
+dbus remove koolclash_reenable_after_install
