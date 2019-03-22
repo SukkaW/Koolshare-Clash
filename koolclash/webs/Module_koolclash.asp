@@ -1134,9 +1134,29 @@ dns:
                         }
                     })
                     .then((data) => {
+                        let getBrowser = () => {
+                            let ua = navigator.userAgent,
+                                tem,
+                                M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+                            if (ua.match("MicroMessenger"))
+                                return "Weixin";
+
+                            if (/trident/i.test(M[1])) {
+                                tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+                                return 'IE ' + (tem[1] || '');
+                            }
+                            if (M[1] === 'Chrome') {
+                                tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+                                if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+                            }
+                            M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+                            if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
+                            return M.join(' ');
+                        }
                         document.getElementById('_koolclash_debug_info').value = `
 ======================== KoolClash 调试工具 ========================
 调试信息生成于 ${new Date().toString()}
+当前浏览器：${getBrowser()}
 -------------------- Koolshare OpenWrt 基本信息 --------------------
 固件版本：${data.koolshare_version}
 路由器 LAN IP：${data.lan_ip}
