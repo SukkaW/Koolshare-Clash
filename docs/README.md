@@ -68,7 +68,7 @@ $ ./build dashboard # Update clash-dashboard to latest
 
 ## 贡献
 
-[汇报 Bug](https://github.com/SukkaW/Koolshare-Clash/issues/new) | [改善文档](https://github.com/SukkaW/Koolshare-Clash/tree/master/docs) | [Fork & Open a New PR](https://github.com/SukkaW/Koolshare-Clash/fork)
+[汇报 Bug](https://github.com/SukkaW/Koolshare-Clash/issues/new/choose) | [改善文档](https://github.com/SukkaW/Koolshare-Clash/tree/master/docs) | [Fork & Open a New PR](https://github.com/SukkaW/Koolshare-Clash/fork)
 
 欢迎一切贡献，包括但不限于增强、新特性、文档和代码的改进、Bug 汇报。
 

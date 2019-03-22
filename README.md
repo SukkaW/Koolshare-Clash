@@ -74,7 +74,7 @@ $ ./build dashboard # Update clash-dashboard to latest
 
 ## Contributions
 
-[Report a Bug](https://github.com/SukkaW/Koolshare-Clash/issues/new) | [Improve Documentations](https://github.com/SukkaW/Koolshare-Clash/tree/master/docs) | [Fork & Open a New PR](https://github.com/SukkaW/Koolshare-Clash/fork)
+[Report a Bug](https://github.com/SukkaW/Koolshare-Clash/issues/new/choose) | [Improve Documentations](https://github.com/SukkaW/Koolshare-Clash/tree/master/docs) | [Fork & Open a New PR](https://github.com/SukkaW/Koolshare-Clash/fork)
 
 All kinds of contributions (enhancements, new features, documentation & code improvements, issues & bugs reporting) are welcome.
 
