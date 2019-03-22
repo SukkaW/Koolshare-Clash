@@ -1149,6 +1149,8 @@ ${Base64.decode(Base64.decode(data.iptables_mangle_clash))}
 
  * iptables nat 中 koolclash 链
 ${Base64.decode(Base64.decode(data.iptables_nat_clash))}
+---------------------- ipset 白名单 IP 列表 ------------------------
+${Base64.decode(data.firewall_white_ip)}
 ===================================================================
 `;
                         KoolClash.enableAllButton();
