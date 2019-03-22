@@ -83,11 +83,33 @@
             display: none;
         }
 
-        #koolclash-nav-overview:checked~.nav-tabs .koolclash-nav-overview>a,
-        #koolclash-nav-config:checked~.nav-tabs .koolclash-nav-config>a,
-        #koolclash-nav-firewall:checked~.nav-tabs .koolclash-nav-firewall>a,
-        #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-log>a,
-        #koolclash-nav-debug:checked~.nav-tabs .koolclash-nav-debug>a {
+        .koolclash-nav-tab {
+            display: block;
+            padding: 0 15px;
+            height: 40px;
+            font-weight: normal;
+            line-height: 40px;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 100ms ease;
+            -webkit-transition: all 100ms ease;
+            text-decoration: none;
+            outline: 0;
+        }
+
+        .koolclash-nav-tab:hover {
+            z-index: 999;
+            color: #777777;
+            background: rgba(0, 0, 0, 0.05);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+            text-decoration: none;
+        }
+
+
+        #koolclash-nav-overview:checked~.nav-tabs .koolclash-nav-overview>.koolclash-nav-tab,
+        #koolclash-nav-config:checked~.nav-tabs .koolclash-nav-config>.koolclash-nav-tab,
+        #koolclash-nav-firewall:checked~.nav-tabs .koolclash-nav-firewall>.koolclash-nav-tab,
+        #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-log>.koolclash-nav-tab,
+        #koolclash-nav-debug:checked~.nav-tabs .koolclash-nav-debug>.koolclash-nav-tab {
             border-bottom: 2px solid #f36c21;
             background: transparent;
             z-index: 999;
@@ -159,42 +181,42 @@
     <ul class="nav nav-tabs">
         <li>
             <label class="koolclash-nav-overview koolclash-nav-label" for="koolclash-nav-overview">
-                <a>
+                <div class="koolclash-nav-tab">
                     <i class="icon-info"></i>
                     运行状态
-                </a>
+                </div>
             </label>
         </li>
         <li>
             <label class="koolclash-nav-config koolclash-nav-label" for="koolclash-nav-config">
-                <a>
+                <div class="koolclash-nav-tab">
                     <i class="icon-system"></i>
                     配置文件
-                </a>
+                </div>
             </label>
         </li>
         <li>
             <label class="koolclash-nav-firewall koolclash-nav-label" for="koolclash-nav-firewall">
-                <a>
+                <div class="koolclash-nav-tab">
                     <i class="icon-lock"></i>
                     访问控制
-                </a>
+                </div>
             </label>
         </li>
         <li>
             <label class="koolclash-nav-log koolclash-nav-label" for="koolclash-nav-log">
-                <a>
+                <div class="koolclash-nav-tab">
                     <i class="icon-hourglass"></i>
                     操作日志
-                </a>
+                </div>
             </label>
         </li>
         <li>
             <label class="koolclash-nav-debug koolclash-nav-label" for="koolclash-nav-debug">
-                <a>
+                <div class="koolclash-nav-tab">
                     <i class="icon-warning"></i>
                     调试工具
-                </a>
+                </div>
             </label>
         </li>
     </ul>
