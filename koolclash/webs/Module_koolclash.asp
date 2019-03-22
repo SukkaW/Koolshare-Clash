@@ -369,11 +369,10 @@
                 IP.get(`https://api.skk.moe/network/parseIp/ipip/${ip}`, 'json')
                     .then(resp => {
                         let x = '';
-                        x += (resp.data[0] !== '') ? `${resp.data[0]} ` : '';
-                        x += (resp.data[1] !== '') ? `${resp.data[1]} ` : '';
-                        x += (resp.data[2] !== '') ? `${resp.data[2]} ` : '';
-                        x += (resp.data[3] !== '') ? `${resp.data[3]} ` : '';
-                        x += (resp.data[4] !== '') ? `${resp.data[4]} ` : '';
+                        for (let i of resp.data) {
+                            x += (i !== '') ? `${i} ` : '';
+                        }
+
                         document.getElementById(elID).innerHTML = x;
                         //document.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city} ${resp.data.isp}`;
                     })
@@ -491,7 +490,7 @@
                 ]);
                 $('#koolclash-firewall-ipset').forms([
                     {
-                        title: '流量不发往 Clash 透明代理的 IP/CIDR 地址（已经包括局域网 IP，无需重复提交），一行一个，例如：<br>119.29.29.29<br>210.2.4.0/24',
+                        title: '不通过 Clash 的 IP/CIDR 地址（已经包括局域网 IP，无需重复提交），一行一个，例如：<br>119.29.29.29<br>210.2.4.0/24',
                         name: 'koolclash_firewall_white_ipset',
                         type: 'textarea',
                         value: '', // Base64.decode(dbus.ss_wan_black_ip) || '',
