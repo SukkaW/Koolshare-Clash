@@ -303,7 +303,7 @@
         </div>
         <div id="koolclash-content-firewall">
             <div class="box">
-                <div class="heading">IP/CIDR 白名单</div>
+                <div class="heading"></div>
                 <div class="content">
                     <div id="koolclash-firewall-ipset"></div>
                     <div class="koolclash-btn-container">
@@ -490,13 +490,21 @@
                 ]);
                 $('#koolclash-firewall-ipset').forms([
                     {
-                        title: '不通过 Clash 的 IP/CIDR 地址（已经包括局域网 IP，无需重复提交），一行一个，例如：<br>119.29.29.29<br>210.2.4.0/24',
+                        title: '<b>IP/CIDR 白名单</b><br><br><p style="color: #999">不通过 Clash 的 IP/CIDR 外网地址，一行一个，例如：<br>119.29.29.29<br>210.2.4.0/24</p>',
                         name: 'koolclash_firewall_white_ipset',
                         type: 'textarea',
                         value: '', // Base64.decode(dbus.ss_wan_black_ip) || '',
-                        style: 'width: 80%; height: 160px;'
+                        style: 'width: 80%; height: 150px;'
+                    },
+                    {
+                        title: '<b>Chromecast 开关</b><br><br><p style="color: #999">劫持 DNS 接管解析</p>',
+                        name: 'koolclash-chromecast-switch',
+                        prefix: '<br>',
+                        type: 'checkbox',
+                        style: `margin-top:16px;`,
                     },
                 ]);
+
 
                 document.getElementById('_koolclash_config_suburl').setAttribute('placeholder', 'https://api.example.com/clash');
                 document.getElementById('_koolclash_firewall_white_ipset').value = '';
@@ -1200,13 +1208,14 @@ ${Base64.decode(data.firewall_white_ip)}
             submitWhiteIP: () => {
                 KoolClash.disableAllButton();
                 let data = Base64.encode(document.getElementById('_koolclash_firewall_white_ipset').value);
+                let chromecast = document.getElementById('_koolclash-chromecast-switch').checked;
 
                 document.getElementById('koolclash-btn-submit-white-ip').innerHTML = `正在提交`;
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         id,
                         "method": "koolclash_firewall.sh",
-                        "params": ['white', `${data}`],
+                        "params": ['submit', `${chromecast}`, `${data}`],
                         "fields": ""
                     });
 
@@ -1269,6 +1278,10 @@ ${Base64.decode(data.firewall_white_ip)}
 
                 if (window.dbus.koolclash_firewall_whiteip_base64) {
                     document.getElementById('_koolclash_firewall_white_ipset').value = Base64.decode(window.dbus.koolclash_firewall_whiteip_base64);
+                }
+
+                if (window.dbus.koolclash_firewall_chromecast === 'true') {
+                    document.getElementById('_koolclash-chromecast-switch').checked = true;
                 }
             })
             .catch(error => {
