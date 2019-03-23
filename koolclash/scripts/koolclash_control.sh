@@ -295,14 +295,13 @@ stop)
     ;;
 start_after_install)
     if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-        echo_date "没有找到 Clash 的配置文件！自动停止 Clash！"
+        echo_date "没有找到 Clash 的配置文件，中断启动并回滚操作！"
         stop_koolclash
     else
         if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
-            echo_date "KoolClash 执行开机自动启动"
             start_koolclash
         else
-            echo_date "没有找到 DNS 配置或 DNS 配置不合法！自动停止 Clash！"
+            echo_date "没有找到 DNS 配置或 DNS 配置不合法，中断启动并回滚操作！"
             stop_koolclash
         fi
     fi
