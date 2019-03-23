@@ -75,3 +75,11 @@ Clash 的规则依赖 Clash 接管 DNS 解析。在 `0.10.0-beta` 版本以前�
 !> 无论是启动、重启、停止 Clash，或 KoolClash 中断或阻止了 Clash 的启动，你都应该等待插件页面提示信息的倒计时结束、页面自动刷新以后再执行操作。
 
 KoolClash 启动以后，你可以通过检查「Clash 运行状态」和「IP 地址检查 & 网站访问检查」来判断代理运行状态。你可以通过「Clash 外部控制」中「访问 Clash 面板」或在浏览器中访问 `http://[LAN IP]/koolclash/index.html` 来访问 Clash 面板，在面板中可以切换节点、测试节点延时和查看 Clash 日志。
+
+## Clash 访问控制
+
+### IP/CIDR 白名单（开发中）
+
+### Chromecast（开发中）
+
+启用 Chromecast 功能后，将会劫持使用 UDP 协议发往位于公网的 53 端口的所有请求、并转发给 Clash，最终返回 Clash 给出的结果。使用该功能在一定程度上可以避免获得错误的 IP、被污染的 IP，但是不能保证获得最佳的 IP 或者完全正确的 IP。

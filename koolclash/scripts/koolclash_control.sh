@@ -112,6 +112,7 @@ flush_nat() {
     iptables -t nat -F koolclash >/dev/null 2>&1 && iptables -t nat -X koolclash >/dev/null 2>&1
     iptables -t mangle -F koolclash >/dev/null 2>&1 && iptables -t mangle -X koolclash >/dev/null 2>&1
 
+    echo_date "停用 Chromecast（劫持 DNS）功能"
     # flush chromecast
     chromecast_nu=$(iptables -t nat -L PREROUTING -v -n --line-numbers | grep "dpt:53" | awk '{print $1}')
     iptables -t nat -D PREROUTING $chromecast_nu >/dev/null 2>&1
@@ -170,6 +171,8 @@ chromecast() {
                 echo_date '检测到 DNS 劫持功能已经启用'
             fi
         fi
+    else
+        echo_date '不启用 Chromecast（劫持 DNS）功能'
     fi
 }
 
