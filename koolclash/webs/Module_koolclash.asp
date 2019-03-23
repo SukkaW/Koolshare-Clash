@@ -1234,14 +1234,13 @@ ${Base64.decode(data.firewall_white_ip)}
                     },
                     error: () => {
                         document.getElementById('koolclash-btn-submit-white-ip').innerHTML = `提交失败，请重试！`;
-
                         setTimeout(() => {
                             KoolClash.enableAllButton();
                             document.getElementById('koolclash-btn-submit-white-ip').innerHTML = '提交';
                         }, 2500)
                     }
                 });
-            }
+            },
         }
 
         function verifyFields(r) {
