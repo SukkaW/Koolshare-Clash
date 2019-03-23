@@ -727,7 +727,8 @@
                                         document.getElementById('_koolclash-dns-config-switch').checked = true;
                                         document.getElementById('_koolclash-dns-config-switch').setAttribute('disabled', '');
                                         $('#_koolclash-config-dns').show();
-                                        document.getElementById('koolclash-dns-msg').innerHTML = `Clash 配置文件存在，但配置文件中不存在 DNS 配置或配置不合法，请在下面提交 DNS 配置`
+                                        $('#koolclash-btn-save-dns-config').show();
+                                        document.getElementById('koolclash-dns-msg').innerHTML = `Clash 配置文件存在，但配置文件中不存在 DNS 配置或配置不合法，请在下面提交 DNS 配置`;
                                     } else {
                                         document.getElementById('koolclash-btn-upload').innerHTML = 'Clash 配置上传成功，页面将自动刷新<span id="koolclash-wait-time"></span>';
                                         KoolClash.tminus(5);
@@ -826,6 +827,13 @@ dns:
                         id,
                         "method": "koolclash_save_dns_config.sh",
                         "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash 自定义 DNS 配置，推荐使用以下的配置\n', ''))}`, '1'],
+                        "fields": ""
+                    });
+                } else if (window.dbus.koolclash_dnsmode === '2' && !document.getElementById('_koolclash-dns-config-switch').checked) {
+                    postData = JSON.stringify({
+                        id,
+                        "method": "koolclash_save_dns_config.sh",
+                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash 自定义 DNS 配置，推荐使用以下的配置\n', ''))}`, '2'],
                         "fields": ""
                     });
                 } else {
@@ -1053,12 +1061,12 @@ dns:
                             }, 4000)
                         } else if (resp.result === 'nofallbackdns') {
                             document.getElementById('koolclash-btn-update-sub').innerHTML = '在托管配置中没有找到 DNS 设置，请在下面添加 DNS 配置！';
-                            document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
-                            $('#koolclash-btn-save-dns-config').show();
                             document.getElementById('_koolclash-dns-config-switch').checked = true;
                             document.getElementById('_koolclash-dns-config-switch').setAttribute('disabled', '');
                             $('#_koolclash-config-dns').show();
-                            document.getElementById('koolclash-dns-msg').innerHTML = `Clash 托管配置文件已经更新，但托管配置中不存在 DNS 配置或配置不合法，请在下面提交 DNS 配置`
+                            $('#koolclash-btn-save-dns-config').show();
+                            document.getElementById('koolclash-btn-save-dns-config').removeAttribute('disabled');
+                            document.getElementById('koolclash-dns-msg').innerHTML = `Clash 托管配置文件已经更新，但托管配置中不存在 DNS 配置或配置不合法，请在下面提交 DNS 配置`;
                         } else {
                             document.getElementById('koolclash-btn-update-sub').innerHTML = 'Clash 配置更新成功，页面将自动刷新<span id="koolclash-wait-time"></span>';
                             KoolClash.tminus(5);
@@ -1254,7 +1262,7 @@ ${Base64.decode(data.firewall_white_ip)}
                     $('#koolclash-btn-save-dns-config').show();
                 } else {
                     $('#_koolclash-config-dns').hide();
-                    $('#koolclash-btn-save-dns-config').hide();
+                    //$('#koolclash-btn-save-dns-config').hide();
                 }
             }
         }
