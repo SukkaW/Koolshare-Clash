@@ -1262,7 +1262,9 @@ ${Base64.decode(data.firewall_white_ip)}
                     $('#koolclash-btn-save-dns-config').show();
                 } else {
                     $('#_koolclash-config-dns').hide();
-                    //$('#koolclash-btn-save-dns-config').hide();
+                    if (window.dbus.koolclash_dnsmode === '1') {
+                        $('#koolclash-btn-save-dns-config').hide();
+                    }
                 }
             }
         }
