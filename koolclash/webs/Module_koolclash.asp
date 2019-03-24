@@ -409,6 +409,7 @@
                 let timeout = setTimeout(() => {
                     img.onerror = img.onload = null;
                     document.getElementById(cbElID).innerHTML = '<span class="sk-text-error">连接超时</span>'
+                    img.src = null;
                 }, 5000);
 
                 img.onerror = () => {
