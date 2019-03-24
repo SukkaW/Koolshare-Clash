@@ -145,6 +145,18 @@
             font-family: Consolas, "Panic Sans", "DejaVu Sans Mono", Monaco, "Bitstream Vera Sans Mono", 'Andale Mono', Menlo, monospace !important;
         }
 
+        table.line-table tr:nth-child(even) {
+            background: rgba(0, 0, 0, 0.04)
+        }
+
+        table.line-table tr:hover {
+            background: #D7D7D7
+        }
+
+        table.line-table tr:hover .progress {
+            background: #D7D7D7
+        }
+
     </style>
 
     <div class="box">
@@ -303,12 +315,26 @@
         </div>
         <div id="koolclash-content-firewall">
             <div class="box">
-                <div class="heading"></div>
+                <div class="heading" style="margin-top: -15px;"></div>
                 <div class="content">
                     <div id="koolclash-firewall-ipset"></div>
                     <div class="koolclash-btn-container">
                         <button type="button" id="koolclash-btn-submit-white-ip" onclick="KoolClash.submitWhiteIP();" class="btn btn-primary">提交</button>
                     </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="heading">访问控制主机</div>
+                <div class="content">
+                    <div class="tabContent">
+                        <table class="line-table" cellspacing="1" id="koolclash-acl-panel"></table>
+                    </div>
+                </div>
+                <div class="heading">默认主机设置</div>
+                <div class="content">
+                    <div id="koolclash-acl-default-panel" class="section"></div>
+                    <br>
+                    <p>除了设置的访问控制主机，其它剩余主机都将走此处设定的模式和端口。<br>常用端口包括 21, 22, 80, 8080, 8880, 2052, 2082, 2086, 2095, 443, 2053, 2083, 2087, 2096, 8443</p>
                 </div>
             </div>
         </div>
@@ -1250,14 +1276,107 @@ ${Base64.decode(data.firewall_white_ip)}
                     }
                 });
             },
+            acl: {
+                renderUI: () => {
+                    let option_acl_mode = [
+                        ['0', '不通过 Clash'],
+                        ['1', '通过 Clash']
+                    ];
+                    let option_acl_mode_name = [
+                        '不通过 Clash',
+                        '通过 Clash'
+                    ];
+                    let option_acl_port = [
+                        ['80,443', '80,443'],
+                        ['21,22,80,8080,8880,2052,2082,2086,2095,443,2053,2083,2087,2096,8443', '常用端口'],
+                        ['all', '全部端口'],
+                        ['0', '自定义端口']
+                    ];
+                    let option_acl_port_name = [
+                        '80,443',
+                        '常用端口',
+                        '全部端口',
+                        '自定义端口'
+                    ];
+                    $('#koolclash-acl-default-panel').forms([
+                        {
+                            title: '默认模式',
+                            name: 'koolclash-acl-default-mode',
+                            type: 'select',
+                            //style: select_style,
+                            options: option_acl_mode,
+                            value: '0' //dbus.koolclash_acl_default_mode || "1"
+                        },
+                        {
+                            title: '目标端口 (全部主机)',
+                            multi: [
+                                {
+                                    name: 'koolclash-acl-default-port',
+                                    type: 'select',
+                                    //style: select_style,
+                                    options: option_acl_port,
+                                    maxlen: 5,
+                                    value: 'all',//dbus.koolclash_acl_default_port || "all",
+                                    suffix: ' &nbsp;&nbsp;'
+                                },
+                                {
+                                    name: 'koolclash-default-port-user',
+                                    type: 'text',
+                                    //style: input_style,
+                                    maxlen: 5,
+                                    value: ''//dbus.koolclash_acl_default_port_user
+                                },
+                            ]
+                        },
+                    ]);
+                }
+            },
+            load: (cb) => {
+                window.dbus = {}
+
+                fetch(`/_api/koolclash`, { method: 'GET' })
+                    .then((resp) => Promise.all([resp.ok, resp.status, resp.json(), resp.headers]))
+                    .then(([ok, status, data, headers]) => {
+                        if (ok) {
+                            window.dbus = data.result[0];
+                        } else {
+                            throw new Error(JSON.stringify(json.error));
+                        }
+                    })
+                    .then((res) => {
+                        KoolClash.renderUI();
+                    })
+                    .then((res) => {
+                        if (window.dbus.koolclash_suburl) {
+                            document.getElementById('_koolclash_config_suburl').value = window.dbus.koolclash_suburl;
+                        }
+
+                        if (window.dbus.koolclash_firewall_whiteip_base64) {
+                            document.getElementById('_koolclash_firewall_white_ipset').value = Base64.decode(window.dbus.koolclash_firewall_whiteip_base64);
+                        }
+
+                        if (window.dbus.koolclash_firewall_chromecast === 'true') {
+                            document.getElementById('_koolclash-chromecast-switch').checked = true;
+                        }
+                    })
+                    .then((res) => {
+                        KoolClash.getClashStatus();
+                        KoolClash.checkUpdate();
+                        KoolClash.getDNSConfig();
+                    })
+                    .then((res) => {
+                        KoolClash.acl.renderUI();
+                    })
+                    .catch(error => {
+                        window.alert(`${error}\n获取 dbus 数据失败，请刷新页面后重试！`)
+                    });
+            },
         }
 
         function verifyFields(r) {
-            // when check/uncheck wireguard_switch
-            let a = document.getElementById('_koolclash-dns-config-switch').checked;
-
+            // 自定义 DNS 配置的显示隐藏
             if ($(r).attr("id") === "_koolclash-dns-config-switch") {
-                if (a) {
+                if (document.getElementById('_koolclash-dns-config-switch').checked) {
                     $('#_koolclash-config-dns').show();
                     $('#koolclash-btn-save-dns-config').show();
                 } else {
@@ -1266,44 +1385,20 @@ ${Base64.decode(data.firewall_white_ip)}
                         $('#koolclash-btn-save-dns-config').hide();
                     }
                 }
+            } else if (r.getAttribute('id') === '_koolclash-acl-default-port') {
+                if (document.getElementById('_koolclash-acl-default-port').value === '0') {
+                    $('#_koolclash-default-port-user').show();
+                } else {
+                    $('#_koolclash-default-port-user').hide();
+                }
             }
         }
     </script>
     <script>
-        window.dbus = {}
-
-        fetch(`/_api/koolclash`, { method: 'GET' })
-            .then((resp) => Promise.all([resp.ok, resp.status, resp.json(), resp.headers]))
-            .then(([ok, status, data, headers]) => {
-                if (ok) {
-                    window.dbus = data.result[0];
-                } else {
-                    throw new Error(JSON.stringify(json.error));
-                }
-            })
-            .then((res) => {
-                if (window.dbus.koolclash_suburl) {
-                    document.getElementById('_koolclash_config_suburl').value = window.dbus.koolclash_suburl;
-                }
-
-                if (window.dbus.koolclash_firewall_whiteip_base64) {
-                    document.getElementById('_koolclash_firewall_white_ipset').value = Base64.decode(window.dbus.koolclash_firewall_whiteip_base64);
-                }
-
-                if (window.dbus.koolclash_firewall_chromecast === 'true') {
-                    document.getElementById('_koolclash-chromecast-switch').checked = true;
-                }
-            })
-            .catch(error => {
-                window.alert(`${error}\n获取 dbus 数据失败，请刷新页面后重试！`)
-            });
-    </script>
-    <script>
-        KoolClash.renderUI();
-        KoolClash.getClashStatus();
-        KoolClash.checkUpdate();
-        KoolClash.getDNSConfig();
-        KoolClash.checkIP();
+        window.KoolClash.load();
+        window.addEventListener('load', () => {
+            KoolClash.checkIP();
+        })
     </script>
     <script src="https://www.taobao.com/help/getip.php"></script>
     <script src="https://ipv4.ip.sb/addrinfo.php?callback=IP.getIpsbIP"></script>
