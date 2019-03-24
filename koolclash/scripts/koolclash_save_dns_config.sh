@@ -16,9 +16,6 @@ cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
 
 case $3 in
 1)
-    # 强制生效 DNS 配置，修改 dnsmode 为 2
-    dbus set koolclash_dnsmode=2
-
     if [ ! -n "$fallbackdns" ]; then
         echo_date "没有找到自定义 DNS 配置！请前往「配置文件」提交 DNS 配置！"
         http_response 'nofallbackdns'
@@ -30,9 +27,10 @@ case $3 in
         # 将后备 DNS 配置以覆盖的方式与 config.yml 合并
         yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
 
-        # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
+        # 先将 Clash DNS 设置监听 23453，以后作为 dnsmasq 的上游以后需要改变端口
         yq w -i $KSROOT/koolclash/config/config.yml dns.listen 0.0.0.0:23453
-
+        # 强制生效 DNS 配置，修改 dnsmode 为 2
+        dbus set koolclash_dnsmode=2
         echo_date "后备 DNS 设置提交成功！"
         http_response 'success'
     fi

@@ -1128,7 +1128,6 @@ dns:
                 });
             },
             debugInfo: () => {
-                KoolClash.disableAllButton();
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         id,
@@ -1168,7 +1167,8 @@ dns:
                             M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
                             if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
                             return M.join(' ');
-                        }
+                        };
+
                         document.getElementById('_koolclash_debug_info').value = `
 ======================== KoolClash 调试工具 ========================
 调试信息生成于 ${new Date().toString()}
@@ -1211,7 +1211,6 @@ ${Base64.decode(Base64.decode(data.iptables_nat_clash))}
 ${Base64.decode(data.firewall_white_ip)}
 ===================================================================
 `;
-                        KoolClash.enableAllButton();
                     })
             },
             submitWhiteIP: () => {
