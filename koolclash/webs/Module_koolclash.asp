@@ -1401,5 +1401,5 @@ ${Base64.decode(data.firewall_white_ip)}
         })
     </script>
     <script src="https://www.taobao.com/help/getip.php"></script>
-    <script src="https://ipv4.ip.sb/addrinfo.php?callback=IP.getIpsbIP"></script>
+    <script src="https://ipv4.ip.sb/addrinfo?callback=IP.getIpsbIP"></script>
 </content>
