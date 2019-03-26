@@ -324,14 +324,15 @@
                 </div>
             </div>
             <div class="box">
-                <div class="heading">访问控制主机</div>
+                <!--<div class="heading">访问控制主机</div>
                 <div class="content">
                     <div class="tabContent">
                         <table class="line-table" cellspacing="1" id="koolclash-acl-panel"></table>
                     </div>
-                </div>
+                </div>-->
                 <div class="heading">默认主机设置</div>
                 <div class="content">
+                    <p style="color: red; font-weight: 600">功能开发中，尚不可用！</p>
                     <div id="koolclash-acl-default-panel" class="section"></div>
                     <br>
                     <p>除了设置的访问控制主机，其它剩余主机都将走此处设定的模式和端口。<br>常用端口包括 21, 22, 80, 8080, 8880, 2052, 2082, 2086, 2095, 443, 2053, 2083, 2087, 2096, 8443</p>
@@ -532,6 +533,62 @@
                     },
                 ]);
 
+                let option_acl_mode = [
+                    ['0', '不通过 Clash'],
+                    ['1', '通过 Clash']
+                ];
+                let option_acl_mode_name = [
+                    '不通过 Clash',
+                    '通过 Clash'
+                ];
+                let option_acl_port = [
+                    ['80,443', '80,443'],
+                    ['21,22,80,8080,8880,2052,2082,2086,2095,443,2053,2083,2087,2096,8443', '常用端口'],
+                    ['all', '全部端口'],
+                    ['0', '自定义端口']
+                ];
+                let option_acl_port_name = [
+                    '80,443',
+                    '常用端口',
+                    '全部端口',
+                    '自定义端口'
+                ];
+                $('#koolclash-acl-default-panel').forms([
+                    {
+                        title: '默认模式',
+                        name: 'koolclash-acl-default-mode',
+                        type: 'select',
+                        //style: select_style,
+                        options: option_acl_mode,
+                        value: '0' //dbus.koolclash_acl_default_mode || "1"
+                    },
+                    {
+                        title: '目标端口 (全部主机)',
+                        multi: [
+                            {
+                                name: 'koolclash-acl-default-port',
+                                type: 'select',
+                                //style: select_style,
+                                options: option_acl_port,
+                                maxlen: 5,
+                                value: 'all',//dbus.koolclash_acl_default_port || "all",
+                                suffix: ' &nbsp;&nbsp;'
+                            },
+                            {
+                                name: 'koolclash-default-port-user',
+                                type: 'text',
+                                //style: input_style,
+                                maxlen: 5,
+                                value: ''//dbus.koolclash_acl_default_port_user
+                            },
+                        ]
+                    },
+                ]);
+                if (document.getElementById('_koolclash-acl-default-port').value === '0') {
+                    $('#_koolclash-default-port-user').show();
+                } else {
+                    $('#_koolclash-default-port-user').hide();
+                }
 
                 document.getElementById('_koolclash_config_suburl').setAttribute('placeholder', 'https://api.example.com/clash');
                 document.getElementById('_koolclash_firewall_white_ipset').value = '';
@@ -1277,59 +1334,7 @@ ${Base64.decode(data.firewall_white_ip)}
                 });
             },
             acl: {
-                renderUI: () => {
-                    let option_acl_mode = [
-                        ['0', '不通过 Clash'],
-                        ['1', '通过 Clash']
-                    ];
-                    let option_acl_mode_name = [
-                        '不通过 Clash',
-                        '通过 Clash'
-                    ];
-                    let option_acl_port = [
-                        ['80,443', '80,443'],
-                        ['21,22,80,8080,8880,2052,2082,2086,2095,443,2053,2083,2087,2096,8443', '常用端口'],
-                        ['all', '全部端口'],
-                        ['0', '自定义端口']
-                    ];
-                    let option_acl_port_name = [
-                        '80,443',
-                        '常用端口',
-                        '全部端口',
-                        '自定义端口'
-                    ];
-                    $('#koolclash-acl-default-panel').forms([
-                        {
-                            title: '默认模式',
-                            name: 'koolclash-acl-default-mode',
-                            type: 'select',
-                            //style: select_style,
-                            options: option_acl_mode,
-                            value: '0' //dbus.koolclash_acl_default_mode || "1"
-                        },
-                        {
-                            title: '目标端口 (全部主机)',
-                            multi: [
-                                {
-                                    name: 'koolclash-acl-default-port',
-                                    type: 'select',
-                                    //style: select_style,
-                                    options: option_acl_port,
-                                    maxlen: 5,
-                                    value: 'all',//dbus.koolclash_acl_default_port || "all",
-                                    suffix: ' &nbsp;&nbsp;'
-                                },
-                                {
-                                    name: 'koolclash-default-port-user',
-                                    type: 'text',
-                                    //style: input_style,
-                                    maxlen: 5,
-                                    value: ''//dbus.koolclash_acl_default_port_user
-                                },
-                            ]
-                        },
-                    ]);
-                }
+
             },
             load: (cb) => {
                 window.dbus = {}
@@ -1363,9 +1368,6 @@ ${Base64.decode(data.firewall_white_ip)}
                         KoolClash.getClashStatus();
                         KoolClash.checkUpdate();
                         KoolClash.getDNSConfig();
-                    })
-                    .then((res) => {
-                        KoolClash.acl.renderUI();
                     })
                     .catch(error => {
                         window.alert(`${error}\n获取 dbus 数据失败，请刷新页面后重试！`)
