@@ -555,7 +555,7 @@
                             ['0', '不通过 Clash'],
                             ['1', '通过 Clash']
                         ],
-                        value: window.dbus.koolclash_firewall_default_mode || "1"
+                        value: window.dbus.koolclash_firewall_default_mode || '1'
                     },
                     {
                         title: '目标端口',
@@ -568,13 +568,13 @@
                             ['all', '全部端口'],
                             ['0', '自定义端口']
                         ],
-                        value: window.dbus.koolclash_firewall_default_port_mode || "all",
+                        value: window.dbus.koolclash_firewall_default_port_mode || 'all',
                     },
                     {
                         title: '&nbsp;',
                         name: 'koolclash-acl-default-port-user',
                         type: 'textarea',
-                        value: '', // Base64.decode(dbus.ss_wan_black_ip) || '',
+                        value: Base64.decode(window.dbus.koolclash_firewall_default_port_user) || '',
                         style: 'width: 100%; height: 50px;',
                     },
                 ]);
@@ -1340,7 +1340,7 @@ ${Base64.decode(data.firewall_white_ip)}
                         postData = JSON.stringify({
                             id,
                             "method": "koolclash_firewall.sh",
-                            "params": ['default', `${document.getElementById('_koolclash-acl-default-mode').value}`, `${document.getElementById('_koolclash-acl-default-port').value}`, `${document.getElementById('_koolclash-acl-default-port-user').value}`],
+                            "params": ['default', `${document.getElementById('_koolclash-acl-default-mode').value}`, `${document.getElementById('_koolclash-acl-default-port').value}`, `${Base64.encode(document.getElementById('_koolclash-acl-default-port-user').value)}`],
                             "fields": ""
                         });
 
