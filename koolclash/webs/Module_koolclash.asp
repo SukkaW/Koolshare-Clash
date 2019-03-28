@@ -507,7 +507,7 @@
                         title: '<b>Clash 托管配置 URL</b><br><small>请注意！务必谨慎使用该功能！</small>',
                         name: 'koolclash_config_suburl',
                         type: 'text',
-                        value: '',
+                        value: window.dbus.koolclash_suburl || 'https://api.example.com/clash',
                     },
                 ]);
                 $('#koolclash-config-dns').forms([
@@ -533,7 +533,7 @@
                         title: '<b>IP/CIDR 白名单</b><br><br><p style="color: #999">不通过 Clash 的 IP/CIDR 外网地址，一行一个，例如：<br>119.29.29.29<br>210.2.4.0/24</p>',
                         name: 'koolclash_firewall_white_ipset',
                         type: 'textarea',
-                        value: '', // Base64.decode(dbus.ss_wan_black_ip) || '',
+                        value: Base64.decode(window.dbus.koolclash_firewall_whiteip_base64) || '',
                         style: 'width: 80%; height: 150px;'
                     },
                     {
@@ -541,7 +541,7 @@
                         name: 'koolclash-chromecast-switch',
                         prefix: '<br>',
                         type: 'checkbox',
-                        style: `margin-top:16px;`,
+                        style: `margin-top:16px;`
                     },
                 ]);
 
@@ -555,7 +555,7 @@
                             ['0', '不通过 Clash'],
                             ['1', '通过 Clash']
                         ],
-                        value: '0', //dbus.koolclash_acl_default_mode || "1"
+                        value: window.dbus.koolclash_firewall_default_mode || "1"
                     },
                     {
                         title: '目标端口',
@@ -568,7 +568,7 @@
                             ['all', '全部端口'],
                             ['0', '自定义端口']
                         ],
-                        value: 'all',//dbus.koolclash_acl_default_port || "all",
+                        value: window.dbus.koolclash_firewall_default_port_mode || "all",
                     },
                     {
                         title: '&nbsp;',
@@ -579,8 +579,13 @@
                     },
                 ]);
 
-                document.getElementById('_koolclash_config_suburl').setAttribute('placeholder', 'https://api.example.com/clash');
-                document.getElementById('_koolclash_firewall_white_ipset').value = '';
+                if (document.getElementById('_koolclash-acl-default-port').value === '0') {
+                    $('#_koolclash-acl-default-port-user').show();
+                } else {
+                    $('#_koolclash-acl-default-port-user').hide();
+                }
+
+                document.getElementById('_koolclash-chromecast-switch').checked = (window.dbus.koolclash_firewall_chromecast === 'true') ? true : false;
             },
             // 选择 Tab
             // 注意选择的方式是使用 input 的 ID
@@ -1376,27 +1381,6 @@ ${Base64.decode(data.firewall_white_ip)}
                     })
                     .then((res) => {
                         KoolClash.renderUI();
-                        return res;
-                    })
-                    .then((res) => {
-                        if (document.getElementById('_koolclash-acl-default-port').value === '0') {
-                            $('#_koolclash-acl-default-port-user').show();
-                        } else {
-                            $('#_koolclash-acl-default-port-user').hide();
-                        }
-
-                        if (window.dbus.koolclash_suburl) {
-                            document.getElementById('_koolclash_config_suburl').value = window.dbus.koolclash_suburl;
-                        }
-
-                        if (window.dbus.koolclash_firewall_whiteip_base64) {
-                            document.getElementById('_koolclash_firewall_white_ipset').value = Base64.decode(window.dbus.koolclash_firewall_whiteip_base64);
-                        }
-
-                        if (window.dbus.koolclash_firewall_chromecast === 'true') {
-                            document.getElementById('_koolclash-chromecast-switch').checked = true;
-                        }
-                        return res;
                     })
                     .then((res) => {
                         KoolClash.getClashStatus();
