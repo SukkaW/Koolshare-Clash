@@ -162,6 +162,13 @@
         }
 
     </style>
+    <script>
+        if (typeof softcenter === undefined) {
+            let softcenter = 0;
+        } else {
+            softcenter = 0;
+        }
+    </script>
 
     <div class="box">
         <div class="heading">
@@ -373,12 +380,6 @@
     </div>
 
     <script>
-        if (typeof softcenter === undefined) {
-            let softcenter = 0;
-        } else {
-            softcenter = 0;
-        }
-
         // IP 检查
         var IP = {
             get: (url, type) =>
@@ -1300,7 +1301,7 @@ ${Base64.decode(data.firewall_white_ip)}
                         postData = JSON.stringify({
                             id,
                             "method": "koolclash_firewall.sh",
-                            "params": ['submit', `${chromecast}`, `${data}`],
+                            "params": ['white', `${chromecast}`, `${data}`],
                             "fields": ""
                         });
 
@@ -1327,9 +1328,38 @@ ${Base64.decode(data.firewall_white_ip)}
                     });
                 },
                 submitDefault: () => {
-                    console.log(E('_koolclash-acl-default-mode').value);
-                    console.log(E('_koolclash-acl-default-port').value);
-                    console.log(E('_koolclash-acl-default-port-user').value);
+                    KoolClash.disableAllButton();
+                    document.getElementById('koolclash-btn-submit-default').innerHTML = `正在提交`;
+
+                    let id = parseInt(Math.random() * 100000000),
+                        postData = JSON.stringify({
+                            id,
+                            "method": "koolclash_firewall.sh",
+                            "params": ['default', `${document.getElementById('_koolclash-acl-default-mode').value}`, `${document.getElementById('_koolclash-acl-default-port').value}`, `${document.getElementById('_koolclash-acl-default-port-user').value}`],
+                            "fields": ""
+                        });
+
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: "/_api/",
+                        data: postData,
+                        dataType: "json",
+                        success: (resp) => {
+                            document.getElementById('koolclash-btn-submit-default').innerHTML = `提交成功，下次启动 Clash 时生效！`;
+                            setTimeout(() => {
+                                KoolClash.enableAllButton();
+                                document.getElementById('koolclash-btn-submit-default').innerHTML = '提交';
+                            }, 2500)
+                        },
+                        error: () => {
+                            document.getElementById('koolclash-btn-submit-default').innerHTML = `提交失败，请重试！`;
+                            setTimeout(() => {
+                                KoolClash.enableAllButton();
+                                document.getElementById('koolclash-btn-submit-default').innerHTML = '提交';
+                            }, 2500)
+                        }
+                    });
                 },
             },
             load: (cb) => {
@@ -1346,6 +1376,7 @@ ${Base64.decode(data.firewall_white_ip)}
                     })
                     .then((res) => {
                         KoolClash.renderUI();
+                        return res;
                     })
                     .then((res) => {
                         if (document.getElementById('_koolclash-acl-default-port').value === '0') {
@@ -1365,6 +1396,7 @@ ${Base64.decode(data.firewall_white_ip)}
                         if (window.dbus.koolclash_firewall_chromecast === 'true') {
                             document.getElementById('_koolclash-chromecast-switch').checked = true;
                         }
+                        return res;
                     })
                     .then((res) => {
                         KoolClash.getClashStatus();
@@ -1397,9 +1429,13 @@ ${Base64.decode(data.firewall_white_ip)}
     </script>
     <script>
         window.KoolClash.load();
-        window.addEventListener('load', () => {
+        if (document.readyState === 'complete') {
             KoolClash.checkIP();
-        })
+        } else {
+            window.addEventListener('load', () => {
+                KoolClash.checkIP();
+            });
+        }
     </script>
     <script src="https://www.taobao.com/help/getip.php"></script>
     <script src="https://ipv4.ip.sb/addrinfo?callback=IP.getIpsbIP"></script>
