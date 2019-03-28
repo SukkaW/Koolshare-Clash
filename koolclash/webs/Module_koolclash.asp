@@ -343,7 +343,7 @@
                 </div>-->
                 <div class="heading">默认主机设置</div>
                 <div class="content">
-                    <p style="color: red; font-weight: 600">功能开发中，尚不可用！</p>
+                    <!--<p style="color: red; font-weight: 600">功能开发中，尚不可用！</p>-->
                     <p>
                         除了设置的访问控制主机，其它剩余主机都将走此处设定的模式和端口。
                         <br>
