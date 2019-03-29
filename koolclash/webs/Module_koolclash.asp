@@ -534,7 +534,7 @@
                         title: '<b>IP/CIDR 白名单</b><br><br><p style="color: #999">不通过 Clash 的 IP/CIDR 外网地址，一行一个，例如：<br>119.29.29.29<br>210.2.4.0/24</p>',
                         name: 'koolclash_firewall_white_ipset',
                         type: 'textarea',
-                        value: Base64.decode(window.dbus.koolclash_firewall_whiteip_base64) || '',
+                        value: Base64.decode(window.dbus.koolclash_firewall_whiteip_base64 || '') || '',
                         style: 'width: 80%; height: 150px;'
                     },
                     {
@@ -575,7 +575,7 @@
                         title: '&nbsp;',
                         name: 'koolclash-acl-default-port-user',
                         type: 'textarea',
-                        value: Base64.decode(window.dbus.koolclash_firewall_default_port_user) || '',
+                        value: Base64.decode(window.dbus.koolclash_firewall_default_port_user || '') || '',
                         style: 'width: 100%; height: 50px;',
                     },
                 ]);
@@ -677,7 +677,7 @@ dns:
                         if (fallbackdns === '') {
                             document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
                         } else {
-                            document.getElementById('_koolclash-config-dns').innerHTML = Base64.decode(fallbackdns);
+                            document.getElementById('_koolclash-config-dns').innerHTML = Base64.decode(fallbackdns || '') || KoolClash.defaultDNSConfig;
                         }
 
                         let control_host = control_data.split(':')[0],
@@ -1352,7 +1352,7 @@ ${Base64.decode(data.firewall_white_ip)}
                             setTimeout(() => {
                                 console.clear();
                                 window.location.reload();
-                            }, 1000)
+                            }, 1000);
                         }
                     })
                     .then((res) => {
