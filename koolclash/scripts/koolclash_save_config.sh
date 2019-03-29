@@ -26,6 +26,9 @@ fi
 # 删除 tmp 目录中上传的配置文件
 rm -rf /tmp/upload/clash.config.yml
 
+sed -i '/^\-\-\-$/ d' $KSROOT/koolclash/config/origin.yml
+sed -i '/^\.\.\.$/ d' $KSROOT/koolclash/config/origin.yml
+
 echo_date "设置 redir-port 和 allow-lan 属性"
 # 覆盖配置文件中的 redir-port 和 allow-lan 的配置
 yq w -i $KSROOT/koolclash/config/origin.yml redir-port 23456
@@ -40,17 +43,26 @@ else
 fi
 yq w -i $KSROOT/koolclash/config/origin.yml external-controller "$ext_control_ip:6170"
 
-sed -i '/^\-\-\-$/ d' $KSROOT/koolclash/config/origin.yml
-sed -i '/^\.\.\.$/ d' $KSROOT/koolclash/config/origin.yml
-
 cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
 
 # 判断是否存在 DNS 字段、DNS 是否启用、DNS 是否使用 redir-host 模式
 if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
+    if [ "$koolclash_dnsmode" == "2" ] && [ -n "$fallbackdns" ]; then
+        # dnsmode 是 2 应该用自定义 DNS 配置进行覆盖
+        echo_date "删除 Clash 配置文件中原有的 DNS 配置"
+        yq d -i $KSROOT/koolclash/config/config.yml dns
+
+        echo_date "将提交的自定义 DNS 设置覆盖 Clash 配置文件..."
+        # 将后备 DNS 配置以覆盖的方式与 config.yml 合并
+        yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
+        dbus set koolclash_dnsmode=2
+    else
+        # 可能 dnsmode 是 2 但是没有自定义 DNS 配置；或者本来之前就是 1
+        dbus set koolclash_dnsmode=1
+    fi
+
     # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
     yq w -i $KSROOT/koolclash/config/config.yml dns.listen "0.0.0.0:23453"
-    # 设置 DNS Mode 为 1
-    dbus set koolclash_dnsmode=1
     echo_date "Clash 配置文件上传成功！"
     http_response 'success'
 else
@@ -65,6 +77,8 @@ else
 
         dbus set koolclash_dnsmode=4
         # 将后备 DNS 配置以覆盖的方式与 config.yml 合并
+        echo_date "删除 Clash 配置文件中原有的 DNS 配置"
+        yq d -i $KSROOT/koolclash/config/config.yml dns
         yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
 
         # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口

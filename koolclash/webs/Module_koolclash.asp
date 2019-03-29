@@ -507,7 +507,8 @@
                         title: '<b>Clash 托管配置 URL</b><br><small>请注意！务必谨慎使用该功能！</small>',
                         name: 'koolclash_config_suburl',
                         type: 'text',
-                        value: window.dbus.koolclash_suburl || 'https://api.example.com/clash',
+                        value: window.dbus.koolclash_suburl || '',
+                        placeholder: 'https://api.example.com/clash'
                     },
                 ]);
                 $('#koolclash-config-dns').forms([
@@ -898,30 +899,21 @@ dns:
                 KoolClash.disableAllButton();
                 document.getElementById('koolclash-btn-save-dns-config').innerHTML = '正在提交...';
                 let id = parseInt(Math.random() * 100000000),
-                    postData;
+                    postData,
+                    checked;
 
-                if (window.dbus.koolclash_dnsmode === '1' && document.getElementById('_koolclash-dns-config-switch').checked) {
-                    postData = JSON.stringify({
-                        id,
-                        "method": "koolclash_save_dns_config.sh",
-                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash 自定义 DNS 配置，推荐使用以下的配置\n', ''))}`, '1'],
-                        "fields": ""
-                    });
-                } else if (window.dbus.koolclash_dnsmode === '2' && !document.getElementById('_koolclash-dns-config-switch').checked) {
-                    postData = JSON.stringify({
-                        id,
-                        "method": "koolclash_save_dns_config.sh",
-                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash 自定义 DNS 配置，推荐使用以下的配置\n', ''))}`, '2'],
-                        "fields": ""
-                    });
+                if (document.getElementById('_koolclash-dns-config-switch').checked) {
+                    checked = '1';
                 } else {
-                    postData = JSON.stringify({
-                        id,
-                        "method": "koolclash_save_dns_config.sh",
-                        "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash 自定义 DNS 配置，推荐使用以下的配置\n', ''))}`, '0'],
-                        "fields": ""
-                    });
+                    checked = '0'
                 }
+
+                postData = JSON.stringify({
+                    id,
+                    "method": "koolclash_save_dns_config.sh",
+                    "params": [`${Base64.encode(document.getElementById('_koolclash-config-dns').value.replace('# 没有找到保存的 Clash 自定义 DNS 配置，推荐使用以下的配置\n', ''))}`, checked],
+                    "fields": ""
+                });
 
                 $.ajax({
                     type: "POST",
@@ -1380,7 +1372,13 @@ ${Base64.decode(data.firewall_white_ip)}
                         }
                     })
                     .then((res) => {
-                        KoolClash.renderUI();
+                        if (typeof $('#koolclash-field').forms === 'function') {
+                            KoolClash.renderUI();
+                        } else {
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000)
+                        }
                     })
                     .then((res) => {
                         KoolClash.getClashStatus();
@@ -1412,7 +1410,9 @@ ${Base64.decode(data.firewall_white_ip)}
         }
     </script>
     <script>
-        window.KoolClash.load();
+        KoolClash.load();
+    </script>
+    <script>
         if (document.readyState === 'complete') {
             KoolClash.checkIP();
         } else {
