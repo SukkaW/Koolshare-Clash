@@ -47,4 +47,8 @@ else
     text="<span style='color: red'>$date Clash 进程未在运行！</span>"
 fi
 
-http_response "$text@$dnsmode@$host@$secret@$lan_ip"
+touch $KSROOT/koolclash/config/dns.yml
+
+fallbackdns=$(cat $KSROOT/koolclash/config/dns.yml | base64 | xargs)
+
+http_response "$text@$dnsmode@$host@$secret@$lan_ip@$fallbackdns"

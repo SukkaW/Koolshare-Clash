@@ -630,6 +630,21 @@
 
                 document.getElementById('koolclash-version-msg').innerHTML = `当前安装版本&nbsp;:&nbsp;<span id="koolclash-version-installed"></span>&nbsp;&nbsp;|&nbsp;&nbsp;最新发布版本&nbsp;:&nbsp;<span id="koolclash-version-remote"></span>`;
             },
+            defaultDNSConfig: `# 没有找到保存的 Clash 自定义 DNS 配置，推荐使用以下的配置
+dns:
+  enable: true
+  ipv6: false
+  listen: 0.0.0.0:53
+  enhanced-mode: redir-host
+  nameserver:
+    - 119.28.28.28
+    - 119.29.29.29
+    - 223.5.5.5
+    - tls://dns.rubyfish.cn:853
+  fallback:
+    - tls://1.0.0.1:853
+    - tls://8.8.4.4:853
+`,
             // getClashStatus
             // 获取 Clash 进程 PID
             getClashStatus: () => {
@@ -656,7 +671,14 @@
                             pid_text = data[0],
                             dnsmode = data[1],
                             control_data = data[2],
-                            secret = data[3];
+                            secret = data[3],
+                            fallbackdns = data[5];
+
+                        if (fallbackdns === '') {
+                            document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
+                        } else {
+                            document.getElementById('_koolclash-config-dns').innerHTML = Base64.decode(fallbackdns);
+                        }
 
                         let control_host = control_data.split(':')[0],
                             control_port = control_data.split(':')[1];
@@ -837,55 +859,6 @@
                             KoolClash.enableAllButton();
                             document.getElementById('koolclash-btn-upload').innerHTML = '上传配置文件';
                         }, 4000)
-                    }
-                });
-            },
-            defaultDNSConfig: `# 没有找到保存的 Clash 自定义 DNS 配置，推荐使用以下的配置
-dns:
-  enable: true
-  ipv6: false
-  listen: 0.0.0.0:53
-  enhanced-mode: redir-host
-  nameserver:
-    - 119.28.28.28
-    - 119.29.29.29
-    - 223.5.5.5
-    - tls://dns.rubyfish.cn:853
-  fallback:
-    - tls://1.0.0.1:853
-    - tls://8.8.4.4:853
-`,
-            getDNSConfig: () => {
-                let id = parseInt(Math.random() * 100000000),
-                    postData = JSON.stringify({
-                        id,
-                        "method": "koolclash_get_dns_config.sh",
-                        "params": [],
-                        "fields": ""
-                    });
-
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "/_api/",
-                    data: postData,
-                    dataType: "json",
-                    success: (resp) => {
-                        if (softcenter === 1) {
-                            return false;
-                        }
-
-                        if (resp.result === '') {
-                            document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
-                        } else {
-                            document.getElementById('_koolclash-config-dns').innerHTML = Base64.decode(resp.result);
-                        }
-                    },
-                    error: () => {
-                        if (softcenter === 1) {
-                            return false;
-                        }
-                        document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
                     }
                 });
             },
@@ -1375,7 +1348,9 @@ ${Base64.decode(data.firewall_white_ip)}
                         if (typeof $('#koolclash-field').forms === 'function') {
                             KoolClash.renderUI();
                         } else {
+                            console.clear();
                             setTimeout(() => {
+                                console.clear();
                                 window.location.reload();
                             }, 1000)
                         }
@@ -1383,7 +1358,6 @@ ${Base64.decode(data.firewall_white_ip)}
                     .then((res) => {
                         KoolClash.getClashStatus();
                         KoolClash.checkUpdate();
-                        KoolClash.getDNSConfig();
                     })
             },
         }
