@@ -104,6 +104,9 @@ dbus set softcenter_module_koolclash_name=koolclash
 dbus set softcenter_module_koolclash_title=koolclash
 dbus set softcenter_module_koolclash_version=$local_version
 
+[ -z $koolclash_firewall_default_mode ] && dbus set koolclash_firewall_default_mode=1
+[ -z $koolclash_firewall_default_port_mode ] && dbus set koolclash_firewall_default_port_mode=all
+
 sleep 1
 
 if [ "$koolclash_reenable_after_install" == "1" ]; then

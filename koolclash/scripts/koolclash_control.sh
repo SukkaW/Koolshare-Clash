@@ -233,6 +233,10 @@ lan_access_control() {
                 iptables -t nat -A koolclash -p tcp --dport $i -j REDIRECT --to-ports 23456
             done
             ;;
+        *)
+            echo_date "【全部主机】转发【所有端口】端口的流量到 Clash"
+            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
+            ;;
         esac
     elif [ "$koolclash_firewall_default_mode" == "0" ]; then
         case $koolclash_firewall_default_port_mode in
@@ -263,7 +267,14 @@ lan_access_control() {
             done
             iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
             ;;
+        *)
+            echo_date "【全部主机】【所有端口】端口均直连"
+            iptables -t nat -A koolclash -p tcp -j RETURN
+            ;;
         esac
+    else
+        echo_date "【全部主机】转发【所有端口】端口的流量到 Clash"
+        iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
     fi
 }
 
