@@ -49,6 +49,11 @@
             margin-left: 4px;
         }
 
+        #koolclash-btn-submit-watchdog {
+            margin-bottom: 5px;
+            margin-left: 8px;
+        }
+
         #koolclash-dns-msg {
             font-size: 85%;
             margin-top: 8px
@@ -396,10 +401,6 @@
                     <p>KoolClash 实现的 Clash 进程守护工具，每 20 秒检查一次 Clash 进程是否存在，如果 Clash 进程丢失则会自动重新拉起。</p>
                     <p style="color:red; margin-top: 8px">注意！Clash 不支持保存节点选择状态！重新拉起 Clash 进程后节点可能会发生变动，因此请务必谨慎启用该功能！</p>
                     <div id="koolclash-watchdog-panel" style="margin-top: 16px"></div>
-
-                    <div class="koolclash-btn-container">
-                        <button type="button" id="koolclash-btn-submit-watchdog" onclick="KoolClash.submitWatchdog();" class="btn btn-primary">提交</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -614,6 +615,7 @@
                             ['0', '禁用'],
                             ['1', '开启']
                         ],
+                        suffix: '<button type="button" id="koolclash-btn-submit-watchdog" onclick="KoolClash.submitWatchdog();" class="btn btn-primary">提交</button>',
                         value: window.dbus.koolclash_watchdog_enable || '0',
                     },
                 ]);
@@ -1369,6 +1371,40 @@ ${Base64.decode(data.firewall_white_ip)}
                         }
                     });
                 },
+            },
+            submitWatchdog: () => {
+                KoolClash.disableAllButton();
+                document.getElementById('koolclash-btn-submit-watchdog').innerHTML = `正在提交`;
+
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        id,
+                        "method": "koolclash_watchdog_config.sh",
+                        "params": [`${document.getElementById('_koolclash-select-watchdog').value}`],
+                        "fields": ""
+                    });
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        document.getElementById('koolclash-btn-submit-watchdog').innerHTML = `提交成功，下次启动 Clash 时生效！`;
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-submit-watchdog').innerHTML = '提交';
+                        }, 2500)
+                    },
+                    error: () => {
+                        document.getElementById('koolclash-btn-submit-watchdog').innerHTML = `提交失败，请重试！`;
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-submit-watchdog').innerHTML = '提交';
+                        }, 2500)
+                    }
+                });
             },
             load: (cb) => {
                 window.dbus = {}
