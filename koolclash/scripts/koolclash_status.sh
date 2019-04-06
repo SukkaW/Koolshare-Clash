@@ -9,7 +9,8 @@ lan_ip=$(uci get network.lan.ipaddr)
 
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 
-pid=$(pidof clash)
+pid_clash=$(pidof clash)
+pid_watchdog=$(ps | grep koolclash_watchdog.sh | grep -v grep | awk '{print $1}')
 date=$(echo_date)
 
 if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
@@ -41,14 +42,20 @@ else
     dnsmode=4
 fi
 
-if [ -n "$pid" ]; then
-    text="<span style='color: green'>$date Clash 进程运行正常！(PID: $pid)</span>"
+if [ -n "$pid_clash" ]; then
+    text1="<span style='color: green'>$date Clash 进程运行正常！(PID: $pid_clash)</span>"
 else
-    text="<span style='color: red'>$date Clash 进程未在运行！</span>"
+    text1="<span style='color: red'>$date Clash 进程未在运行！</span>"
+fi
+
+if [ -n "$pid_watchdog" ]; then
+    text2="<span style='color: green'>$date Clash 看门狗运行正常！(PID: $pid_watchdog)</span>"
+else
+    text2="<span style='color: orange'>$date Clash 看门狗未在运行！</span>"
 fi
 
 touch $KSROOT/koolclash/config/dns.yml
 
 fallbackdns=$(cat $KSROOT/koolclash/config/dns.yml | base64 | xargs)
 
-http_response "$text@$dnsmode@$host@$secret@$lan_ip@$fallbackdns"
+http_response "$text1@$text2@$dnsmode@$host@$secret@$lan_ip@$fallbackdns"

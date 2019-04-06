@@ -16,6 +16,6 @@ while [ "$koolclash_enable" == "1" ]; do
         echo_date "重启 Clash 进程"
     fi
 
-    sleep 30
+    sleep 15
     continue
 done
