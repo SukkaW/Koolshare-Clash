@@ -108,6 +108,7 @@
         #koolclash-nav-overview:checked~.nav-tabs .koolclash-nav-overview>.koolclash-nav-tab,
         #koolclash-nav-config:checked~.nav-tabs .koolclash-nav-config>.koolclash-nav-tab,
         #koolclash-nav-firewall:checked~.nav-tabs .koolclash-nav-firewall>.koolclash-nav-tab,
+        #koolclash-nav-additional:checked~.nav-tabs .koolclash-nav-additional>.koolclash-nav-tab,
         #koolclash-nav-log:checked~.nav-tabs .koolclash-nav-log>.koolclash-nav-tab,
         #koolclash-nav-debug:checked~.nav-tabs .koolclash-nav-debug>.koolclash-nav-tab {
             border-bottom: 2px solid #f36c21;
@@ -123,8 +124,10 @@
         #koolclash-nav-overview:checked~.tab-content>#koolclash-content-overview,
         #koolclash-nav-config:checked~.tab-content>#koolclash-content-config,
         #koolclash-nav-firewall:checked~.tab-content>#koolclash-content-firewall,
+        #koolclash-nav-additional:checked~.tab-content>#koolclash-content-additional,
         #koolclash-nav-log:checked~.tab-content>#koolclash-content-log,
         #koolclash-nav-debug:checked~.tab-content>#koolclash-content-debug {
+
             display: block;
         }
 
@@ -194,6 +197,7 @@
     <input class="koolclash-nav-radio" id="koolclash-nav-overview" type="radio" name="nav-tab" checked>
     <input class="koolclash-nav-radio" id="koolclash-nav-config" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-firewall" type="radio" name="nav-tab">
+    <input class="koolclash-nav-radio" id="koolclash-nav-additional" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-log" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-debug" type="radio" name="nav-tab">
 
@@ -223,6 +227,14 @@
                 <div class="koolclash-nav-tab">
                     <i class="icon-lock"></i>
                     访问控制
+                </div>
+            </label>
+        </li>
+        <li>
+            <label class="koolclash-nav-additional koolclash-nav-label" for="koolclash-nav-additional">
+                <div class="koolclash-nav-tab">
+                    <i class="icon-wake"></i>
+                    附加功能
                 </div>
             </label>
         </li>
@@ -374,6 +386,20 @@
                     <button type="button" id="koolclash-btn-debug" onclick="KoolClash.debugInfo();" class="btn btn-danger" style="margin-top: 6px; margin-bottom: 12px">获取 KoolClash 调试信息</button>
 
                     <textarea class="as-script" name="koolclash_debug_info" id="_koolclash_debug_info" readonly wrap="off" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                </div>
+            </div>
+        </div>
+        <div id="koolclash-content-additional">
+            <div class="box">
+                <div class="heading">Clash 看门狗</div>
+                <div class="content">
+                    <p>KoolClash 实现的 Clash 进程守护工具，每 20 秒检查一次 Clash 进程是否存在，如果 Clash 进程丢失则会自动重新拉起。</p>
+                    <p style="color:red; margin-top: 8px">注意！Clash 不支持保存节点选择状态！重新拉起 Clash 进程后节点可能会发生变动，因此请务必谨慎启用该功能！</p>
+                    <div id="koolclash-watchdog-panel" style="margin-top: 16px"></div>
+
+                    <div class="koolclash-btn-container">
+                        <button type="button" id="koolclash-btn-submit-watchdog" onclick="KoolClash.submitWatchdog();" class="btn btn-primary">提交</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -577,6 +603,18 @@
                         type: 'textarea',
                         value: Base64.decode(window.dbus.koolclash_firewall_default_port_user || '') || '',
                         style: 'width: 100%; height: 50px;',
+                    },
+                ]);
+                $('#koolclash-watchdog-panel').forms([
+                    {
+                        title: 'Clash 看门狗',
+                        name: 'koolclash-select-watchdog',
+                        type: 'select',
+                        options: [
+                            ['0', '禁用'],
+                            ['1', '开启']
+                        ],
+                        value: window.dbus.koolclash_watchdog_enable || '0',
                     },
                 ]);
 
