@@ -505,8 +505,12 @@
                 var inputWidth = `min-width: 220px; max-width: 220px`;
                 $('#koolclash-field').forms([
                     {
-                        title: '<b>Clash 运行状态</b>',
+                        title: '<b>Clash 进程状态</b>',
                         text: '<span id="koolclash_status" name="koolclash_status" color="#1bbf35">正在获取 Clash 进程状态...</span>'
+                    },
+                    {
+                        title: '<b>Clash 看门狗进程状态</b>',
+                        text: '<span id="koolclash_watchdog_status" name="koolclash_watchdog_status" color="#1bbf35">正在获取 Clash 看门狗进程状态...</span>'
                     },
                 ]);
                 $('#koolclash-dashboard-info').forms([
@@ -608,7 +612,7 @@
                 ]);
                 $('#koolclash-watchdog-panel').forms([
                     {
-                        title: 'Clash 看门狗',
+                        title: 'Clash 看门狗开关',
                         name: 'koolclash-select-watchdog',
                         type: 'select',
                         options: [
@@ -709,10 +713,11 @@ dns:
 
                         let data = resp.result.split('@'),
                             pid_text = data[0],
-                            dnsmode = data[1],
-                            control_data = data[2],
-                            secret = data[3],
-                            fallbackdns = data[5];
+                            pid_watchdog_text = data[1],
+                            dnsmode = data[2],
+                            control_data = data[3],
+                            secret = data[4],
+                            fallbackdns = data[6];
 
                         if (fallbackdns === '') {
                             document.getElementById('_koolclash-config-dns').innerHTML = KoolClash.defaultDNSConfig;
@@ -725,6 +730,7 @@ dns:
 
                         control_host = (control_host.length === 0) ? `请先上传 Clash 配置文件！` : control_host;
                         document.getElementById('koolclash_status').innerHTML = pid_text;
+                        document.getElementById('koolclash_watchdog_status').innerHTML = pid_watchdog_text;
                         document.getElementById('_koolclash_dashboard_host').value = control_host;
 
                         /*
@@ -769,6 +775,7 @@ dns:
                             return false;
                         }
                         document.getElementById('koolclash_status').innerHTML = `<span style="color: red">获取 Clash 进程运行状态失败！请刷新页面重试`;
+                        document.getElementById('koolclash_watchdog_status').innerHTML = `<span style="color: red">获取 Clash 看门狗进程运行状态失败！请刷新页面重试`;
                     }
                 });
             },

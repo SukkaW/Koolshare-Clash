@@ -41,12 +41,18 @@ restore_start_file() {
 }
 
 kill_process() {
-    echo_date "关闭 Clash 看门狗..."
-    killall -9 $(ps | grep koolclash_watchdog.sh | grep -v grep | awk '{print $1}') >/dev/null 2>&1
-    echo_date "关闭 Clash 进程..."
-    killall -9 $(pidof clash) >/dev/null 2>&1
-    echo_date "关闭 Clash 看门狗和其它进程..."
-    killall -9 $(ps | grep clash | grep -v grep | awk '{print $1}') >/dev/null 2>&1
+    if [ -n "$(ps | grep koolclash_watchdog.sh | grep -v grep | awk '{print $1}')" ]; then
+        echo_date "关闭 Clash 看门狗..."
+        kill -9 $(ps | grep koolclash_watchdog.sh | grep -v grep | awk '{print $1}') >/dev/null 2>&1
+    fi
+    if [ -n "$(pidof clash)" ]; then
+        echo_date "关闭 Clash 进程..."
+        killall clash
+    fi
+    #if [ -n "$(ps | grep clash | grep -v grep | awk '{print $1}')" ]; then
+    #    echo_date "关闭 Clash 其它进程..."
+    #    kill -9 $(ps | grep clash | grep -v grep | awk '{print $1}') >/dev/null 2>&1
+    #fi
 }
 
 create_dnsmasq_conf() {
@@ -93,10 +99,14 @@ start_clash_process() {
 }
 
 start_clash_watchdog() {
-    echo_date "启动 Clash 看门狗进程守护"
-    start-stop-daemon -S -q -b -m \
-        -p /tmp/run/koolclash.pid \
-        -x $KSROOT/scripts/koolclash_watchdog.sh
+    if [ "$koolclash_watchdog_enable" == "1" ]; then
+        echo_date "启动 Clash 看门狗进程守护..."
+        start-stop-daemon -S -q -b -m \
+            -p /tmp/run/koolclash.pid \
+            -x $KSROOT/scripts/koolclash_watchdog.sh
+    else
+        echo_date "不启动 Clash 看门狗进程守护"
+    fi
 }
 
 #--------------------------------------------------------------------------
