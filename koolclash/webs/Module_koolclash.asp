@@ -1271,6 +1271,8 @@ KoolClash 版本：${window.dbus.koolclash_version}
 KoolClash 当前状态：${(window.dbus.koolclash_enable === '1') ? `Clash 进程正在运行` : `Clash 进程未在运行`}
 用户指定 Clash 外部控制 Host：${(window.dbus.koolclash_api_host) ? koolclash_api_host : `未改动`}
 Chromecast（劫持 DNS）是否启用：${window.dbus.koolclash_firewall_chromecast}
+-------------------------- Clash 进程信息 --------------------------
+${Base64.decode(data.clash_process)}
 ------------------------ Clash 配置文件信息 ------------------------
 Clash 原始配置文件是否存在：${data.origin_exists}
 Clash 运行配置文件是否存在：${data.config_exists}
