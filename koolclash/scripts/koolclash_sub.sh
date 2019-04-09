@@ -25,19 +25,20 @@ del)
     ;;
 
 update)
-    if [ "$3" == "" ]; then
+    url=$(echo "$3" | base64 -d)
+    if [ "$url" == "" ]; then
         # 你提交个空的上来干嘛？是不是想删掉？
         dbus remove koolclash_suburl
         http_response 'ok'
     else
-        dbus set koolclash_suburl=$3
+        dbus set koolclash_suburl="$url"
         curl=$(which curl)
 
         cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/origin-backup.yml
         rm -rf $KSROOT/koolclash/config/origin.yml
 
         if [ "x$curl" != "x" ] && [ -x $curl ]; then
-            $curl --compressed $3 -o $KSROOT/koolclash/config/origin.yml
+            $curl --compressed "$url" -o $KSROOT/koolclash/config/origin.yml
         else
             http_response 'nocurl'
             cp $KSROOT/koolclash/config/origin-backup.yml $KSROOT/koolclash/config/origin.yml

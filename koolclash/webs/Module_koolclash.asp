@@ -1126,7 +1126,7 @@ dns:
                     postData = JSON.stringify({
                         id,
                         "method": "koolclash_sub.sh",
-                        "params": ['update', `${document.getElementById('_koolclash_config_suburl').value}`],
+                        "params": ['update', `${Base64.encode(document.getElementById('_koolclash_config_suburl').value)}`],
                         "fields": ""
                     });
 
