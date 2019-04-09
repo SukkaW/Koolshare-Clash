@@ -10,6 +10,8 @@ lan_ip=$(uci get network.lan.ipaddr)
 #wan_ip=$(ubus call network.interface.wan status | grep \"address\" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 koolshare_version=$(cat /etc/banner | grep Openwrt)
 
+clash_version=$($KSROOT/bin/clash -v)
+
 if [ ! -f $KSROOT/koolclash/config/origin.yml ]; then
     origin_exists='false'
 else
@@ -49,4 +51,4 @@ chromecast_nu=$(iptables -t nat -L PREROUTING -v -n --line-numbers | grep "dpt:5
 
 clash_process=$(ps | grep clash | grep -v grep | base64 | xargs)
 
-http_response "{ \\\"lan_ip\\\": \\\"${lan_ip}\\\", \\\"koolshare_version\\\": \\\"$koolshare_version\\\", \\\"origin_exists\\\": \\\"$origin_exists\\\", \\\"config_exists\\\": \\\"$config_exists\\\", \\\"clash_allow_lan\\\": \\\"$clash_allow_lan\\\", \\\"clash_ext_controller\\\": \\\"$clash_ext_controller\\\", \\\"clash_dns_enable\\\": \\\"$clash_dns_enable\\\", \\\"clash_dns_ipv6\\\": \\\"$clash_dns_ipv6\\\", \\\"clash_dns_mode\\\": \\\"$clash_dns_mode\\\", \\\"clash_dns_listen\\\": \\\"$clash_dns_listen\\\", \\\"fallbackdns\\\": \\\"$fallbackdns\\\", \\\"iptables_mangle\\\": \\\"$iptables_mangle\\\", \\\"iptables_nat\\\": \\\"$iptables_nat\\\", \\\"iptables_mangle_clash\\\": \\\"$iptables_mangle_clash\\\", \\\"iptables_nat_clash\\\": \\\"$iptables_nat_clash\\\", \\\"clash_redir\\\": \\\"$clash_redir\\\", \\\"firewall_white_ip\\\": \\\"$white_ip\\\", \\\"chromecast_nu\\\": \\\"$chromecast_nu\\\", \\\"clash_process\\\": \\\"$clash_process\\\"}"
+http_response "{ \\\"lan_ip\\\": \\\"${lan_ip}\\\", \\\"koolshare_version\\\": \\\"$koolshare_version\\\", \\\"origin_exists\\\": \\\"$origin_exists\\\", \\\"config_exists\\\": \\\"$config_exists\\\", \\\"clash_allow_lan\\\": \\\"$clash_allow_lan\\\", \\\"clash_ext_controller\\\": \\\"$clash_ext_controller\\\", \\\"clash_dns_enable\\\": \\\"$clash_dns_enable\\\", \\\"clash_dns_ipv6\\\": \\\"$clash_dns_ipv6\\\", \\\"clash_dns_mode\\\": \\\"$clash_dns_mode\\\", \\\"clash_dns_listen\\\": \\\"$clash_dns_listen\\\", \\\"fallbackdns\\\": \\\"$fallbackdns\\\", \\\"iptables_mangle\\\": \\\"$iptables_mangle\\\", \\\"iptables_nat\\\": \\\"$iptables_nat\\\", \\\"iptables_mangle_clash\\\": \\\"$iptables_mangle_clash\\\", \\\"iptables_nat_clash\\\": \\\"$iptables_nat_clash\\\", \\\"clash_redir\\\": \\\"$clash_redir\\\", \\\"firewall_white_ip\\\": \\\"$white_ip\\\", \\\"chromecast_nu\\\": \\\"$chromecast_nu\\\", \\\"clash_process\\\": \\\"$clash_process\\\", \\\"clash_version\\\": \\\"$clash_version\\\"}"

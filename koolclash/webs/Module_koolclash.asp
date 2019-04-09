@@ -1268,6 +1268,7 @@ dns:
 路由器 LAN IP：${data.lan_ip}
 ------------------------ KoolClash 基本信息 ------------------------
 KoolClash 版本：${window.dbus.koolclash_version}
+Clash 核心版本：${data.clash_version}
 KoolClash 当前状态：${(window.dbus.koolclash_enable === '1') ? `Clash 进程正在运行` : `Clash 进程未在运行`}
 用户指定 Clash 外部控制 Host：${(window.dbus.koolclash_api_host) ? koolclash_api_host : `未改动`}
 Chromecast（劫持 DNS）是否启用：${window.dbus.koolclash_firewall_chromecast}
