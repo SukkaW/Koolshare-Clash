@@ -38,7 +38,9 @@ update)
         rm -rf $KSROOT/koolclash/config/origin.yml
 
         if [ "x$curl" != "x" ] && [ -x $curl ]; then
-            $curl --compressed "$url" -o $KSROOT/koolclash/config/origin.yml
+            $curl -L --compressed "$url" -o $KSROOT/koolclash/config/origin.yml
+            sed -i '/^\-\-\-$/ d' $KSROOT/koolclash/config/origin.yml
+            sed -i '/^\.\.\.$/ d' $KSROOT/koolclash/config/origin.yml
         else
             http_response 'nocurl'
             cp $KSROOT/koolclash/config/origin-backup.yml $KSROOT/koolclash/config/origin.yml
@@ -48,8 +50,6 @@ update)
         if [ "$(yq r $KSROOT/koolclash/config/origin.yml port | sed 's|[0-9]||g')" == "" ]; then
             # 下载成功了
             rm -rf $KSROOT/koolclash/config/origin-backup.yml
-            sed -i '/^\-\-\-$/ d' $KSROOT/koolclash/config/origin.yml
-            sed -i '/^\.\.\.$/ d' $KSROOT/koolclash/config/origin.yml
 
             echo_date "设置 redir-port 和 allow-lan 属性"
             # 覆盖配置文件中的 redir-port 和 allow-lan 的配置
