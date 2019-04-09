@@ -45,13 +45,8 @@ update)
             exit 1
         fi
 
-        if [ $(yq r $KSROOT/koolclash/config/origin.yml port) == "null" ]; then
-            # 下载失败了
-            rm -rf $KSROOT/koolclash/config/origin.yml
-            cp $KSROOT/koolclash/config/origin-backup.yml $KSROOT/koolclash/config/origin.yml
-            rm -rf $KSROOT/koolclash/config/origin-backup.yml
-            http_response 'fail'
-        else
+        if [ "$(yq r $KSROOT/koolclash/config/origin.yml port | sed 's|[0-9]||g')" == "" ]; then
+            # 下载成功了
             rm -rf $KSROOT/koolclash/config/origin-backup.yml
             sed -i '/^\-\-\-$/ d' $KSROOT/koolclash/config/origin.yml
             sed -i '/^\.\.\.$/ d' $KSROOT/koolclash/config/origin.yml
@@ -108,6 +103,12 @@ update)
                     http_response 'success'
                 fi
             fi
+        else
+            # 下载失败了
+            rm -rf $KSROOT/koolclash/config/origin.yml
+            cp $KSROOT/koolclash/config/origin-backup.yml $KSROOT/koolclash/config/origin.yml
+            rm -rf $KSROOT/koolclash/config/origin-backup.yml
+            http_response 'fail'
         fi
     fi
     ;;
