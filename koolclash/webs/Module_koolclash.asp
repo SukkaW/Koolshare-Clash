@@ -399,8 +399,18 @@
                 <div class="heading">Clash 看门狗</div>
                 <div class="content">
                     <p>KoolClash 实现的 Clash 进程守护工具，每 20 秒检查一次 Clash 进程是否存在，如果 Clash 进程丢失则会自动重新拉起。</p>
-                    <p style="color:red; margin-top: 8px">注意！Clash 不支持保存节点选择状态！重新拉起 Clash 进程后节点可能会发生变动，因此请务必谨慎启用该功能！</p>
+                    <p style="color:red; margin-top: 8px">注意！Clash 不支持保存节点选择状态！Clash 进程重新启动后节点可能会变动，因此务必谨慎启用该功能！</p>
                     <div id="koolclash-watchdog-panel" style="margin-top: 16px"></div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="heading">GeoIP 数据库</div>
+                <div class="content">
+                    <p>Clash 用于解析 GeoIP 规则所使用的 IP 数据库，使用由 <a href="https://www.maxmind.com/" target="_blank">MaxMind</a> 提供的 <a href="https://dev.maxmind.com/geoip/geoip2/geolite2/" target="_blank">GeoLite2</a></p>
+                    <br>
+                    <p style="font-size: 110%">当前 IP 数据库版本：<span id="koolclash-ipdb-version" style="font-weight: bold">加载中</span>
+                        <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn btn-primary" style="float: right">更新 IP 解析库</button>
+                    </p>
                 </div>
             </div>
         </div>
@@ -631,6 +641,8 @@
                 }
 
                 document.getElementById('_koolclash-chromecast-switch').checked = (window.dbus.koolclash_firewall_chromecast === 'true') ? true : false;
+
+                document.getElementById('koolclash-ipdb-version').innerHTML = window.dbus.koolclash_ipdb_version || '';
             },
             // 选择 Tab
             // 注意选择的方式是使用 input 的 ID
@@ -1172,6 +1184,46 @@ dns:
                             KoolClash.enableAllButton();
                             document.getElementById('koolclash-btn-update-sub').innerHTML = '更新 Clash 托管配置';
                         }, 2500)
+                    }
+                });
+            },
+            updateIPDB: () => {
+                KoolClash.disableAllButton();
+                document.getElementById('koolclash-btn-update-ipdb').innerHTML = `开始下载最新 IP 解析库并更新`;
+                let id = parseInt(Math.random() * 100000000),
+                    postData = JSON.stringify({
+                        "id": id,
+                        "method": "koolclash_update_ipdb.sh",
+                        "params": [],
+                        "fields": ""
+                    });
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/_api/",
+                    data: postData,
+                    dataType: "json",
+                    success: (resp) => {
+                        if (resp.result === 'nodl') {
+                            document.getElementById('koolclash-btn-update-ipdb').innerHTML = `你的路由器中既没有 curl 也没有 wget，不能下载更新！`;
+                            setTimeout(() => {
+                                KoolClash.enableAllButton();
+                                document.getElementById('koolclash-btn-update-ipdb').innerHTML = '更新 IP 解析库';
+                            }, 5500)
+                        } else {
+                            document.getElementById('koolclash-btn-update-ipdb').innerHTML = `IP 解析库更新成功！页面将自动刷新<span id="koolclash-wait-time"></span>`;
+                            KoolClash.tminus(3);
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 3000)
+                        }
+                    },
+                    error: () => {
+                        document.getElementById('koolclash-btn-update-ipdb').innerHTML = `IP 解析库更新失败！`;
+                        setTimeout(() => {
+                            KoolClash.enableAllButton();
+                            document.getElementById('koolclash-btn-update-ipdb').innerHTML = '更新 IP 解析库';
+                        }, 3000)
                     }
                 });
             },
