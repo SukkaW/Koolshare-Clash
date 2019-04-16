@@ -407,10 +407,7 @@
                 <div class="heading">GeoIP 数据库</div>
                 <div class="content">
                     <p>Clash 用于解析 GeoIP 规则所使用的 IP 数据库，使用由 <a href="https://www.maxmind.com/" target="_blank">MaxMind</a> 提供的 <a href="https://dev.maxmind.com/geoip/geoip2/geolite2/" target="_blank">GeoLite2</a></p>
-                    <br>
-                    <p style="font-size: 110%">当前 IP 数据库版本：<span id="koolclash-ipdb-version" style="font-weight: bold">加载中</span>
-                        <button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn btn-primary" style="float: right">更新 IP 解析库</button>
-                    </p>
+                    <div id="koolclash-ipdb-panel" style="margin-top: 8px"></div>
                 </div>
             </div>
         </div>
@@ -633,6 +630,13 @@
                         value: window.dbus.koolclash_watchdog_enable || '0',
                     },
                 ]);
+                $('#koolclash-ipdb-panel').forms([
+                    {
+                        title: '<b>当前 IP 数据库版本</b>',
+                        name: 'koolclash-ipdb-version',
+                        text: `${window.dbus.koolclash_ipdb_version || '没有获取到版本信息'}<button type="button" id="koolclash-btn-update-ipdb" onclick="KoolClash.updateIPDB()" class="btn btn-success" style="margin-left: 16px; margin-top: -6px; ">更新 IP 数据库</button>`,
+                    },
+                ]);
 
                 if (document.getElementById('_koolclash-acl-default-port').value === '0') {
                     $('#_koolclash-acl-default-port-user').show();
@@ -641,8 +645,6 @@
                 }
 
                 document.getElementById('_koolclash-chromecast-switch').checked = (window.dbus.koolclash_firewall_chromecast === 'true') ? true : false;
-
-                document.getElementById('koolclash-ipdb-version').innerHTML = window.dbus.koolclash_ipdb_version || '';
             },
             // 选择 Tab
             // 注意选择的方式是使用 input 的 ID
@@ -1208,7 +1210,7 @@ dns:
                             document.getElementById('koolclash-btn-update-ipdb').innerHTML = `你的路由器中既没有 curl 也没有 wget，不能下载更新！`;
                             setTimeout(() => {
                                 KoolClash.enableAllButton();
-                                document.getElementById('koolclash-btn-update-ipdb').innerHTML = '更新 IP 解析库';
+                                document.getElementById('koolclash-btn-update-ipdb').innerHTML = '更新 IP 数据库';
                             }, 5500)
                         } else {
                             document.getElementById('koolclash-btn-update-ipdb').innerHTML = `IP 解析库更新成功！页面将自动刷新<span id="koolclash-wait-time"></span>`;
@@ -1222,7 +1224,7 @@ dns:
                         document.getElementById('koolclash-btn-update-ipdb').innerHTML = `IP 解析库更新失败！`;
                         setTimeout(() => {
                             KoolClash.enableAllButton();
-                            document.getElementById('koolclash-btn-update-ipdb').innerHTML = '更新 IP 解析库';
+                            document.getElementById('koolclash-btn-update-ipdb').innerHTML = '更新 IP 数据库';
                         }, 3000)
                     }
                 });
