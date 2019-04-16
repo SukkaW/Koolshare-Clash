@@ -406,7 +406,7 @@
             <div class="box">
                 <div class="heading">GeoIP 数据库</div>
                 <div class="content">
-                    <p>Clash 用于解析 GeoIP 规则所使用的 IP 数据库，使用由 <a href="https://www.maxmind.com/" target="_blank">MaxMind</a> 提供的 <a href="https://dev.maxmind.com/geoip/geoip2/geolite2/" target="_blank">GeoLite2</a></p>
+                    <p>Clash 使用由 <a href="https://www.maxmind.com/" target="_blank">MaxMind</a> 提供的 <a href="https://dev.maxmind.com/geoip/geoip2/geolite2/" target="_blank">GeoLite2</a> IP 数据库解析 GeoIP 规则</p>
                     <div id="koolclash-ipdb-panel" style="margin-top: 8px"></div>
                 </div>
             </div>

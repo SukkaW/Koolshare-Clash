@@ -14,6 +14,6 @@
 
 ![](/img/install-2.png)
 
-等待安装完成，页面会自动跳转，在软件列表中找到 koolclash，点击进入。
+安装完成后，软件中心页面会自动跳转，在软件列表中找到 koolclash，点击进入。
 
 ![](/img/install-3.png)

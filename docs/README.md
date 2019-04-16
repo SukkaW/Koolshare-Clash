@@ -27,6 +27,11 @@
     </a>
 </p>
 
+<p align="center">
+    <img src="https://i.loli.net/2019/04/16/5cb5e4b579a44.png">
+</p>
+
+
 ## 名词解释
 
 - Clash：一个 GO 开发的、基于规则的多平台代理客户端，兼容 Shadowsocks、V2Ray 等协议，拥有像 Surge 一样强大的代理规则。[GitHub](https://github.com/Dreamacro/clash)
@@ -77,6 +82,10 @@ $ ./build dashboard # Update clash-dashboard to latest
 KoolClash 使用 GPL-3.0 协议开源 - 阅读项目的 [LICENSE](https://github.com/SukkaW/Koolshare-Clash/blob/master/LICENSE) 文件。
 
 同时，这个项目中还包含了由 [MaxMind](https://www.maxmind.com) 提供的 [GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/)。
+
+## 赞助
+
+[![Dler Cloud](https://img.vim-cn.com/7e/dbc9122a41f7eadbab889a9037ef6232cbea51.png)](https://dlercloud.org)
 
 ## 维护者
 

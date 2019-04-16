@@ -26,7 +26,7 @@ A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://g
 </p>
 
 <p align="center">
-    <img src="https://i.loli.net/2019/03/15/5c8a7f20cf5e4.png">
+    <img src="https://i.loli.net/2019/04/16/5cb5e4b579a44.png">
 </p>
 
 <p></p>

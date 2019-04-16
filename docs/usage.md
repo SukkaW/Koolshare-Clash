@@ -18,9 +18,13 @@ KoolClash 也已经支持自动从托管配置自动下载更新 Clash 配置文
 
 如果你当前没有上传 Clash 配置文件、或者没有添加 Clash 托管配置 URL 并下载，KoolClash 将不允许你添加 自定义 DNS 配置。
 
-当你上传了一个 Clash 配置文件、或提交了托管配置更新，KoolClash 会自动检查你上传的 Clash 配置文件有没有包含 DNS 配置、DNS 配置合不合法。如果 KoolClash  检测到你上传的 Clash 配置文件中没有包含合法的 DNS 配置，KoolClash 会强制你你添加 自定义 DNS 配置（「DNS 配置开关」强制勾选）：
+当你上传了一个 Clash 配置文件、或提交了托管配置更新，KoolClash 会自动检查你上传的 Clash 配置文件有没有包含合法的 DNS 配置。如果 KoolClash 检测到你当前 Clash 配置文件中没有包含合法的 DNS 配置，KoolClash 会强制你你添加 自定义 DNS 配置：
 
 ![](/img/usage-0.png)
+
+> 「合法的 DNS 配置」包括
+> - `dns.enable = true`
+> - `dns.enhanced-mode = redir-host`
 
 以下是一个推荐的 自定义 DNS 配置 的示范：
 
@@ -40,15 +44,17 @@ dns:
     - tls://1.0.0.1:853
 ```
 
-当你提交过自定义 DNS 配置以后，下次你上传没有包含合法的 DNS 配置的 Clash 配置文件时，KoolClash 会自动将你提交过的 自定义 DNS 配置 添加到 Clash 配置文件中。此外你还可以通过重新提交新的 自定义 DNS 配置 来取代旧的 自定义 DNS 配置，同时更新现有的 Clash 配置文件中的 DNS 配置。
+当你提交过自定义 DNS 配置以后，下次你上传 没有包含合法的 DNS 配置 的 Clash 配置文件时，KoolClash 会自动将你提交过的 自定义 DNS 配置 合并到 Clash 配置文件中。你还可以通过重新提交新的 自定义 DNS 配置 以更新 Clash 配置文件中的 DNS 配置。
 
-如果你上传的 Clash 配置文件包含合法的 DNS 配置，此时 KoolClash 不需要你添加自定义 DNS 配置也能运行。
+如果你上传的 Clash 配置文件已经 包含合法的 DNS 配置，此时 KoolClash 不需要你添加自定义 DNS 配置也能运行。
 
 ![](/img/usage-4.png)
 
-但是你可以通过勾选「DNS 配置开关」并提交 自定义 DNS 配置 的方式来用你自己的 DNS 配置来覆盖 Clash 配置文件中已有的 DNS 配置。
+此时你可以勾选「DNS 配置开关」并提交 自定义 DNS 配置，KoolClash 会用你提交的 自定义 DNS 配置 来覆盖 Clash 配置文件中已有的 DNS 配置。
 
-?> 无论你之前是否提交过 自定义 DNS 配置，当你通过上传或者更新托管配置的方式提交一个包含了合法的 DNS 配置的 Clash 配置文件，KoolClash 都不会用自定义 DNS 配置文件覆盖 Clash 配置文件中的设置，除非你勾选「DNS 配置开关」并重新提交 自定义 DNS 配置。
+?> 在 `0.14.1-beta` 版本之前，无论你是否提交过 自定义 DNS 配置，当你通过上传或者更新托管配置的方式提交一个 包含合法 DNS 配置的 Clash 配置文件时，KoolClash 都不会用自定义 DNS 配置文件进行覆盖。你需要勾选「DNS 配置开关」并重新提交 自定义 DNS 配置。
+
+?> 从 `0.14.1-beta` 开始，如果你曾经使用 自定义 DNS 配置覆盖过 Clash 配置文件中的 DNS 配置文件，那么在你下次提交一个 包含合法 DNS 配置的 Clash 配置文件时，KoolClash 将自动用 自定义 DNS 配置 进行覆盖。
 
 ## ~~修改 dnsmasq 监听端口~~
 
@@ -62,9 +68,11 @@ Clash 的规则依赖 Clash 接管 DNS 解析。在 `0.10.0-beta` 版本以前�
 
 ## Clash 外部控制
 
-在上传 Clash 配置文件以后，KoolClash 将会修改配置文件中 `external-controller` 字段、设置为 `[LAN IP]:6170`。这使得 KoolClash 启动的 Clash 进程可以被属于路由器所在的局域网段的设备控制。你也可以在「Clash 外部控制」处修改 Clash 外部控制监听的 IP。
+在上传 Clash 配置文件以后，KoolClash 将会修改配置文件中 `external-controller` 字段、设置为 `[LAN IP]:6170`。这使得 KoolClash 启动的 Clash 进程可以被属于路由器所在的局域网段的设备控制。你也可以在「Clash 外部控、制」处修改 Clash 外部控制监听的 IP。
 
 ![](/img/usage-5.png)
+
+!> KoolClash 提供修改 Clash `external-controller` Host 的功能。如果你不知道修改这一项的作用，请保留默认配置。
 
 ## 启动 Clash
 
@@ -76,10 +84,43 @@ Clash 的规则依赖 Clash 接管 DNS 解析。在 `0.10.0-beta` 版本以前�
 
 KoolClash 启动以后，你可以通过检查「Clash 运行状态」和「IP 地址检查 & 网站访问检查」来判断代理运行状态。你可以通过「Clash 外部控制」中「访问 Clash 面板」或在浏览器中访问 `http://[LAN IP]/koolclash/index.html` 来访问 Clash 面板，在面板中可以切换节点、测试节点延时和查看 Clash 日志。
 
+!> 首次访问 Clash 面板时会要求你提交外部控制设置。请严格按照 KoolClash 在插件页面中给出的外部控制设置参数进行填写！
+
 ## Clash 访问控制
 
-### IP/CIDR 白名单（开发中）
+### IP/CIDR 白名单
 
-### Chromecast（开发中）
+设置不通过 Clash 的 IP/CIDR 外网地址，一行一个。
 
-启用 Chromecast 功能后，将会劫持使用 UDP 协议发往不位于当前 LAN 网段的 53 端口的所有请求、并转发给 Clash，最终返回 Clash 给出的结果。使用该功能在一定程度上可以避免获得错误的 IP、被污染的 IP，但是不能保证获得最佳的 IP 或者完全正确的 IP。
+?> KoolClash 的 IP/CIDR 白名单已经包含所有局域网 IP 段和保留 IP 段，无需在这里重复提交。
+
+### Chromecast
+
+启用 Chromecast 功能后，将会劫持使用 UDP 协议发往不位于当前 LAN 网段的 53 端口的所有请求、并转发给 Clash，最终返回 Clash 给出的解析结果（即劫持常规 DNS 解析）。
+
+!> Clash 的 DNS 工作原理和传统 DNS、抗污染 DNS、KoolSS 的 DNS 不同，不能当做抗污染 DNS 使用，不要轻易使用该功能！
+
+### 默认主机设置
+
+设置 **目标端口** 的流量是否经过 Clash。
+
+- 默认模式：设置匹配到的流量是否经过 Clash
+- 目标端口：
+  - 80,443：匹配目标端口为 80 和 443 的流量
+  - 常用端口：匹配目标端口为 RFC 中规定的 HTTP 协议的端口和 FTP、SSH 端口的流量
+  - 全部端口：匹配所有流量
+  - 自定义端口：自定义需要匹配的目标端口；多个端口 **使用空格分割**
+
+## 附加功能
+
+### Clash 看门狗
+
+KoolClash 实现的 Clash 进程守护工具。启用后 KoolClash 会每 20 秒检查一次 Clash 进程是否存在，如果 Clash 进程丢失则会自动重新启动 Clash 进程。
+
+!> 注意！Clash 尚不支持保存节点选择状态！重新启动 Clash 进程可能会导致节点变动，因此务必谨慎启用该功能！
+
+### GeoIP 数据库
+
+Clash 使用由 [MaxMind](https://www.maxmind.com/) 提供的 [GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) 解析 Geo-IP 规则。在这里可以查看当前使用的 IP 数据库版本并进行更新。
+
+
