@@ -645,6 +645,8 @@
                 }
 
                 document.getElementById('_koolclash-chromecast-switch').checked = (window.dbus.koolclash_firewall_chromecast === 'true') ? true : false;
+
+                $('.koolclash-nav-log').on('click', KoolClash.getLog);
             },
             // 选择 Tab
             // 注意选择的方式是使用 input 的 ID
