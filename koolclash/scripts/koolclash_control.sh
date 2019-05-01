@@ -21,14 +21,13 @@ get_lan_cidr() {
 
 #--------------------------------------------------------------------------
 restore_dnsmasq_conf() {
-    # delete server setting in dnsmasq.conf
-    #pc_delete "server=" "/etc/dnsmasq.conf"
-    #pc_delete "all-servers" "/etc/dnsmasq.conf"
-    #pc_delete "no-resolv" "/etc/dnsmasq.conf"
-    #pc_delete "no-poll" "/etc/dnsmasq.conf"
-
     echo_date "删除 KoolClash 的 dnsmasq 配置..."
     rm -rf /tmp/dnsmasq.d/koolclash.conf
+
+    echo_date "还原 DHCP/DNS 中 resolvfile 配置..."
+    uci set dhcp.@dnsmasq[0].resolvfile=/tmp/resolv.conf.auto
+    uci set dhcp.@dnsmasq[0].noresolv=0
+    uci commit dhcp
 }
 
 restore_start_file() {
@@ -56,6 +55,16 @@ kill_process() {
 }
 
 create_dnsmasq_conf() {
+    echo_date "删除 DHCP/DNS 中 resolvfile 和 cachesize 配置"
+    dhcp_server=$(uci get dhcp.@dnsmasq[0].server 2>/dev/null)
+    if [ $dhcp_server ]; then
+        uci delete dhcp.@dnsmasq[0].server >/dev/null 2>&1
+    fi
+    uci delete dhcp.@dnsmasq[0].resolvfile
+    uci delete dhcp.@dnsmasq[0].cachesize
+    uci set dhcp.@dnsmasq[0].noresolv=1
+    uci commit dhcp
+
     touch /tmp/dnsmasq.d/koolclash.conf
     echo_date "修改 dnsmasq 配置使 dnsmasq 将所有的 DNS 请求转发给 Clash"
     echo "no-resolv" >>/tmp/dnsmasq.d/koolclash.conf
@@ -165,7 +174,7 @@ add_white_black_ip() {
 
     if [ ! -z $koolclash_firewall_whiteip_base64 ]; then
         ip_white=$(echo $koolclash_firewall_whiteip_base64 | base64_decode | sed '/\#/d')
-        echo_date '应用 IP/CIDR 白名单'
+        echo_date '应用外网目标 IP/CIDR 白名单'
         for ip in $ip_white; do
             ipset -! add koolclash_white $ip >/dev/null 2>&1
         done
