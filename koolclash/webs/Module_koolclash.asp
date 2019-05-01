@@ -290,7 +290,7 @@
                             <p><span class="ip-title">IPIP&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-ipipnet"></span></p>
                             <p><span class="ip-title">淘宝&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-taobao"></span>&nbsp;<span id="ip-taobao-ipip"></span></p>
                             <p><span class="ip-title">IP.SB&nbsp;海外</span>:&nbsp;<span id="ip-ipsb"></span>&nbsp;<span id="ip-ipsb-geo"></span></p>
-                            <p><span class="ip-title">ipify&nbsp;&nbsp;海外</span>:&nbsp;<span id="ip-ipify"></span>&nbsp;<span id="ip-ipify-ipip"></span></p>
+                            <p><span class="ip-title">IPAPI&nbsp;海外</span>:&nbsp;<span id="ip-ipapi"></span>&nbsp;<span id="ip-ipapi-geo"></span></p>
                         </div>
                         <div style="width: 38.2%">
                             <p><span class="ip-title">百度搜索</span>&nbsp;:&nbsp;<span id="http-baidu"></span></p>
@@ -460,16 +460,16 @@
             },
             getIpsbIP: (data) => {
                 document.getElementById('ip-ipsb').innerHTML = data.address;
-                document.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.operator}`
+                document.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.isp.name}`
             },
-            getIpifyIP: () => {
+            getIpApiIP: () => {
                 IP.get(`https://api.ipify.org/?format=json&id=${+(new Date)}`, 'json')
                     .then(resp => {
-                        document.getElementById('ip-ipify').innerHTML = resp.data.ip;
+                        document.getElementById('ip-ipapi').innerHTML = resp.data.ip;
                         return resp.data.ip;
                     })
                     .then(ip => {
-                        IP.parseIPIpip(ip, 'ip-ipify-ipip');
+                        IP.parseIPIpip(ip, 'ip-ipapi-geo');
                     })
             },
         };
@@ -797,7 +797,7 @@ dns:
             },
             checkIP: () => {
                 IP.getIpipnetIP();
-                IP.getIpifyIP();
+                IP.getIpApiIP();
                 HTTP.runcheck();
             },
             disableAllButton: () => {
