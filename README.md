@@ -29,7 +29,7 @@ A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://g
     <img src="https://i.loli.net/2019/04/16/5cb5e4b579a44.png">
 </p>
 
-<p></p>
+> KoolClash is for `Koolshare OpenWrt/LEDE x86_64`. Use [Clash for OpenWrt](https://github.com/frainzy1477/clash/) if you are running original OpenWrt.
 
 ## Keywords
 
@@ -71,6 +71,7 @@ $ ./build dashboard # Update clash-dashboard to latest
 - [Clash for Windows](https://github.com/Fndroid/clash_for_windows_pkg) : A Windows GUI based on Clash
 - [clashX](https://github.com/yichengchen/clashX) : A rule based custom proxy with GUI for Mac base on clash
 - [ClashA](https://github.com/ccg2018/ClashA) : An Android GUI for Clash
+- [Clash for OpenWrt](https://github.com/frainzy1477/clash) : A rule based custom proxy for OpenWrt based on Clash.
 
 ## Contributions
 
