@@ -124,6 +124,8 @@ flush_nat() {
 
     iptables -t nat -D PREROUTING -p tcp -j koolclash >/dev/null 2>&1
     iptables -t mangle -D PREROUTING -p tcp -j koolclash >/dev/null 2>&1
+    iptables -t nat -D PREROUTING -p tcp -j koolclash_dns >/dev/null 2>&1
+    iptables -t mangle -D PREROUTING -p tcp -j koolclash_dns >/dev/null 2>&1
 
     nat_indexs=$(iptables -nvL PREROUTING -t nat | sed 1,2d | sed -n '/clash/=' | sort -r)
     for nat_index in $nat_indexs; do
@@ -138,6 +140,8 @@ flush_nat() {
     # flush iptables rules
     iptables -t nat -F koolclash >/dev/null 2>&1 && iptables -t nat -X koolclash >/dev/null 2>&1
     iptables -t mangle -F koolclash >/dev/null 2>&1 && iptables -t mangle -X koolclash >/dev/null 2>&1
+    iptables -t nat -F koolclash_dns >/dev/null 2>&1 && iptables -t nat -X koolclash_dns >/dev/null 2>&1
+    iptables -t mangle -F koolclash_dns >/dev/null 2>&1 && iptables -t mangle -X koolclash_dns >/dev/null 2>&1
 
     #flush_ipset
     echo_date "删除 KoolClash 添加的 ipsets 名单"
@@ -289,7 +293,11 @@ apply_nat_rules() {
     # iptables -t nat -A koolclash -j $(get_action_chain $ss_acl_default_mode)
 
     iptables -t nat -N koolclash
+    iptables -t nat -N koolclash_dns
     iptables -t nat -A PREROUTING -p tcp -j koolclash
+    iptables -t nat -A PREROUTING -p tcp -j koolclash_dns
+    iptables -t nat -A PREROUTING -p udp -j koolclash_dns
+
 
     # IP Whitelist
     # 包括路由器本机 IP
@@ -297,6 +305,10 @@ apply_nat_rules() {
     # Free 22 SSH
     iptables -t nat -A koolclash -p tcp --dport 22 -j ACCEPT
     #iptables -t nat -A koolclash -p tcp -m set --match-set koolclash_black dst -j REDIRECT --to-ports 23456
+
+    iptables -t nat -A koolclash_dns -p udp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
+    iptables -t nat -A koolclash_dns -p tcp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
+
     # Redirect all tcp traffic to 23456
     lan_access_control
 }

@@ -1348,6 +1348,12 @@ ${Base64.decode(Base64.decode(data.iptables_mangle_clash))}
  * iptables nat 中 koolclash 链
 ${Base64.decode(Base64.decode(data.iptables_nat_clash))}
 
+* iptables mangle 中 koolclash_dns 链
+${Base64.decode(Base64.decode(data.iptables_mangle_clash_dns))}
+
+ * iptables nat 中 koolclash_dns 链
+${Base64.decode(Base64.decode(data.iptables_nat_clash_dns))}
+
  * iptables nat 中 Chromecast 相关条目
 ${Base64.decode(data.chromecast_nu)}
 ---------------------- ipset 白名单 IP 列表 ------------------------
