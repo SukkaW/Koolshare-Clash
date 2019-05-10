@@ -575,13 +575,6 @@
                         value: Base64.decode(window.dbus.koolclash_firewall_whiteip_base64 || '') || '',
                         style: 'width: 80%; height: 150px;'
                     },
-                    {
-                        title: '<b>Chromecast 开关</b><br><br><p style="color: #999">强烈建议暂时不要使用！</p>',
-                        name: 'koolclash-chromecast-switch',
-                        prefix: '<br>',
-                        type: 'checkbox',
-                        style: `margin-top:16px;`
-                    },
                 ]);
 
                 $('#koolclash-acl-default-panel').forms([
@@ -643,8 +636,6 @@
                 } else {
                     $('#_koolclash-acl-default-port-user').hide();
                 }
-
-                document.getElementById('_koolclash-chromecast-switch').checked = (window.dbus.koolclash_firewall_chromecast === 'true') ? true : false;
 
                 $('.koolclash-nav-log').on('click', KoolClash.getLog);
             },
@@ -1327,7 +1318,6 @@ KoolClash 版本：${window.dbus.koolclash_version}
 Clash 核心版本：${data.clash_version}
 KoolClash 当前状态：${(window.dbus.koolclash_enable === '1') ? `Clash 进程正在运行` : `Clash 进程未在运行`}
 用户指定 Clash 外部控制 Host：${(window.dbus.koolclash_api_host) ? koolclash_api_host : `未改动`}
-Chromecast（劫持 DNS）是否启用：${window.dbus.koolclash_firewall_chromecast}
 IP 数据库是否存在：${data.ipdb_exists}
 -------------------------- Clash 进程信息 --------------------------
 ${Base64.decode(data.clash_process)}
@@ -1371,14 +1361,13 @@ ${Base64.decode(data.firewall_white_ip)}
                 submitWhiteIP: () => {
                     KoolClash.disableAllButton();
                     let data = Base64.encode(document.getElementById('_koolclash_firewall_white_ipset').value);
-                    let chromecast = document.getElementById('_koolclash-chromecast-switch').checked;
 
                     document.getElementById('koolclash-btn-submit-white-ip').innerHTML = `正在提交`;
                     let id = parseInt(Math.random() * 100000000),
                         postData = JSON.stringify({
                             id,
                             "method": "koolclash_firewall.sh",
-                            "params": ['white', `${chromecast}`, `${data}`],
+                            "params": ['white', `${data}`],
                             "fields": ""
                         });
 

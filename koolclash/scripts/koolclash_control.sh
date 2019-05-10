@@ -139,11 +139,6 @@ flush_nat() {
     iptables -t nat -F koolclash >/dev/null 2>&1 && iptables -t nat -X koolclash >/dev/null 2>&1
     iptables -t mangle -F koolclash >/dev/null 2>&1 && iptables -t mangle -X koolclash >/dev/null 2>&1
 
-    echo_date "停用 Chromecast（劫持 DNS）功能"
-    # flush chromecast
-    chromecast_nu=$(iptables -t nat -L PREROUTING -v -n --line-numbers | grep "dpt:53" | awk '{print $1}')
-    iptables -t nat -D PREROUTING $chromecast_nu >/dev/null 2>&1
-
     #flush_ipset
     echo_date "删除 KoolClash 添加的 ipsets 名单"
     ipset -F koolclash_white >/dev/null 2>&1 && ipset -X koolclash_white >/dev/null 2>&1
@@ -182,27 +177,6 @@ add_white_black_ip() {
 }
 
 #--------------------------------------------------------------------------
-chromecast() {
-    chromecast_nu=$(iptables -t nat -L PREROUTING -v -n --line-numbers | grep "dpt:53" | awk '{print $1}')
-    is_right_lanip=$(iptables -t nat -L PREROUTING -v -n --line-numbers | grep "dpt:53" | grep "$lan_ip")
-    if [ $koolclash_firewall_chromecast == "true" ]; then
-        if [ -z "$chromecast_nu" ]; then
-            iptables -t nat -A PREROUTING -p udp -s $(get_lan_cidr) --dport 53 -j DNAT --to $lan_ip >/dev/null 2>&1
-            echo_date '启用 Chromecast（劫持 DNS）'
-        else
-            if [ -z "$is_right_lanip" ]; then
-                echo_date '启用 Chromecast（劫持 DNS）'
-                iptables -t nat -D PREROUTING $chromecast_nu >/dev/null 2>&1
-                iptables -t nat -A PREROUTING -p udp -s $(get_lan_cidr) --dport 53 -j DNAT --to $lan_ip >/dev/null 2>&1
-            else
-                echo_date '检测到 DNS 劫持功能已经启用'
-            fi
-        fi
-    else
-        echo_date '不启用 Chromecast（劫持 DNS）功能'
-    fi
-}
-
 get_mode_name() {
     case "$1" in
     0)
@@ -334,7 +308,6 @@ load_nat() {
     creat_ipset
     add_white_black_ip
     apply_nat_rules
-    chromecast
 }
 
 start_koolclash() {

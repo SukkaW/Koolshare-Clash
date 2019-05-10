@@ -94,7 +94,9 @@ KoolClash 启动以后，你可以通过检查「Clash 运行状态」和「IP �
 
 ?> KoolClash 的 IP/CIDR 白名单已经包含所有局域网 IP 段和保留 IP 段，无需在这里重复提交。
 
-### Chromecast
+### ~~Chromecast~~
+
+?> 从 KoolClash `0.17.0-beta` 版本开始，KoolClash 使用 Clash 的 Fake-IP，不再提供 Chromecast 功能。
 
 启用 Chromecast 功能后，将会劫持使用 UDP 协议发往不位于当前 LAN 网段的 53 端口的所有请求、并转发给 Clash，最终返回 Clash 给出的解析结果（即劫持常规 DNS 解析）。
 
