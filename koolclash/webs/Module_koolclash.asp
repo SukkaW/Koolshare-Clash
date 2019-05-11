@@ -686,7 +686,7 @@ dns:
   enable: true
   ipv6: false
   listen: 0.0.0.0:53
-  enhanced-mode: redir-host
+  enhanced-mode: fake-ip
   nameserver:
     - 119.28.28.28
     - 119.29.29.29

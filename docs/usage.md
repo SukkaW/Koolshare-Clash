@@ -24,7 +24,8 @@ KoolClash 也已经支持自动从托管配置自动下载更新 Clash 配置文
 
 > 「合法的 DNS 配置」包括
 > - `dns.enable = true`
-> - `dns.enhanced-mode = redir-host`
+> - `dns.enhanced-mode = redir-host`（KoolClash 0.16.2 及其之前的版本）
+> - `dns.enhanced-mode = fake-ip`（KoolClash 0.16.2 之后的版本）
 
 以下是一个推荐的 自定义 DNS 配置 的示范：
 
@@ -32,7 +33,7 @@ KoolClash 也已经支持自动从托管配置自动下载更新 Clash 配置文
 dns:
   enable: true
   listen: 0.0.0.0:53
-  enhanced-mode: redir-host
+  enhanced-mode: fake-ip
   nameserver:
     - 119.29.29.29
     - 119.28.28.28
