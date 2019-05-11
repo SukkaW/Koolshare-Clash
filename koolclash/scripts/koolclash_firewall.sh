@@ -10,8 +10,7 @@ wan_ip=$(ubus call network.interface.wan status | grep \"address\" | grep -oE '[
 
 case $2 in
 white)
-    dbus set koolclash_firewall_chromecast=$3
-    dbus set koolclash_firewall_whiteip_base64=$4
+    dbus set koolclash_firewall_whiteip_base64=$3
     http_response 'ok'
     ;;
 default)

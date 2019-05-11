@@ -24,7 +24,8 @@ KoolClash 也已经支持自动从托管配置自动下载更新 Clash 配置文
 
 > 「合法的 DNS 配置」包括
 > - `dns.enable = true`
-> - `dns.enhanced-mode = redir-host`
+> - `dns.enhanced-mode = redir-host`（KoolClash 0.16.2 及其之前的版本）
+> - `dns.enhanced-mode = fake-ip`（KoolClash 0.16.2 之后的版本）
 
 以下是一个推荐的 自定义 DNS 配置 的示范：
 
@@ -32,7 +33,7 @@ KoolClash 也已经支持自动从托管配置自动下载更新 Clash 配置文
 dns:
   enable: true
   listen: 0.0.0.0:53
-  enhanced-mode: redir-host
+  enhanced-mode: fake-ip
   nameserver:
     - 119.29.29.29
     - 119.28.28.28
@@ -52,7 +53,7 @@ dns:
 
 此时你可以勾选「DNS 配置开关」并提交 自定义 DNS 配置，KoolClash 会用你提交的 自定义 DNS 配置 来覆盖 Clash 配置文件中已有的 DNS 配置。
 
-?> 在 `0.14.1-beta` 版本之前，无论你是否提交过 自定义 DNS 配置，当你通过上传或者更新托管配置的方式提交一个 包含合法 DNS 配置的 Clash 配置文件时，KoolClash 都不会用自定义 DNS 配置文件进行覆盖。你需要勾选「DNS 配置开关」并重新提交 自定义 DNS 配置。
+?> 在 `0.14.1-beta` 版本之前，无论你是否提交过 自定义 DNS 配置，当你通过上传或者更新托管配置的方式提交一个 包含合法 DNS 配置的 Clash 配置文件时，KoolClash 都不会用自定义 DNS 配置文件进行覆盖，需要你勾选「DNS 配置开关」并重新提交 自定义 DNS 配置。
 
 ?> 从 `0.14.1-beta` 开始，如果你曾经使用 自定义 DNS 配置覆盖过 Clash 配置文件中的 DNS 配置文件，那么在你下次提交一个 包含合法 DNS 配置的 Clash 配置文件时，KoolClash 将自动用 自定义 DNS 配置 进行覆盖。
 
@@ -60,7 +61,9 @@ dns:
 
 ?> 从 KoolClash `0.10.0-beta` 版本开始，KoolClash 会自动修改 Clash 将 DNS Server 运行在 23453 端口上，并将 LEDE/OpenWrt 中内置的 dnsmasq 设置转发 DNS 查询请求到 Clash 上。因此用户不再需要修改 dnsmasq 监听的端口就可以直接使用 KoolClash。
 
-!> 这一部分内容是关于 KoolClash 旧版本的。如果你在使用更新版本的 KoolClash，将不需要执行下述操作！
+?> 从 KoolClash `0.17.0-beta` 版本开始，KoolClash 会自动修改 Clash 将 DNS Server 运行在 23453 端口上，同时不再令 dnsmasq 转发 DNS 查询请求转发给 Clash DNS。
+
+!> 这一部分内容是关于 KoolClash 旧版本的。如果你在使用 `0.10.0-beta` 及更新版本的 KoolClash，将不需要执行下述操作！
 
 Clash 的规则依赖 Clash 接管 DNS 解析。在 `0.10.0-beta` 版本以前，KoolClash 选择由 Clash 直接接管 DNS，所以在使用 KoolClash 之前需要修改 LEDE/OpenWrt 中 dnsmasq 监听的端口：在「网络 - DHCP/DNS - 服务器设置 - 高级设置」中，找到「DNS 服务器端口」，修改为除了 53 以外任何不冲突的端口，「保存并应用」。
 
@@ -80,11 +83,27 @@ Clash 的规则依赖 Clash 接管 DNS 解析。在 `0.10.0-beta` 版本以前�
 
 ?> 如果 KoolClash 没有检测到 Clash 配置文件、或者 Clash 配置文件语法不规范、或者 Clash 配置文件中没有合法的 DNS 配置，都会导致无法启动；如果 Clash 进程无法运行，可能是由于提交的 Clash 配置文件存在问题，此时 KoolClash 会自动中断启动流程并回滚一切操作，而你应该去检查 Clash 配置文件。
 
-!> 无论是启动、重启、停止 Clash，或 KoolClash 中断或阻止了 Clash 的启动，你都应该等待插件页面提示信息的倒计时结束、页面自动刷新以后再执行操作。
+!> 无论是启动、重启、停止 Clash，或因为某些原因 KoolClash 中断、阻止了 Clash 的启动，你都应该等待插件页面提示信息的倒计时结束、页面自动刷新以后再执行操作。
 
 KoolClash 启动以后，你可以通过检查「Clash 运行状态」和「IP 地址检查 & 网站访问检查」来判断代理运行状态。你可以通过「Clash 外部控制」中「访问 Clash 面板」或在浏览器中访问 `http://[LAN IP]/koolclash/index.html` 来访问 Clash 面板，在面板中可以切换节点、测试节点延时和查看 Clash 日志。
 
 !> 首次访问 Clash 面板时会要求你提交外部控制设置。请严格按照 KoolClash 在插件页面中给出的外部控制设置参数进行填写！
+
+## 修改设备的网络设置
+
+?> 从 KoolClash `0.17.0-beta` 版本开始，KoolClash 将以 Fake-IP 模式运行，与 Surge 的增强模式类似。
+
+!> 这一部分内容是关于 KoolClash 新版本的。如果你在使用早于 `0.17.0-beta` 版本的 KoolClash，将不需要执行下述操作！
+
+启动 KoolClash 后，修改你的设备的网络设置，将网关设置为你安装 KoolClash 的设备的 LAN IP，将 DNS 修改为 `198.19.0.0/24` 中的任何一个 IP。
+
+> 说人话就是直接把主 DNS 改成 `198.19.0.1` 备 DNS 改成 `198.19.0.2` 就行。
+
+除了手动为需要的设备修改 DNS 和网关，你也可以直接修改当前局域网内 DHCP Server 的配置、为所有设备统一下发网关和 DNS。
+
+修改完毕以后，你的设备就可以正常上网了。
+
+!> 当你停止 Clash 进程以后，应当立刻将设备的 DNS 修改回之前的 DNS，同时还要刷新设备的 DNS 缓存避免 Fake-IP 的解析结果被继续使用。
 
 ## Clash 访问控制
 
@@ -94,7 +113,9 @@ KoolClash 启动以后，你可以通过检查「Clash 运行状态」和「IP �
 
 ?> KoolClash 的 IP/CIDR 白名单已经包含所有局域网 IP 段和保留 IP 段，无需在这里重复提交。
 
-### Chromecast
+### ~~Chromecast~~
+
+?> 从 KoolClash `0.17.0-beta` 版本开始，KoolClash 使用 Clash 的 Fake-IP 和 KoolClash 自己实现的 Fake-DNS，不再提供 Chromecast 功能。
 
 启用 Chromecast 功能后，将会劫持使用 UDP 协议发往不位于当前 LAN 网段的 53 端口的所有请求、并转发给 Clash，最终返回 Clash 给出的解析结果（即劫持常规 DNS 解析）。
 

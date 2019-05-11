@@ -28,7 +28,7 @@ if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
 elif [ $koolclash_dnsmode = 2 ]; then
     # Clash 配置文件存在且 DNS 配置合法，但是用户选择了自定义 DNS 配置，显示 DNS 配置输入，dnsmode 为 2
     dnsmode=2
-elif [ $(yq r $KSROOT/koolclash/config/origin.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/origin.yml dns.enhanced-mode) == 'redir-host' ]; then
+elif [ $(yq r $KSROOT/koolclash/config/origin.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/origin.yml dns.enhanced-mode) == 'fake-ip' ]; then
     # Clash 配置文件存在且 DNS 配置合法，不显示 DNS 配置输入，dnsmode 为 1
     dbus set koolclash_dnsmode=1
     dnsmode=1

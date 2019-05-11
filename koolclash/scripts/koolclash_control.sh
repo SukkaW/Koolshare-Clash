@@ -20,15 +20,15 @@ get_lan_cidr() {
 }
 
 #--------------------------------------------------------------------------
-restore_dnsmasq_conf() {
-    echo_date "删除 KoolClash 的 dnsmasq 配置..."
-    rm -rf /tmp/dnsmasq.d/koolclash.conf
-
-    echo_date "还原 DHCP/DNS 中 resolvfile 配置..."
-    uci set dhcp.@dnsmasq[0].resolvfile=/tmp/resolv.conf.auto
-    uci set dhcp.@dnsmasq[0].noresolv=0
-    uci commit dhcp
-}
+#restore_dnsmasq_conf() {
+#    echo_date "删除 KoolClash 的 dnsmasq 配置..."
+#    rm -rf /tmp/dnsmasq.d/koolclash.conf
+#
+#    echo_date "还原 DHCP/DNS 中 resolvfile 配置..."
+#    uci set dhcp.@dnsmasq[0].resolvfile=/tmp/resolv.conf.auto
+#    uci set dhcp.@dnsmasq[0].noresolv=0
+#    uci commit dhcp
+#}
 
 restore_start_file() {
     echo_date "删除 KoolClash 的防火墙配置"
@@ -54,23 +54,23 @@ kill_process() {
     #fi
 }
 
-create_dnsmasq_conf() {
-    echo_date "删除 DHCP/DNS 中 resolvfile 和 cachesize 配置"
-    dhcp_server=$(uci get dhcp.@dnsmasq[0].server 2>/dev/null)
-    if [ $dhcp_server ]; then
-        uci delete dhcp.@dnsmasq[0].server >/dev/null 2>&1
-    fi
-    uci delete dhcp.@dnsmasq[0].resolvfile
-    uci delete dhcp.@dnsmasq[0].cachesize
-    uci set dhcp.@dnsmasq[0].noresolv=1
-    uci commit dhcp
-
-    touch /tmp/dnsmasq.d/koolclash.conf
-    echo_date "修改 dnsmasq 配置使 dnsmasq 将所有的 DNS 请求转发给 Clash"
-    echo "no-resolv" >>/tmp/dnsmasq.d/koolclash.conf
-    echo "server=127.0.0.1#23453" >>/tmp/dnsmasq.d/koolclash.conf
-    echo "cache-size=0" >>/tmp/dnsmasq.d/koolclash.conf
-}
+#create_dnsmasq_conf() {
+#    echo_date "删除 DHCP/DNS 中 resolvfile 和 cachesize 配置"
+#    dhcp_server=$(uci get dhcp.@dnsmasq[0].server 2>/dev/null)
+#    if [ $dhcp_server ]; then
+#        uci delete dhcp.@dnsmasq[0].server >/dev/null 2>&1
+#    fi
+#    uci delete dhcp.@dnsmasq[0].resolvfile
+#    uci delete dhcp.@dnsmasq[0].cachesize
+#    uci set dhcp.@dnsmasq[0].noresolv=1
+#    uci commit dhcp
+#
+#    touch /tmp/dnsmasq.d/koolclash.conf
+#    echo_date "修改 dnsmasq 配置使 dnsmasq 将所有的 DNS 请求转发给 Clash"
+#    echo "no-resolv" >>/tmp/dnsmasq.d/koolclash.conf
+#    echo "server=127.0.0.1#23453" >>/tmp/dnsmasq.d/koolclash.conf
+#    echo "cache-size=0" >>/tmp/dnsmasq.d/koolclash.conf
+#}
 
 restart_dnsmasq() {
     # Restart dnsmasq
@@ -124,6 +124,8 @@ flush_nat() {
 
     iptables -t nat -D PREROUTING -p tcp -j koolclash >/dev/null 2>&1
     iptables -t mangle -D PREROUTING -p tcp -j koolclash >/dev/null 2>&1
+    iptables -t nat -D PREROUTING -p tcp -j koolclash_dns >/dev/null 2>&1
+    iptables -t mangle -D PREROUTING -p tcp -j koolclash_dns >/dev/null 2>&1
 
     nat_indexs=$(iptables -nvL PREROUTING -t nat | sed 1,2d | sed -n '/clash/=' | sort -r)
     for nat_index in $nat_indexs; do
@@ -138,11 +140,8 @@ flush_nat() {
     # flush iptables rules
     iptables -t nat -F koolclash >/dev/null 2>&1 && iptables -t nat -X koolclash >/dev/null 2>&1
     iptables -t mangle -F koolclash >/dev/null 2>&1 && iptables -t mangle -X koolclash >/dev/null 2>&1
-
-    echo_date "停用 Chromecast（劫持 DNS）功能"
-    # flush chromecast
-    chromecast_nu=$(iptables -t nat -L PREROUTING -v -n --line-numbers | grep "dpt:53" | awk '{print $1}')
-    iptables -t nat -D PREROUTING $chromecast_nu >/dev/null 2>&1
+    iptables -t nat -F koolclash_dns >/dev/null 2>&1 && iptables -t nat -X koolclash_dns >/dev/null 2>&1
+    iptables -t mangle -F koolclash_dns >/dev/null 2>&1 && iptables -t mangle -X koolclash_dns >/dev/null 2>&1
 
     #flush_ipset
     echo_date "删除 KoolClash 添加的 ipsets 名单"
@@ -182,27 +181,6 @@ add_white_black_ip() {
 }
 
 #--------------------------------------------------------------------------
-chromecast() {
-    chromecast_nu=$(iptables -t nat -L PREROUTING -v -n --line-numbers | grep "dpt:53" | awk '{print $1}')
-    is_right_lanip=$(iptables -t nat -L PREROUTING -v -n --line-numbers | grep "dpt:53" | grep "$lan_ip")
-    if [ $koolclash_firewall_chromecast == "true" ]; then
-        if [ -z "$chromecast_nu" ]; then
-            iptables -t nat -A PREROUTING -p udp -s $(get_lan_cidr) --dport 53 -j DNAT --to $lan_ip >/dev/null 2>&1
-            echo_date '启用 Chromecast（劫持 DNS）'
-        else
-            if [ -z "$is_right_lanip" ]; then
-                echo_date '启用 Chromecast（劫持 DNS）'
-                iptables -t nat -D PREROUTING $chromecast_nu >/dev/null 2>&1
-                iptables -t nat -A PREROUTING -p udp -s $(get_lan_cidr) --dport 53 -j DNAT --to $lan_ip >/dev/null 2>&1
-            else
-                echo_date '检测到 DNS 劫持功能已经启用'
-            fi
-        fi
-    else
-        echo_date '不启用 Chromecast（劫持 DNS）功能'
-    fi
-}
-
 get_mode_name() {
     case "$1" in
     0)
@@ -315,7 +293,11 @@ apply_nat_rules() {
     # iptables -t nat -A koolclash -j $(get_action_chain $ss_acl_default_mode)
 
     iptables -t nat -N koolclash
+    iptables -t nat -N koolclash_dns
     iptables -t nat -A PREROUTING -p tcp -j koolclash
+    iptables -t nat -A PREROUTING -p tcp -j koolclash_dns
+    iptables -t nat -A PREROUTING -p udp -j koolclash_dns
+
 
     # IP Whitelist
     # 包括路由器本机 IP
@@ -323,6 +305,10 @@ apply_nat_rules() {
     # Free 22 SSH
     iptables -t nat -A koolclash -p tcp --dport 22 -j ACCEPT
     #iptables -t nat -A koolclash -p tcp -m set --match-set koolclash_black dst -j REDIRECT --to-ports 23456
+
+    iptables -t nat -A koolclash_dns -p udp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
+    iptables -t nat -A koolclash_dns -p tcp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
+
     # Redirect all tcp traffic to 23456
     lan_access_control
 }
@@ -334,7 +320,6 @@ load_nat() {
     creat_ipset
     add_white_black_ip
     apply_nat_rules
-    chromecast
 }
 
 start_koolclash() {
@@ -344,12 +329,12 @@ start_koolclash() {
     [ -n "$ONSTART" ] && echo_date 路由器开机触发 KoolClash 启动！ || echo_date web 提交操作触发 KoolClash 启动！
     echo_date ---------------------------------------------------------------------------------
     # stop first
-    restore_dnsmasq_conf
+    # restore_dnsmasq_conf
     flush_nat
     restore_start_file
     kill_process
     echo_date ---------------------------------------------------------------------------------
-    create_dnsmasq_conf
+    # create_dnsmasq_conf
     auto_start
     start_clash_process
 
@@ -360,7 +345,7 @@ start_koolclash() {
         echo_date '【即将关闭 KoolClash 并还原所有操作】'
         echo_date ------------------------------- KoolClash 启动中断 -------------------------------
         sleep 2
-        restore_dnsmasq_conf
+        # restore_dnsmasq_conf
         restart_dnsmasq
         flush_nat
         restore_start_file
@@ -380,7 +365,7 @@ start_koolclash() {
 
 stop_koolclash() {
     echo_date --------------------- KoolClash: Clash on Koolshare OpenWrt ---------------------
-    restore_dnsmasq_conf
+    # restore_dnsmasq_conf
     restart_dnsmasq
     flush_nat
     restore_start_file
@@ -398,7 +383,7 @@ start)
             stop_koolclash
             echo "XU6J03M6"
         else
-            if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
+            if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
                 echo_date "KoolClash 执行开机自动启动"
                 start_koolclash
                 echo "XU6J03M6"
@@ -424,7 +409,7 @@ start_after_install)
         echo_date "没有找到 Clash 的配置文件，中断启动并回滚操作！"
         stop_koolclash
     else
-        if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
+        if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
             start_koolclash
         else
             echo_date "没有找到 DNS 配置或 DNS 配置不合法，中断启动并回滚操作！"
@@ -440,7 +425,7 @@ start_after_install)
                 stop_koolclash
                 echo "XU6J03M6"
             else
-                if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
+                if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
                     echo_date "KoolClash 执行开机自动启动"
                     start_koolclash
                     echo "XU6J03M6"
@@ -470,7 +455,7 @@ start)
         echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
         echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
     else
-        if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'redir-host' ]; then
+        if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
             http_response 'success'
             start_koolclash >/tmp/upload/koolclash_log.txt
             echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
