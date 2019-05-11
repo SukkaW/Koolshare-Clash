@@ -47,7 +47,8 @@ A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://g
 Besides those features that Clash have, KoolClash has more:
 
 - Install clash and upload config to [Koolshare OpenWrt/LEDE X86](https://firmware.koolshare.cn/LEDE_X64_fw867/)
-- Transparent proxy for all of your devices
+- ~~Transparent proxy for all of your devices~~
+- Surge Enhanced Mode like proxy gateway
 
 ## Installation
 

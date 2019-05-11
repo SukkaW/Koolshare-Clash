@@ -20,7 +20,7 @@
         <img src="https://img.shields.io/github/release/SukkaW/Koolshare-Clash/all.svg?style=flat-square">
     </a>
     <a href="https://github.com/Dreamacro/clash" target="_blank">
-        <img src="https://img.shields.io/badge/Clash-0.12.0-1c4070.svg?style=flat-square"/>
+        <img src="https://img.shields.io/badge/Clash-0.14.0-1c4070.svg?style=flat-square"/>
     </a>
     <a href="https://github.com/SukkaW/Koolshare-Clash/blob/master/LICENSE">
         <img src="https://img.shields.io/github/license/sukkaw/koolshare-clash.svg?style=flat-square"/>
@@ -31,6 +31,7 @@
     <img src="https://i.loli.net/2019/04/16/5cb5e4b579a44.png">
 </p>
 
+> KoolClash 尽可以在 Koolshare OpenWrt/LEDE x86_64 上使用。如果你使用的是原版 OpenWrt，请使用 [Clash for OpenWrt](https://github.com/frainzy1477/clash/)。
 
 ## 名词解释
 
@@ -47,8 +48,8 @@
 
 除了 Clash 的这些特性，KoolClash 有以下特性:
 
-- 在 [Koolshare OpenWrt/LEDE X86](https://firmware.koolshare.cn/LEDE_X64_fw867/) 上安装、加载配置并运行 Clash
-- 实现透明代理
+- 在 [Koolshare OpenWrt/LEDE X86](https://firmware.koolshare.cn/LEDE_X64_fw867/) 上安装、上传配置并运行 Clash
+- 和 Surge 增强模式类似的代理网关
 
 ## 安装
 
