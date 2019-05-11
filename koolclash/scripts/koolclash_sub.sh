@@ -92,7 +92,7 @@ update)
                     dbus set koolclash_dnsmode=1
                 fi
 
-                # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
+
                 overwrite_dns_config
                 echo_date "Clash 配置文件上传成功！"
                 http_response 'success'
@@ -112,7 +112,7 @@ update)
                     yq d -i $KSROOT/koolclash/config/config.yml dns
                     yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
 
-                    # 先将 Clash DNS 设置监听 53，以后作为 dnsmasq 的上游以后需要改变端口
+    
                     overwrite_dns_config
 
                     echo_date "Clash 配置文件上传成功！"

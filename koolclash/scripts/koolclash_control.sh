@@ -20,15 +20,15 @@ get_lan_cidr() {
 }
 
 #--------------------------------------------------------------------------
-restore_dnsmasq_conf() {
-    echo_date "删除 KoolClash 的 dnsmasq 配置..."
-    rm -rf /tmp/dnsmasq.d/koolclash.conf
-
-    echo_date "还原 DHCP/DNS 中 resolvfile 配置..."
-    uci set dhcp.@dnsmasq[0].resolvfile=/tmp/resolv.conf.auto
-    uci set dhcp.@dnsmasq[0].noresolv=0
-    uci commit dhcp
-}
+#restore_dnsmasq_conf() {
+#    echo_date "删除 KoolClash 的 dnsmasq 配置..."
+#    rm -rf /tmp/dnsmasq.d/koolclash.conf
+#
+#    echo_date "还原 DHCP/DNS 中 resolvfile 配置..."
+#    uci set dhcp.@dnsmasq[0].resolvfile=/tmp/resolv.conf.auto
+#    uci set dhcp.@dnsmasq[0].noresolv=0
+#    uci commit dhcp
+#}
 
 restore_start_file() {
     echo_date "删除 KoolClash 的防火墙配置"
@@ -54,23 +54,23 @@ kill_process() {
     #fi
 }
 
-create_dnsmasq_conf() {
-    echo_date "删除 DHCP/DNS 中 resolvfile 和 cachesize 配置"
-    dhcp_server=$(uci get dhcp.@dnsmasq[0].server 2>/dev/null)
-    if [ $dhcp_server ]; then
-        uci delete dhcp.@dnsmasq[0].server >/dev/null 2>&1
-    fi
-    uci delete dhcp.@dnsmasq[0].resolvfile
-    uci delete dhcp.@dnsmasq[0].cachesize
-    uci set dhcp.@dnsmasq[0].noresolv=1
-    uci commit dhcp
-
-    touch /tmp/dnsmasq.d/koolclash.conf
-    echo_date "修改 dnsmasq 配置使 dnsmasq 将所有的 DNS 请求转发给 Clash"
-    echo "no-resolv" >>/tmp/dnsmasq.d/koolclash.conf
-    echo "server=127.0.0.1#23453" >>/tmp/dnsmasq.d/koolclash.conf
-    echo "cache-size=0" >>/tmp/dnsmasq.d/koolclash.conf
-}
+#create_dnsmasq_conf() {
+#    echo_date "删除 DHCP/DNS 中 resolvfile 和 cachesize 配置"
+#    dhcp_server=$(uci get dhcp.@dnsmasq[0].server 2>/dev/null)
+#    if [ $dhcp_server ]; then
+#        uci delete dhcp.@dnsmasq[0].server >/dev/null 2>&1
+#    fi
+#    uci delete dhcp.@dnsmasq[0].resolvfile
+#    uci delete dhcp.@dnsmasq[0].cachesize
+#    uci set dhcp.@dnsmasq[0].noresolv=1
+#    uci commit dhcp
+#
+#    touch /tmp/dnsmasq.d/koolclash.conf
+#    echo_date "修改 dnsmasq 配置使 dnsmasq 将所有的 DNS 请求转发给 Clash"
+#    echo "no-resolv" >>/tmp/dnsmasq.d/koolclash.conf
+#    echo "server=127.0.0.1#23453" >>/tmp/dnsmasq.d/koolclash.conf
+#    echo "cache-size=0" >>/tmp/dnsmasq.d/koolclash.conf
+#}
 
 restart_dnsmasq() {
     # Restart dnsmasq
@@ -329,12 +329,12 @@ start_koolclash() {
     [ -n "$ONSTART" ] && echo_date 路由器开机触发 KoolClash 启动！ || echo_date web 提交操作触发 KoolClash 启动！
     echo_date ---------------------------------------------------------------------------------
     # stop first
-    restore_dnsmasq_conf
+    # restore_dnsmasq_conf
     flush_nat
     restore_start_file
     kill_process
     echo_date ---------------------------------------------------------------------------------
-    create_dnsmasq_conf
+    # create_dnsmasq_conf
     auto_start
     start_clash_process
 
@@ -345,7 +345,7 @@ start_koolclash() {
         echo_date '【即将关闭 KoolClash 并还原所有操作】'
         echo_date ------------------------------- KoolClash 启动中断 -------------------------------
         sleep 2
-        restore_dnsmasq_conf
+        # restore_dnsmasq_conf
         restart_dnsmasq
         flush_nat
         restore_start_file
@@ -365,7 +365,7 @@ start_koolclash() {
 
 stop_koolclash() {
     echo_date --------------------- KoolClash: Clash on Koolshare OpenWrt ---------------------
-    restore_dnsmasq_conf
+    # restore_dnsmasq_conf
     restart_dnsmasq
     flush_nat
     restore_start_file
