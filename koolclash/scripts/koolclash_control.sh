@@ -404,6 +404,10 @@ stop)
     stop_koolclash
     echo "XU6J03M6"
     ;;
+stop_for_install)
+    echo_date "关闭 KoolClash 以进行安装 / 更新"
+    stop_koolclash
+    ;;
 start_after_install)
     if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
         echo_date "没有找到 Clash 的配置文件，中断启动并回滚操作！"

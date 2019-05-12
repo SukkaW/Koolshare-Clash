@@ -46,7 +46,7 @@ if [ -n "$(pidof clash)" ]; then
     echo_date 'KoolClash:【更新 KoolClash 过程中可能会出现「软件中心异常」的提示，是正常现象！】'
     echo_date 'KoolClash:【请不要刷新或关闭页面，务必等待安装完成、页面自动跳转！】'
     sleep 4
-    sh $KSROOT/scripts/koolclash_control.sh stop
+    sh $KSROOT/scripts/koolclash_control.sh stop_for_install
     sleep 1
     echo_date "KoolClash: Clash 已经停止，继续更新/安装..."
 fi
