@@ -1381,6 +1381,7 @@ ${Base64.decode(data.firewall_white_ip)}
             },
             load: (cb) => {
                 window.dbus = {}
+                document.title = 'KoolClash - Clash for Koolshare OpenWrt/LEDE';
 
                 fetch(`/_api/koolclash`, { method: 'GET' })
                     .then((resp) => Promise.all([resp.ok, resp.status, resp.json(), resp.headers]))
