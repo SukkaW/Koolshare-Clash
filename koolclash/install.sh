@@ -110,9 +110,9 @@ dbus set softcenter_module_koolclash_title=koolclash
 dbus set softcenter_module_koolclash_version=$local_version
 
 # 防火墙默认模式
-[ -z $koolclash_firewall_default_mode ] && dbus set koolclash_firewall_default_mode=1
+#[ -z $koolclash_firewall_default_mode ] && dbus set koolclash_firewall_default_mode=1
 # 防火墙默认端口模式
-[ -z $koolclash_firewall_default_port_mode ] && dbus set koolclash_firewall_default_port_mode=all
+#[ -z $koolclash_firewall_default_port_mode ] && dbus set koolclash_firewall_default_port_mode=all
 # 看门狗默认禁用
 [ -z $koolclash_watchdog_enable ] && dbus set koolclash_watchdog_enable=0
 

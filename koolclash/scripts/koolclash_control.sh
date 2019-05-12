@@ -209,79 +209,79 @@ get_default_port_name() {
     esac
 }
 
-lan_access_control() {
-    common_http_port="21 22 80 8080 8880 2052 2082 2086 2095 443 2053 2083 2087 2096 8443"
-
-    if [ "$koolclash_firewall_default_mode" == "1" ]; then
-        case $koolclash_firewall_default_port_mode in
-        80443)
-            echo_date "【全部主机】仅转发【80,443】端口的流量到 Clash，剩余端口直连"
-            iptables -t nat -A koolclash -p tcp --dport 80 -j REDIRECT --to-ports 23456
-            iptables -t nat -A koolclash -p tcp --dport 443 -j REDIRECT --to-ports 23456
-            ;;
-        1)
-            echo_date "【全部主机】仅转发【常用 HTTP 端口】端口的流量到 Clash，剩余端口直连"
-            for i in $common_http_port; do
-                iptables -t nat -A koolclash -p tcp --dport $i -j REDIRECT --to-ports 23456
-            done
-            ;;
-        all)
-            echo_date "【全部主机】转发【所有端口】端口的流量到 Clash"
-            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
-            ;;
-        0)
-            echo_date "【全部主机】转发【以下端口】端口的流量到 Clash，剩余端口直连"
-            echo_date $(echo $koolclash_firewall_default_port_user | base64 -d)
-
-            custom_port=$(echo $koolclash_firewall_default_port_user | base64 -d)
-            for i in $custom_port; do
-                iptables -t nat -A koolclash -p tcp --dport $i -j REDIRECT --to-ports 23456
-            done
-            ;;
-        *)
-            echo_date "【全部主机】转发【所有端口】端口的流量到 Clash"
-            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
-            ;;
-        esac
-    elif [ "$koolclash_firewall_default_mode" == "0" ]; then
-        case $koolclash_firewall_default_port_mode in
-        80443)
-            echo_date "【全部主机】仅【80,443】端口直连，剩余端口的流量转发到 Clash"
-            iptables -t nat -A koolclash -p tcp --dport 80 -j RETURN
-            iptables -t nat -A koolclash -p tcp --dport 443 -j RETURN
-            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
-            ;;
-        1)
-            echo_date "【全部主机】仅【常用 HTTP 端口】端口直连，剩余端口的流量转发到 Clash"
-            for i in $common_http_port; do
-                iptables -t nat -A koolclash -p tcp --dport $i -j RETURN
-            done
-            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
-            ;;
-        all)
-            echo_date "【全部主机】【所有端口】端口均直连"
-            iptables -t nat -A koolclash -p tcp -j RETURN
-            ;;
-        0)
-            echo_date "【全部主机】【以下端口】端口全部直连，剩余端口的流量转发到 Clash"
-            echo_date $(echo $koolclash_firewall_default_port_user | base64 -d)
-
-            custom_port=$(echo $koolclash_firewall_default_port_user | base64 -d)
-            for i in $custom_port; do
-                iptables -t nat -A koolclash -p tcp --dport $i -j RETURN
-            done
-            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
-            ;;
-        *)
-            echo_date "【全部主机】【所有端口】端口均直连"
-            iptables -t nat -A koolclash -p tcp -j RETURN
-            ;;
-        esac
-    else
-        echo_date "【全部主机】转发【所有端口】端口的流量到 Clash"
-        iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
-    fi
-}
+#lan_access_control() {
+#    common_http_port="21 22 80 8080 8880 2052 2082 2086 2095 443 2053 2083 2087 2096 8443"
+#
+#    if [ "$koolclash_firewall_default_mode" == "1" ]; then
+#        case $koolclash_firewall_default_port_mode in
+#        80443)
+#            echo_date "【全部主机】仅转发【80,443】端口的流量到 Clash，剩余端口直连"
+#            iptables -t nat -A koolclash -p tcp --dport 80 -j REDIRECT --to-ports 23456
+#            iptables -t nat -A koolclash -p tcp --dport 443 -j REDIRECT --to-ports 23456
+#            ;;
+#        1)
+#            echo_date "【全部主机】仅转发【常用 HTTP 端口】端口的流量到 Clash，剩余端口直连"
+#            for i in $common_http_port; do
+#                iptables -t nat -A koolclash -p tcp --dport $i -j REDIRECT --to-ports 23456
+#            done
+#            ;;
+#        all)
+#            echo_date "【全部主机】转发【所有端口】端口的流量到 Clash"
+#            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
+#            ;;
+#        0)
+#            echo_date "【全部主机】转发【以下端口】端口的流量到 Clash，剩余端口直连"
+#            echo_date $(echo $koolclash_firewall_default_port_user | base64 -d)
+#
+#            custom_port=$(echo $koolclash_firewall_default_port_user | base64 -d)
+#            for i in $custom_port; do
+#                iptables -t nat -A koolclash -p tcp --dport $i -j REDIRECT --to-ports 23456
+#            done
+#            ;;
+#        *)
+#            echo_date "【全部主机】转发【所有端口】端口的流量到 Clash"
+#            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
+#            ;;
+#        esac
+#    elif [ "$koolclash_firewall_default_mode" == "0" ]; then
+#        case $koolclash_firewall_default_port_mode in
+#        80443)
+#            echo_date "【全部主机】仅【80,443】端口直连，剩余端口的流量转发到 Clash"
+#            iptables -t nat -A koolclash -p tcp --dport 80 -j RETURN
+#            iptables -t nat -A koolclash -p tcp --dport 443 -j RETURN
+#            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
+#            ;;
+#        1)
+#            echo_date "【全部主机】仅【常用 HTTP 端口】端口直连，剩余端口的流量转发到 Clash"
+#            for i in $common_http_port; do
+#                iptables -t nat -A koolclash -p tcp --dport $i -j RETURN
+#            done
+#            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
+#            ;;
+#        all)
+#            echo_date "【全部主机】【所有端口】端口均直连"
+#            iptables -t nat -A koolclash -p tcp -j RETURN
+#            ;;
+#        0)
+#            echo_date "【全部主机】【以下端口】端口全部直连，剩余端口的流量转发到 Clash"
+#            echo_date $(echo $koolclash_firewall_default_port_user | base64 -d)
+#
+#            custom_port=$(echo $koolclash_firewall_default_port_user | base64 -d)
+#            for i in $custom_port; do
+#                iptables -t nat -A koolclash -p tcp --dport $i -j RETURN
+#            done
+#            iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
+#            ;;
+#        *)
+#            echo_date "【全部主机】【所有端口】端口均直连"
+#            iptables -t nat -A koolclash -p tcp -j RETURN
+#            ;;
+#        esac
+#    else
+#        echo_date "【全部主机】转发【所有端口】端口的流量到 Clash"
+#        iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
+#    fi
+#}
 
 #--------------------------------------------------------------------------
 apply_nat_rules() {
@@ -310,7 +310,7 @@ apply_nat_rules() {
     iptables -t nat -A koolclash_dns -p tcp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
 
     # Redirect all tcp traffic to 23456
-    lan_access_control
+    iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
 }
 
 # =======================================================================================================
