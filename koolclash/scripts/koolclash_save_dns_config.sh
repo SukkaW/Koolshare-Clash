@@ -9,6 +9,8 @@ eval $(dbus export koolclash_)
 # 强制覆盖 DNS、Fake-IP 的设置
 
 overwrite_dns_config() {
+    # 启用 external-ui
+    yq w -i $KSROOT/koolclash/config/config.yml external-ui "/koolshare/webs/koolclash/"
     # 确保启用 DNS
     yq w -i $KSROOT/koolclash/config/config.yml dns.enable "true"
     # 修改端口

@@ -310,7 +310,7 @@
                     <div id="koolclash-dashboard-info"></div>
 
                     <div class="koolclash-btn-container">
-                        <a href="/koolclash/index.html" class="btn btn-primary" target="_blank">访问 Clash 面板</a>
+                        <button class="btn btn-primary" onclick="window.open(`http:\/\/${window.location.hostname.replace('%3', '')}:6170/ui/`, 'newwindow', '')">访问 Clash 面板</button>
                         <button type="button" id="koolclash-btn-submit-control" onclick="KoolClash.submitExternalControl();" class="btn">提交外部控制设置</button>
                     </div>
                 </div>
