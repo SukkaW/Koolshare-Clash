@@ -114,7 +114,6 @@ update)
                     yq d -i $KSROOT/koolclash/config/config.yml dns
                     yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
 
-    
                     overwrite_dns_config
 
                     echo_date "Clash 配置文件上传成功！"

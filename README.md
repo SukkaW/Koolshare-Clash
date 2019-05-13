@@ -88,7 +88,7 @@ Also, this project includes [GeoLite2](https://dev.maxmind.com/geoip/geoip2/geol
 
 ## Sponsors
 
-[![Dler Cloud](https://img.vim-cn.com/7e/dbc9122a41f7eadbab889a9037ef6232cbea51.png)](https://dlercloud.org)
+[![Dler Cloud](https://img.vim-cn.com/7e/dbc9122a41f7eadbab889a9037ef6232cbea51.png)](https://dlercloud.me)
 
 ## Maintainer
 
