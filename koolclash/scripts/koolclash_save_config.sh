@@ -44,7 +44,7 @@ fi
 
 yq w -i $KSROOT/koolclash/config/origin.yml external-controller "$ext_control_ip:6170"
 # 启用 external-ui
-yq w -i $KSROOT/koolclash/config/config.yml external-ui "/koolshare/webs/koolclash/"
+yq w -i $KSROOT/koolclash/config/origin.yml external-ui "/koolshare/webs/koolclash/"
 
 cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
 
