@@ -1,3 +1,3 @@
-# 451 ILLEGAL
+# Temporarily Unavailable
 
-Temporarily Unavailable For Legal Reasons. Please sit back and relax.
+Please Sit Back and Relax.
