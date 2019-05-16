@@ -589,8 +589,8 @@
             selectTab: (inputId) => {
                 for (let i of document.getElementsByClassName('koolclash-nav-radio')) {
                     i.removeAttribute('checked');
-                    document.getElementById(inputId).setAttribute('checked', '');
                 }
+                document.getElementById(inputId).setAttribute('checked', '');
             },
             checkUpdate: () => {
                 let installed = '',
@@ -922,6 +922,11 @@ dns:
                 document.getElementById('msg_warning').innerHTML = `正在启动 Clash，请不要刷新或关闭页面！`;
                 $('#msg_warning').show();
 
+                setTimeout(() => {
+                    KoolClash.selectTab('koolclash-nav-log');
+                    KoolClash.getLog();
+                }, 100);
+
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         id,
@@ -933,6 +938,7 @@ dns:
                 $.ajax({
                     type: "POST",
                     cache: false,
+                    async: true,
                     url: "/_api/",
                     data: postData,
                     dataType: "json",
@@ -943,36 +949,30 @@ dns:
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_error').show();
                             $('#msg_warning').show();
-                            KoolClash.selectTab('koolclash-nav-log');
-                            KoolClash.getLog();
-                            KoolClash.tminus(15);
+                            KoolClash.tminus(5);
                             setTimeout(() => {
                                 window.location.reload();
-                            }, 15000)
+                            }, 5000)
                         } else if (resp.result === 'nodns') {
                             $('#msg_warning').hide();
                             document.getElementById('msg_error').innerHTML = `在 Clash 配置文件中没有找到正确的 DNS 设置或 Clash 配置文件存在语法错误！请在页面自动刷新之后(重新)上传 Clash 配置文件！<span id="koolclash-wait-time"></span>`;
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_error').show();
                             $('#msg_warning').show();
-                            KoolClash.selectTab('koolclash-nav-log');
-                            KoolClash.getLog();
-                            KoolClash.tminus(15);
+                            KoolClash.tminus(5);
                             setTimeout(() => {
                                 window.location.reload();
-                            }, 15000)
+                            }, 5000)
                         } else {
                             $('#msg_warning').hide();
                             document.getElementById('msg_success').innerHTML = `Clash 即将启动成功！<span id="koolclash-wait-time"></span>`;
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_success').show();
                             $('#msg_warning').show();
-                            KoolClash.selectTab('koolclash-nav-log');
-                            KoolClash.getLog();
-                            KoolClash.tminus(20);
+                            KoolClash.tminus(5);
                             setTimeout(() => {
                                 window.location.reload();
-                            }, 20000)
+                            }, 5000)
                         }
                     },
                     error: () => {
@@ -981,11 +981,10 @@ dns:
                         $('#msg_error').show();
                         $('#msg_warning').show();
                         KoolClash.selectTab('koolclash-nav-log');
-                        KoolClash.getLog();
-                        KoolClash.tminus(20);
+                        KoolClash.tminus(5);
                         setTimeout(() => {
                             window.location.reload();
-                        }, 20000)
+                        }, 5000)
                     }
                 });
             },
@@ -993,6 +992,12 @@ dns:
                 KoolClash.disableAllButton();
                 document.getElementById('msg_warning').innerHTML = `正在关闭 Clash，请不要刷新或关闭页面！`;
                 $('#msg_warning').show();
+
+                setTimeout(() => {
+                    KoolClash.selectTab('koolclash-nav-log');
+                    KoolClash.getLog();
+                }, 100);
+
                 let id = parseInt(Math.random() * 100000000),
                     postData = JSON.stringify({
                         id,
@@ -1004,6 +1009,7 @@ dns:
                 $.ajax({
                     type: "POST",
                     cache: false,
+                    async: true,
                     url: "/_api/",
                     data: postData,
                     dataType: "json",
@@ -1013,25 +1019,21 @@ dns:
                         document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                         $('#msg_success').show();
                         $('#msg_warning').show();
-                        KoolClash.selectTab('koolclash-nav-log');
-                        KoolClash.getLog();
-                        KoolClash.tminus(15);
+                        KoolClash.tminus(5);
                         setTimeout(() => {
                             window.location.reload();
-                        }, 15000)
+                        }, 5000)
                     },
                     error: () => {
                         $('#msg_warning').hide();
                         document.getElementById('msg_error').innerHTML = `Clash (可能)关闭失败！请在页面自动刷新之后检查 Clash 运行状态！<span id="koolclash-wait-time"></span>`;
                         document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
-                        KoolClash.selectTab('koolclash-nav-log');
-                        KoolClash.getLog();
                         $('#msg_error').show();
                         $('#msg_warning').show();
-                        KoolClash.tminus(15);
+                        KoolClash.tminus(5);
                         setTimeout(() => {
                             window.location.reload();
-                        }, 15000)
+                        }, 5000)
                     }
                 });
             },
@@ -1174,6 +1176,8 @@ dns:
                     _responseLen = 0;
                 }
 
+                let noChange = 0;
+
                 $.ajax({
                     url: '/_temp/koolclash_log.txt',
                     type: 'GET',
@@ -1191,19 +1195,19 @@ dns:
                         } else {
                             noChange = 0;
                         }
-                        if (noChange > 1000) {
+                        if (noChange > 8000) {
                             KoolClash.selectTab('koolclash-nav-overview');
                             return false;
                         } else {
                             setTimeout(() => {
                                 KoolClash.getLog();
-                            }, 500);
+                            }, 100);
                         }
                         retArea.value = response.replace("XU6J03M6", " ");
                         retArea.scrollTop = retArea.scrollHeight;
                         _responseLen = response.length;
                     },
-                    error: function () {
+                    error: () => {
                         E("_koolclash_log").value = "获取日志失败！";
                         return false;
                     }

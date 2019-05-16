@@ -451,32 +451,35 @@ esac
 # used by httpdb
 case $2 in
 start)
-    touch /tmp/upload/koolclash_log.txt
+    rm -rf /tmp/upload/koolclash_log.txt && touch /tmp/upload/koolclash_log.txt
+    sleep 1
     if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
         echo_date "【没有找到 Clash 的配置文件！自动停止 Clash！】" >/tmp/upload/koolclash_log.txt
-        http_response 'noconfig'
         stop_koolclash >>/tmp/upload/koolclash_log.txt
         echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
         echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
+        http_response 'noconfig'
     else
         if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
-            http_response 'success'
             start_koolclash >/tmp/upload/koolclash_log.txt
             echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
+            http_response 'success'
         else
             echo_date "【没有找到正确的 DNS 配置或 Clash 配置文件存在错误！自动停止 Clash！】" >/tmp/upload/koolclash_log.txt
-            http_response 'nodns'
             stop_koolclash >>/tmp/upload/koolclash_log.txt
             echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
+            http_response 'nodns'
         fi
     fi
     ;;
 stop)
-    http_response 'success'
+    rm -rf /tmp/upload/koolclash_log.txt && touch /tmp/upload/koolclash_log.txt
+    sleep 1
     stop_koolclash >/tmp/upload/koolclash_log.txt
     echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
     echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
+    http_response 'success'
     ;;
 esac
