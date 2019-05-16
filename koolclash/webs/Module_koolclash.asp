@@ -943,9 +943,9 @@ dns:
                     data: postData,
                     dataType: "json",
                     success: (resp) => {
-                        if (resp.result === 'noconfig') {
+                        if (resp.result === 'nofile') {
                             $('#msg_warning').hide();
-                            document.getElementById('msg_error').innerHTML = `没有找到 Clash 配置文件！请在页面自动刷新之后(重新)上传 Clash 配置文件！<span id="koolclash-wait-time"></span>`;
+                            document.getElementById('msg_error').innerHTML = `关键文件缺失，Clash 无法启动！<span id="koolclash-wait-time"></span>`;
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_error').show();
                             $('#msg_warning').show();
