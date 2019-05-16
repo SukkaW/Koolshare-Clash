@@ -149,7 +149,6 @@ flush_nat() {
 
 #--------------------------------------------------------------------------
 creat_ipset() {
-    echo_date "创建 ipset 名单"
     ipset -! create koolclash_white nethash && ipset flush koolclash_white
     #ipset -! create koolclash_black nethash && ipset flush koolclash_black
 }
@@ -179,33 +178,33 @@ add_white_black_ip() {
 }
 
 #--------------------------------------------------------------------------
-get_mode_name() {
-    case "$1" in
-    0)
-        echo "不通过 Clash"
-        ;;
-    1)
-        echo "通过 Clash"
-        ;;
-    esac
-}
+#get_mode_name() {
+#    case "$1" in
+#    0)
+#        echo "不通过 Clash"
+#        ;;
+#    1)
+#        echo "通过 Clash"
+#        ;;
+#    esac
+#}
 
-get_default_port_name() {
-    case "$1" in
-    80443)
-        echo "80, 443"
-        ;;
-    1)
-        echo "常用 HTTP 协议端口"
-        ;;
-    all)
-        echo "全部端口"
-        ;;
-    0)
-        echo "自定义口"
-        ;;
-    esac
-}
+#get_default_port_name() {
+#    case "$1" in
+#    80443)
+#        echo "80, 443"
+#        ;;
+#    1)
+#        echo "常用 HTTP 协议端口"
+#        ;;
+#    all)
+#        echo "全部端口"
+#        ;;
+#    0)
+#        echo "自定义口"
+#        ;;
+#    esac
+#}
 
 #lan_access_control() {
 #    common_http_port="21 22 80 8080 8880 2052 2082 2086 2095 443 2053 2083 2087 2096 8443"
@@ -284,12 +283,13 @@ get_default_port_name() {
 #--------------------------------------------------------------------------
 apply_nat_rules() {
     #----------------------BASIC RULES---------------------
-    echo_date "写入 iptables 规则"
+
     #-------------------------------------------------------
     # 局域网黑名单（不走ss）/局域网黑名单（走ss）
     # 其余主机默认模式
     # iptables -t nat -A koolclash -j $(get_action_chain $ss_acl_default_mode)
 
+    echo_date "iptables 创建 koolclash 链并添加到 PREROUTING 中"
     iptables -t nat -N koolclash
     iptables -t nat -N koolclash_dns
     iptables -t nat -A PREROUTING -p tcp -j koolclash
