@@ -352,7 +352,6 @@ start_koolclash() {
         kill_process
         dbus set koolclash_enable=0
         echo_date ------------------------------- KoolClash 停止完毕 -------------------------------
-        echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------
         exit 1
     else
         echo_date "Clash 进程成功启动！"
@@ -381,22 +380,27 @@ case $1 in
 start)
     if [ "$koolclash_enable" == "1" ]; then
         if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-            echo_date "没有找到 Clash 的配置文件！自动停止 Clash！"
+            echo_date "【没有找到 Clash 的配置文件！中断启动并回滚操作！】"
             stop_koolclash
+            echo_date "【请重新上传 Clash 配置文件！】"
+            echo "XU6J03M6"
+        elif [ ! -f $KSROOT/koolclash/config/Country.mmdb ]; then
+            echo_date "【没有找到 GeoLite IP 数据库！中断启动并回滚操作！】"
+            stop_koolclash
+            echo_date "【请尝试更新 IP 数据库！】"
             echo "XU6J03M6"
         else
             if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
-                echo_date "KoolClash 执行开机自动启动"
                 start_koolclash
                 echo "XU6J03M6"
             else
-                echo_date "没有找到 DNS 配置或 DNS 配置不合法！自动停止 Clash！"
+                echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！中断启动并回滚操作！】"
                 stop_koolclash
                 echo "XU6J03M6"
             fi
         fi
     else
-        echo_date "KoolClash 开机自动关闭"
+        echo_date "【KoolClash 开机自动关闭】"
         stop_koolclash
         echo "XU6J03M6"
     fi
@@ -412,13 +416,16 @@ stop_for_install)
     ;;
 start_after_install)
     if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-        echo_date "没有找到 Clash 的配置文件，中断启动并回滚操作！"
+        echo_date "【没有找到 Clash 的配置文件！中断启动并回滚操作！】"
+        stop_koolclash
+    elif [ ! -f $KSROOT/koolclash/config/Country.mmdb ]; then
+        echo_date "【没有找到 GeoLite IP 数据库！中断启动并回滚操作！】"
         stop_koolclash
     else
         if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
             start_koolclash
         else
-            echo_date "没有找到 DNS 配置或 DNS 配置不合法，中断启动并回滚操作！"
+            echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！中断启动并回滚操作！】"
             stop_koolclash
         fi
     fi
@@ -427,22 +434,27 @@ start_after_install)
     if [ -z "$2" ]; then
         if [ "$koolclash_enable" == "1" ]; then
             if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-                echo_date "没有找到 Clash 的配置文件！自动停止 Clash！"
+                echo_date "【没有找到 Clash 的配置文件！中断启动并回滚操作！】"
                 stop_koolclash
+                echo_date "【请重新上传 Clash 配置文件！】"
+                echo "XU6J03M6"
+            elif [ ! -f $KSROOT/koolclash/config/Country.mmdb ]; then
+                echo_date "【没有找到 GeoLite IP 数据库！中断启动并回滚操作！】"
+                stop_koolclash
+                echo_date "【请尝试更新 IP 数据库！】"
                 echo "XU6J03M6"
             else
                 if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
-                    echo_date "KoolClash 执行开机自动启动"
                     start_koolclash
                     echo "XU6J03M6"
                 else
-                    echo_date "没有找到 DNS 配置或 DNS 配置不合法！自动停止 Clash！"
+                    echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！中断启动并回滚操作！】"
                     stop_koolclash
                     echo "XU6J03M6"
                 fi
             fi
         else
-            echo_date "KoolClash 开机自动关闭"
+            echo_date "【KoolClash 开机自动关闭】"
             stop_koolclash
             echo "XU6J03M6"
         fi
@@ -476,7 +488,7 @@ start)
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
             http_response 'success'
         else
-            echo_date "【没有找到正确的 DNS 配置或 Clash 配置文件存在错误！中断启动并回滚操作！】" >/tmp/upload/koolclash_log.txt
+            echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！中断启动并回滚操作！】" >/tmp/upload/koolclash_log.txt
             stop_koolclash >>/tmp/upload/koolclash_log.txt
             echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
