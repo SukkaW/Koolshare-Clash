@@ -590,7 +590,7 @@
                 for (let i of document.getElementsByClassName('koolclash-nav-radio')) {
                     i.removeAttribute('checked');
                 }
-                document.getElementById(inputId).setAttribute('checked', '');
+                document.getElementById(inputId).click();
             },
             checkUpdate: () => {
                 let installed = '',
