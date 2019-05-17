@@ -459,8 +459,8 @@
                 let img = new Image;
                 let timeout = setTimeout(() => {
                     img.onerror = img.onload = null;
+                    img = null;
                     document.getElementById(cbElID).innerHTML = '<span class="sk-text-error">连接超时</span>'
-                    img.src = null;
                 }, 5000);
 
                 img.onerror = () => {
@@ -1139,6 +1139,12 @@ dns:
                         "params": [],
                         "fields": ""
                     });
+
+                setTimeout(() => {
+                    KoolClash.selectTab('koolclash-nav-log');
+                    KoolClash.getLog();
+                }, 100);
+
                 $.ajax({
                     type: "POST",
                     cache: false,
