@@ -490,6 +490,7 @@ start)
         else
             echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！中断启动并回滚操作！】" >/tmp/upload/koolclash_log.txt
             stop_koolclash >>/tmp/upload/koolclash_log.txt
+            echo_date "【请在页面刷新以后重新上传 Clash 配置文件！】" >>/tmp/upload/koolclash_log.txt
             echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
             http_response 'nodns'

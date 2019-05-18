@@ -955,7 +955,7 @@ dns:
                             }, 5000)
                         } else if (resp.result === 'nodns') {
                             $('#msg_warning').hide();
-                            document.getElementById('msg_error').innerHTML = `在 Clash 配置文件中没有找到正确的 DNS 设置或 Clash 配置文件存在语法错误！请在页面自动刷新之后(重新)上传 Clash 配置文件！<span id="koolclash-wait-time"></span>`;
+                            document.getElementById('msg_error').innerHTML = `在 Clash 配置文件中没有找到正确的 DNS 设置！<span id="koolclash-wait-time"></span>`;
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_error').show();
                             $('#msg_warning').show();
@@ -965,7 +965,7 @@ dns:
                             }, 5000)
                         } else {
                             $('#msg_warning').hide();
-                            document.getElementById('msg_success').innerHTML = `Clash 即将启动成功！<span id="koolclash-wait-time"></span>`;
+                            document.getElementById('msg_success').innerHTML = `Clash 成功启动！<span id="koolclash-wait-time"></span>`;
                             document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                             $('#msg_success').show();
                             $('#msg_warning').show();
@@ -1015,7 +1015,7 @@ dns:
                     dataType: "json",
                     success: (resp) => {
                         $('#msg_warning').hide();
-                        document.getElementById('msg_success').innerHTML = `Clash 即将关闭！<span id="koolclash-wait-time"></span>`;
+                        document.getElementById('msg_success').innerHTML = `Clash 成功关闭！<span id="koolclash-wait-time"></span>`;
                         document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
                         $('#msg_success').show();
                         $('#msg_warning').show();
