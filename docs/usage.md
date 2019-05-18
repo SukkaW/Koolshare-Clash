@@ -32,6 +32,8 @@ KoolClash 也支持自动从托管配置自动下载更新 Clash 配置文件，
 > - `dns.enhanced-mode = redir-host`（KoolClash 0.16.2 及其之前的版本）
 > - `dns.enhanced-mode = fake-ip`（KoolClash 0.16.2 之后的版本）
 
+?> 为了保证兼容性，当上传了一个 `dns.enhanced-mode` 为 `redir-host` 的 `Clash 配置文件` 时，KoolClash 会自动将 `dns.enhanced-mode` 修改为 `fake-ip`，并将该 `Clash 配置文件` 视为包含 `合法的 DNS 配置`。
+
 以下是一个推荐的 `自定义 DNS 配置` 的示范：
 
 ```yaml
@@ -46,6 +48,7 @@ dns:
     - 223.5.5.5
     - tls://dns.rubyfish.cn:853
   fallback:
+    - tls://dns.rubyfish.cn:853
     - tls://8.8.4.4:853
     - tls://1.0.0.1:853
 ```

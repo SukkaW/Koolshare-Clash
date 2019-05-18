@@ -362,6 +362,7 @@ start_koolclash() {
     start_clash_watchdog
     dbus set koolclash_enable=1
     echo_date ------------------------------- KoolClash 启动完毕 -------------------------------
+    echo_date KoolClash 启动后可能无法立即上网，请先等待 1-2 分钟！
 }
 
 stop_koolclash() {
