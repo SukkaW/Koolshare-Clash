@@ -293,8 +293,8 @@ apply_nat_rules() {
     iptables -t nat -N koolclash
     iptables -t nat -N koolclash_dns
 
-    iptables -t nat -A PREROUTING -p tcp -j koolclash_dns
-    iptables -t nat -A PREROUTING -p udp -j koolclash_dns
+    iptables -t nat -A PREROUTING -p tcp --dport 53 -d 198.19.0.0/24 -j koolclash_dns
+    iptables -t nat -A PREROUTING -p udp --dport 53 -d 198.19.0.0/24 -j koolclash_dns
     iptables -t nat -A PREROUTING -p tcp -j koolclash
 
     iptables -t nat -A koolclash_dns -p udp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
