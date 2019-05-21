@@ -35,10 +35,10 @@ version=$(ls $KSROOT/koolclash/ipdb | grep 'GeoLite2-Country' | sed "s|GeoLite2-
 
 cp -rf $KSROOT/koolclash/ipdb/GeoLite2-Country_*/GeoLite2-Country.mmdb $KSROOT/koolclash/config/Country.mmdb
 
-echo_date "更新至 IP 数据库版本 $version" >>/tmp/upload/koolclash_log.txt
+echo_date "更新 IP 数据库至 $version 版本" >>/tmp/upload/koolclash_log.txt
 dbus set koolclash_ipdb_version=$version
 
-echo_date "清理临时文件" >>/tmp/upload/koolclash_log.txt
+echo_date "清理临时文件..." >>/tmp/upload/koolclash_log.txt
 rm -rf $KSROOT/koolclash/ipdb.tar.gz
 rm -rf $KSROOT/koolclash/ipdb
 

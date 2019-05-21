@@ -6,18 +6,18 @@ eval $(dbus export koolclash_)
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 lan_ip=$(uci get network.lan.ipaddr)
 
-ONSTART=$(ps -l | grep $PPID | grep -v grep | grep "S99koolss")
+ONSTART=$(ps -l | grep $PPID | grep -v grep | grep "S99koolclash")
 
-get_lan_cidr() {
-    netmask=$(uci get network.lan.netmask)
-    # Assumes there's no "255." after a non-255 byte in the mask
-    local x=${netmask##*255.}
-    set -- 0^^^128^192^224^240^248^252^254^ $(((${#netmask} - ${#x}) * 2)) ${x%%.*}
-    x=${1%%$3*}
-    suffix=$(($2 + (${#x} / 4)))
-    prefix=$(uci get network.lan.ipaddr | cut -d "." -f1,2,3)
-    echo $prefix.0/$suffix
-}
+#get_lan_cidr() {
+#    netmask=$(uci get network.lan.netmask)
+#    # Assumes there's no "255." after a non-255 byte in the mask
+#    local x=${netmask##*255.}
+#    set -- 0^^^128^192^224^240^248^252^254^ $(((${#netmask} - ${#x}) * 2)) ${x%%.*}
+#    x=${1%%$3*}
+#    suffix=$(($2 + (${#x} / 4)))
+#    prefix=$(uci get network.lan.ipaddr | cut -d "." -f1,2,3)
+#    echo $prefix.0/$suffix
+#}
 
 #--------------------------------------------------------------------------
 #restore_dnsmasq_conf() {
@@ -74,7 +74,7 @@ kill_process() {
 
 restart_dnsmasq() {
     # Restart dnsmasq
-    echo_date "重启 dnsmasq"
+    echo_date "重启 dnsmasq..."
     /etc/init.d/dnsmasq restart >/dev/null 2>&1
 }
 
@@ -322,7 +322,7 @@ load_nat() {
 
 start_koolclash() {
     # get_status >> /tmp/ss_start.txt
-    # used by web for start/restart; or by system for startup by S99koolss.sh in rc.d
+    # used by web for start/restart; or by system for startup by S99koolclash.sh in rc.d
     echo_date --------------------- KoolClash: Clash on Koolshare OpenWrt ---------------------
     [ -n "$ONSTART" ] && echo_date 路由器开机触发 KoolClash 启动！ || echo_date web 提交操作触发 KoolClash 启动！
     echo_date ---------------------------------------------------------------------------------
