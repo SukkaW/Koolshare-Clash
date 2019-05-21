@@ -292,10 +292,13 @@ apply_nat_rules() {
     echo_date "iptables 创建 koolclash 链并添加到 PREROUTING 中"
     iptables -t nat -N koolclash
     iptables -t nat -N koolclash_dns
-    iptables -t nat -A PREROUTING -p tcp -j koolclash
+
     iptables -t nat -A PREROUTING -p tcp -j koolclash_dns
     iptables -t nat -A PREROUTING -p udp -j koolclash_dns
+    iptables -t nat -A PREROUTING -p tcp -j koolclash
 
+    iptables -t nat -A koolclash_dns -p udp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
+    iptables -t nat -A koolclash_dns -p tcp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
 
     # IP Whitelist
     # 包括路由器本机 IP
@@ -303,9 +306,6 @@ apply_nat_rules() {
     # Free 22 SSH
     iptables -t nat -A koolclash -p tcp --dport 22 -j ACCEPT
     #iptables -t nat -A koolclash -p tcp -m set --match-set koolclash_black dst -j REDIRECT --to-ports 23456
-
-    iptables -t nat -A koolclash_dns -p udp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
-    iptables -t nat -A koolclash_dns -p tcp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
 
     # Redirect all tcp traffic to 23456
     iptables -t nat -A koolclash -p tcp -j REDIRECT --to-ports 23456
