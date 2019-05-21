@@ -86,6 +86,10 @@ KoolClash is released under the GPL-3.0 License - see the [LICENSE](https://gith
 
 Also, this project includes [GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) data created by [MaxMind](https://www.maxmind.com).
 
+## Disclaimer
+
+KoolClash is not responsible for any loss of any user, including but not limited to Kernel Panic, device fail to boot or can not function normally, storage damage or data loss, atomic bombing, World War III, The CK-Class Restructuring Scenario that SCP Foundation can not prevent, and so on.
+
 ## Sponsors
 
 [![Dler Cloud](https://img.vim-cn.com/7e/dbc9122a41f7eadbab889a9037ef6232cbea51.png)](https://dlercloud.me)
