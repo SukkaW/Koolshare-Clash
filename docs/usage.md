@@ -4,13 +4,15 @@
 
 KoolClash 提供了两种配置文件上传方式，直接上传和提交托管订阅。
 
+?> KoolClash 不支持 Clash 配置文件的编写或生成，只支持上传和托管订阅更新。一是因为我想要降低 KoolClash 的维护难度，二是目前已经有很多完善的工具可以轻易生成或是转换 Clash 配置文件了。如果你实在无法自行生成 Clash 配置文件，可以购买支持 Clash 并提供 Clash 托管订阅的商业性质的公共代理服务（如 rixCloud 和 DlerCloud）。
+
 在「配置文件」页面的「Clash 配置上传」选择 Clash 配置文件并点击右侧的「上传」即可上传 Clash 配置文件到 KoolClash 中。
 
 ![](/img/usage-2.png)
 
 KoolClash 也支持自动从托管配置自动下载更新 Clash 配置文件，在「Clash 托管配置 URL」中输入 Clash 托管配置的 URL 地址，然后点击「更新 Clash 托管配置」的按钮，KoolClash 会自动记忆你填入的 Clash 托管配置的 URL，并开始从这个 URL 下载 Clash 配置文件。
 
-?> KoolClash 托管配置功能尚不支持自动更新，需要手动到 KoolClash 后台点击更新。
+?> KoolClash 托管配置功能尚不支持自动更新，你需要手动到 KoolClash 后台点击更新。
 
 当你上传了新的 Clash 配置文件后，KoolClash 将会修改你的 Clash 配置文件：
 
