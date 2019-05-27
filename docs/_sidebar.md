@@ -4,3 +4,4 @@
 - [界面介绍](ui)
 - [使用教程](usage)
 - [更新与卸载](update-uninstall)
+- [其它参考资料](referrer)
