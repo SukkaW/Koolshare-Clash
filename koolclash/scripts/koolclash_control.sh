@@ -381,12 +381,14 @@ case $1 in
 start)
     if [ "$koolclash_enable" == "1" ]; then
         if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-            echo_date "【没有找到 Clash 的配置文件！中断启动并回滚操作！】"
+            echo_date "【没有找到 Clash 的配置文件！】"
+            echo_date "【KoolClash 将会中断启动并回滚操作！】"
             stop_koolclash
             echo_date "【请重新上传 Clash 配置文件！】"
             echo "XU6J03M6"
         elif [ ! -f $KSROOT/koolclash/config/Country.mmdb ]; then
-            echo_date "【没有找到 GeoLite IP 数据库！中断启动并回滚操作！】"
+            echo_date "【没有找到 GeoLite IP 数据库！】"
+            echo_date "【KoolClash 将会中断启动并回滚操作！】"
             stop_koolclash
             echo_date "【请尝试更新 IP 数据库！】"
             echo "XU6J03M6"
@@ -395,7 +397,9 @@ start)
                 start_koolclash
                 echo "XU6J03M6"
             else
-                echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！中断启动并回滚操作！】"
+                echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！】"
+                echo_date "【Clash 配置文件中 dns.enable 不为 true 或 dns.enhanced-mode 不为 fake-ip】"
+                echo_date "【KoolClash 将会中断启动并回滚操作！】"
                 stop_koolclash
                 echo "XU6J03M6"
             fi
@@ -417,16 +421,20 @@ stop_for_install)
     ;;
 start_after_install)
     if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-        echo_date "【没有找到 Clash 的配置文件！中断启动并回滚操作！】"
+        echo_date "【没有找到 Clash 的配置文件！】"
+        echo_date "【KoolClash 将会中断启动并回滚操作！】"
         stop_koolclash
     elif [ ! -f $KSROOT/koolclash/config/Country.mmdb ]; then
-        echo_date "【没有找到 GeoLite IP 数据库！中断启动并回滚操作！】"
+        echo_date "【没有找到 GeoLite IP 数据库！】"
+        echo_date "【KoolClash 将会中断启动并回滚操作！】"
         stop_koolclash
     else
         if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
             start_koolclash
         else
-            echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！中断启动并回滚操作！】"
+            echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！】"
+            echo_date "【Clash 配置文件中 dns.enable 不为 true 或 dns.enhanced-mode 不为 fake-ip】"
+            echo_date "【KoolClash 将会中断启动并回滚操作！】"
             stop_koolclash
         fi
     fi
@@ -435,12 +443,14 @@ start_after_install)
     if [ -z "$2" ]; then
         if [ "$koolclash_enable" == "1" ]; then
             if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-                echo_date "【没有找到 Clash 的配置文件！中断启动并回滚操作！】"
+                echo_date "【没有找到 Clash 的配置文件！】"
+                echo_date "【KoolClash 将会中断启动并回滚操作！】"
                 stop_koolclash
                 echo_date "【请重新上传 Clash 配置文件！】"
                 echo "XU6J03M6"
             elif [ ! -f $KSROOT/koolclash/config/Country.mmdb ]; then
-                echo_date "【没有找到 GeoLite IP 数据库！中断启动并回滚操作！】"
+                echo_date "【没有找到 GeoLite IP 数据库！】"
+                echo_date "【KoolClash 将会中断启动并回滚操作！】"
                 stop_koolclash
                 echo_date "【请尝试更新 IP 数据库！】"
                 echo "XU6J03M6"
@@ -449,7 +459,9 @@ start_after_install)
                     start_koolclash
                     echo "XU6J03M6"
                 else
-                    echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！中断启动并回滚操作！】"
+                    echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！】"
+                    echo_date "【Clash 配置文件中 dns.enable 不为 true 或 dns.enhanced-mode 不为 fake-ip】"
+                    echo_date "【KoolClash 将会中断启动并回滚操作！】"
                     stop_koolclash
                     echo "XU6J03M6"
                 fi
@@ -469,14 +481,16 @@ start)
     rm -rf /tmp/upload/koolclash_log.txt && touch /tmp/upload/koolclash_log.txt
     sleep 1
     if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
-        echo_date "【没有找到 Clash 的配置文件！中断启动并回滚操作！】" >/tmp/upload/koolclash_log.txt
+        echo_date "【没有找到 Clash 的配置文件！】" >/tmp/upload/koolclash_log.txt
+        echo_date "【KoolClash 将会中断启动并回滚操作！】" >>/tmp/upload/koolclash_log.txt
         stop_koolclash >>/tmp/upload/koolclash_log.txt
         echo_date "【请在页面刷新以后重新上传 Clash 配置文件！】" >>/tmp/upload/koolclash_log.txt
         echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
         echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
         http_response 'nofile'
     elif [ ! -f $KSROOT/koolclash/config/Country.mmdb ]; then
-        echo_date "【没有找到 GeoLite IP 数据库！中断启动并回滚操作！】" >/tmp/upload/koolclash_log.txt
+        echo_date "【没有找到 GeoLite IP 数据库！】" >/tmp/upload/koolclash_log.txt
+        echo_date "【KoolClash 将会中断启动并回滚操作！】" >>/tmp/upload/koolclash_log.txt
         stop_koolclash >>/tmp/upload/koolclash_log.txt
         echo_date "【请在页面刷新以后尝试更新 IP 数据库！】" >>/tmp/upload/koolclash_log.txt
         echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
@@ -489,7 +503,9 @@ start)
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
             http_response 'success'
         else
-            echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！中断启动并回滚操作！】" >/tmp/upload/koolclash_log.txt
+            echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！】" >/tmp/upload/koolclash_log.txt
+            echo_date "【Clash 配置文件中 dns.enable 不为 true 或 dns.enhanced-mode 不为 fake-ip】" >>/tmp/upload/koolclash_log.txt
+            echo_date "【KoolClash 将会中断启动并回滚操作！】" >>/tmp/upload/koolclash_log.txt
             stop_koolclash >>/tmp/upload/koolclash_log.txt
             echo_date "【请在页面刷新以后重新上传 Clash 配置文件！】" >>/tmp/upload/koolclash_log.txt
             echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
