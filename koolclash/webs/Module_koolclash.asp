@@ -952,23 +952,23 @@ dns:
                     success: (resp) => {
                         if (resp.result === 'nofile') {
                             Msg.hide('warning');
-                            Msg.show('error', '关键文件缺失，Clash 无法启动！<span id="koolclash-wait-time"></span>');
-                            Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
+                            Msg.show('error', '关键文件缺失，Clash 无法启动！');
+                            Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！<span id="koolclash-wait-time"></span>');
                             setTimeout(() => {
                                 window.location.reload();
                             }, 5000)
                         } else if (resp.result === 'nodns') {
                             Msg.hide('warning');
-                            Msg.show('error', '在 Clash 配置文件中没有找到正确的 DNS 设置！<span id="koolclash-wait-time"></span>');
-                            Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
+                            Msg.show('error', '在 Clash 配置文件中没有找到正确的 DNS 设置！');
+                            Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！<span id="koolclash-wait-time"></span>');
                             KoolClash.tminus(5);
                             setTimeout(() => {
                                 window.location.reload();
                             }, 5000)
                         } else {
                             Msg.hide('warning');
-                            Msg.show('success', 'Clash 成功启动！<span id="koolclash-wait-time"></span>');
-                            Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
+                            Msg.show('success', 'Clash 成功启动！');
+                            Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！<span id="koolclash-wait-time"></span>');
                             KoolClash.tminus(5);
                             setTimeout(() => {
                                 window.location.reload();
@@ -976,8 +976,8 @@ dns:
                         }
                     },
                     error: () => {
-                        Msg.show('error', 'Clash (可能)启动失败！请在页面自动刷新之后检查 Clash 运行状态！<span id="koolclash-wait-time"></span>');
-                        Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
+                        Msg.show('error', 'Clash (可能)启动失败！请在页面自动刷新之后检查 Clash 运行状态！');
+                        Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！<span id="koolclash-wait-time"></span>');
                         KoolClash.selectTab('koolclash-nav-log');
                         KoolClash.tminus(5);
                         setTimeout(() => {
@@ -1012,8 +1012,8 @@ dns:
                     dataType: "json",
                     success: (resp) => {
                         Msg.hide('warning');
-                        Msg.show('success', 'Clash 成功关闭！<span id="koolclash-wait-time"></span>');
-                        Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
+                        Msg.show('success', 'Clash 成功关闭！');
+                        Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！<span id="koolclash-wait-time"></span>');
                         KoolClash.tminus(5);
                         setTimeout(() => {
                             window.location.reload();
@@ -1021,8 +1021,8 @@ dns:
                     },
                     error: () => {
                         Msg.hide('warning');
-                        Msg.show('error', 'Clash (可能)关闭失败！请在页面自动刷新之后检查 Clash 运行状态！<span id="koolclash-wait-time"></span>');
-                        Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
+                        Msg.show('error', 'Clash (可能)关闭失败！请在页面自动刷新之后检查 Clash 运行状态！');
+                        Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！<span id="koolclash-wait-time"></span>');
                         KoolClash.tminus(5);
                         setTimeout(() => {
                             window.location.reload();
