@@ -927,8 +927,7 @@ dns:
             },
             restart: () => {
                 KoolClash.disableAllButton();
-                document.getElementById('msg_warning').innerHTML = `正在启动 Clash，请不要刷新或关闭页面！`;
-                $('#msg_warning').show();
+                Msg.show('warning', '正在启动 Clash，请不要刷新或关闭页面！');
 
                 setTimeout(() => {
                     KoolClash.selectTab('koolclash-nav-log');
@@ -952,31 +951,24 @@ dns:
                     dataType: "json",
                     success: (resp) => {
                         if (resp.result === 'nofile') {
-                            $('#msg_warning').hide();
-                            document.getElementById('msg_error').innerHTML = `关键文件缺失，Clash 无法启动！<span id="koolclash-wait-time"></span>`;
-                            document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
-                            $('#msg_error').show();
-                            $('#msg_warning').show();
-                            KoolClash.tminus(5);
+                            Msg.hide('warning');
+                            Msg.show('error', '关键文件缺失，Clash 无法启动！<span id="koolclash-wait-time"></span>');
+                            Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
                             setTimeout(() => {
                                 window.location.reload();
                             }, 5000)
                         } else if (resp.result === 'nodns') {
-                            $('#msg_warning').hide();
-                            document.getElementById('msg_error').innerHTML = `在 Clash 配置文件中没有找到正确的 DNS 设置！<span id="koolclash-wait-time"></span>`;
-                            document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
-                            $('#msg_error').show();
-                            $('#msg_warning').show();
+                            Msg.hide('warning');
+                            Msg.show('error', '在 Clash 配置文件中没有找到正确的 DNS 设置！<span id="koolclash-wait-time"></span>');
+                            Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
                             KoolClash.tminus(5);
                             setTimeout(() => {
                                 window.location.reload();
                             }, 5000)
                         } else {
-                            $('#msg_warning').hide();
-                            document.getElementById('msg_success').innerHTML = `Clash 成功启动！<span id="koolclash-wait-time"></span>`;
-                            document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
-                            $('#msg_success').show();
-                            $('#msg_warning').show();
+                            Msg.hide('warning');
+                            Msg.show('success', 'Clash 成功启动！<span id="koolclash-wait-time"></span>');
+                            Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
                             KoolClash.tminus(5);
                             setTimeout(() => {
                                 window.location.reload();
@@ -984,10 +976,8 @@ dns:
                         }
                     },
                     error: () => {
-                        document.getElementById('msg_error').innerHTML = `Clash (可能)启动失败！请在页面自动刷新之后检查 Clash 运行状态！<span id="koolclash-wait-time"></span>`;
-                        document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
-                        $('#msg_error').show();
-                        $('#msg_warning').show();
+                        Msg.show('error', 'Clash (可能)启动失败！请在页面自动刷新之后检查 Clash 运行状态！<span id="koolclash-wait-time"></span>');
+                        Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
                         KoolClash.selectTab('koolclash-nav-log');
                         KoolClash.tminus(5);
                         setTimeout(() => {
@@ -998,8 +988,7 @@ dns:
             },
             stop: () => {
                 KoolClash.disableAllButton();
-                document.getElementById('msg_warning').innerHTML = `正在关闭 Clash，请不要刷新或关闭页面！`;
-                $('#msg_warning').show();
+                Msg.show('warning', '正在关闭 Clash，请不要刷新或关闭页面！');
 
                 setTimeout(() => {
                     KoolClash.selectTab('koolclash-nav-log');
@@ -1022,22 +1011,18 @@ dns:
                     data: postData,
                     dataType: "json",
                     success: (resp) => {
-                        $('#msg_warning').hide();
-                        document.getElementById('msg_success').innerHTML = `Clash 成功关闭！<span id="koolclash-wait-time"></span>`;
-                        document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
-                        $('#msg_success').show();
-                        $('#msg_warning').show();
+                        Msg.hide('warning');
+                        Msg.show('success', 'Clash 成功关闭！<span id="koolclash-wait-time"></span>');
+                        Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
                         KoolClash.tminus(5);
                         setTimeout(() => {
                             window.location.reload();
                         }, 5000)
                     },
                     error: () => {
-                        $('#msg_warning').hide();
-                        document.getElementById('msg_error').innerHTML = `Clash (可能)关闭失败！请在页面自动刷新之后检查 Clash 运行状态！<span id="koolclash-wait-time"></span>`;
-                        document.getElementById('msg_warning').innerHTML = `请不要刷新或关闭页面，务必等待页面自动刷新！`;
-                        $('#msg_error').show();
-                        $('#msg_warning').show();
+                        Msg.hide('warning');
+                        Msg.show('error', 'Clash (可能)关闭失败！请在页面自动刷新之后检查 Clash 运行状态！<span id="koolclash-wait-time"></span>');
+                        Msg.show('warning', '请不要刷新或关闭页面，务必等待页面自动刷新！');
                         KoolClash.tminus(5);
                         setTimeout(() => {
                             window.location.reload();
