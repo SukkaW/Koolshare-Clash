@@ -43,6 +43,7 @@ rm -rf $KSROOT/koolclash/ipdb.tar.gz
 rm -rf $KSROOT/koolclash/ipdb
 
 echo_date "IP 数据库更新完成！" >>/tmp/upload/koolclash_log.txt
+echo_date "注意！新版 IP 数据库将在下次启动 Clash 时生效！" >>/tmp/upload/koolclash_log.txt
 
 sleep 1
 
