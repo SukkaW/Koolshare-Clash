@@ -171,11 +171,7 @@
 
     </style>
     <script>
-        if (typeof softcenter === undefined) {
-            let softcenter = 0;
-        } else {
-            softcenter = 0;
-        }
+        var softcenter = 0;
     </script>
 
     <div class="box">
@@ -198,7 +194,7 @@
         </div>
     </div>
 
-
+    <!-- Basic Elements used for tab -->
     <input class="koolclash-nav-radio" id="koolclash-nav-overview" type="radio" name="nav-tab" checked>
     <input class="koolclash-nav-radio" id="koolclash-nav-config" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-firewall" type="radio" name="nav-tab">
@@ -206,6 +202,7 @@
     <input class="koolclash-nav-radio" id="koolclash-nav-log" type="radio" name="nav-tab">
     <input class="koolclash-nav-radio" id="koolclash-nav-debug" type="radio" name="nav-tab">
 
+    <!-- Msg Elements -->
     <div id="msg_success" class="alert alert-success icon" style="display: none;"></div>
     <div id="msg_error" class="alert alert-error icon" style="display: none;"></div>
     <div id="msg_warning" class="alert alert-warning icon" style="display: none;"></div>
@@ -480,6 +477,17 @@
                 HTTP.checker('s1.music.126.net/style', 'http-163');
                 HTTP.checker('github.com', 'http-github');
                 HTTP.checker('www.youtube.com', 'http-youtube');
+            }
+        };
+
+        var Msg = {
+            show: (type, text) => {
+                document.getElementById(`msg_${type}`).innerHTML = text;
+                $(`#msg_${type}`).show();
+            },
+            hide: (type) => {
+                $(`#msg_${type}`).hide();
+                document.getElementById(`msg_${type}`).innerHTML = '';
             }
         };
 
