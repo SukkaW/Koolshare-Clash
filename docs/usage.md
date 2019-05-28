@@ -42,7 +42,7 @@ KoolClash 也支持自动从托管配置自动下载更新 Clash 配置文件，
 dns:
   enable: true
   listen: 0.0.0.0:53
-  enhanced-mode: fake-ip
+  enhanced-mode: redir-host
   nameserver:
     - 119.29.29.29
     - 119.28.28.28
