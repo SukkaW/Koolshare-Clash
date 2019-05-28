@@ -1266,12 +1266,11 @@ KoolClash 版本：${window.dbus.koolclash_version}
 Clash 核心版本：${data.clash_version}
 KoolClash 当前状态：${(window.dbus.koolclash_enable === '1') ? `Clash 进程正在运行` : `Clash 进程未在运行`}
 用户指定 Clash 外部控制 Host：${(window.dbus.koolclash_api_host) ? window.dbus.koolclash_api_host : `未改动`}
-IP 数据库是否存在：${data.ipdb_exists}
 -------------------------- Clash 进程信息 --------------------------
 ${Base64.decode(data.clash_process)}
+------------------------ Clash 配置文件目录 ------------------------
+${Base64.decode(data.clash_config_dir)}
 ------------------------ Clash 配置文件信息 ------------------------
-Clash 原始配置文件是否存在：${data.origin_exists}
-Clash 运行配置文件是否存在：${data.config_exists}
 Clash 透明代理端口：${data.clash_redir}
 Clash 是否允许局域网连接：${data.clash_allow_lan}
 Clash 外部控制监听地址：${data.clash_ext_controller}
@@ -1302,11 +1301,10 @@ ${Base64.decode(Base64.decode(data.iptables_mangle_clash_dns))}
  * iptables nat 中 koolclash_dns 链
 ${Base64.decode(Base64.decode(data.iptables_nat_clash_dns))}
 
- * iptables nat 中 Chromecast 相关条目
+ * iptables nat 中 53 端口相关条目
 ${Base64.decode(data.chromecast_nu)}
 ---------------------- ipset 白名单 IP 列表 ------------------------
 ${Base64.decode(data.firewall_white_ip)}
-
 ===================================================================
 `;
                     })
