@@ -299,7 +299,10 @@ apply_nat_rules() {
 
     iptables -t nat -A koolclash_dns -p udp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
     iptables -t nat -A koolclash_dns -p tcp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
-
+    
+    # redirect all fake-ip ssh connections to 23456
+    iptables -t nat -A koolclash -p tcp --dport 22 -d 198.18.0.1/16 -j REDIRECT --to-ports 23456
+    
     # IP Whitelist
     # 包括路由器本机 IP
     iptables -t nat -A koolclash -m set --match-set koolclash_white dst -j ACCEPT
