@@ -71,7 +71,9 @@ dns:
 
 > 注：以上三个 IP 均为腾讯公共 DNS 的 IP
 
-?> 使用 Fake IP 以后，DNS 污染问题不严重的地区（绝大部分地区）可不设置 fallback 组。如有必要，建议仅在 fallback 组中添加一条 `tls://dns.rubyfish.cn:853` 即可。
+!> 使用 Fake IP 以后，DNS 污染问题不严重的地区（绝大部分地区）可不设置 fallback 组。如有必要，建议仅在 fallback 组中添加一条 `tls://dns.rubyfish.cn:853` 即可。
+
+?> 之所以建议尽量不设置 fallback，因为使用 fallback 以后会 DNS 解析用时会大大延长，从而影响整体 HTTP 延时，严重影响上网体验。如果受 DNS 污染所迫被迫设置 fallback，请尽可能选择速度快的 DoT 作为 fallback。
 
 KoolClash 会自动记忆你提交的 `自定义 DNS 配置`，并把 `自定义 DNS 配置` 和你上传的 `Clash 配置文件` 以覆盖的方式合并。并且在下次你上传没有包含 `合法的 DNS 配置` 的 `Clash 配置文件` 时，KoolClash 会自动将你提交过的 `自定义 DNS 配置` 以覆盖的方式合并到 `Clash 配置文件` 中。你还可以通过重新提交新的 `自定义 DNS 配置` 以更新现有 `Clash 配置文件` 中的 DNS 配置。
 

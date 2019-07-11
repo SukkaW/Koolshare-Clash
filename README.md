@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://github.com/Dreamacro/clash" target="_blank">Clash</a>.
+A rule based custom proxy for <strong>Koolshare OpenWrt/LEDE x64</strong> based on <a href="https://github.com/Dreamacro/clash" target="_blank">Clash</a>.
 <br>
 <a href="https://koolclash.js.org">Documentation(zh-Hans)</a> |
 <a href="https://github.com/SukkaW/Koolshare-Clash/releases">Download</a>
@@ -18,7 +18,7 @@ A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://g
         <img src="https://img.shields.io/github/release/SukkaW/Koolshare-Clash/all.svg?style=flat-square">
     </a>
     <a href="https://github.com/Dreamacro/clash" target="_blank">
-        <img src="https://img.shields.io/badge/Clash-0.14.0-1c4070.svg?style=flat-square"/>
+        <img src="https://img.shields.io/badge/Clash-0.15.0-1c4070.svg?style=flat-square"/>
     </a>
     <a href="https://github.com/SukkaW/Koolshare-Clash/blob/master/LICENSE">
         <img src="https://img.shields.io/github/license/sukkaw/koolshare-clash.svg?style=flat-square"/>
@@ -29,12 +29,12 @@ A rule based custom proxy for Koolshare OpenWrt/LEDE based on <a href="https://g
     <img src="https://i.loli.net/2019/04/16/5cb5e4b579a44.png">
 </p>
 
-> KoolClash is for `Koolshare OpenWrt/LEDE x86_64`. Use [Clash for OpenWrt](https://github.com/frainzy1477/clash/) if you are running original OpenWrt.
+> KoolClash is for `Koolshare OpenWrt/LEDE x86_64` ONLY. Use [Clash for OpenWrt](https://github.com/frainzy1477/clash/) if you are running original OpenWrt.
 
 ## Keywords
 
 - [Clash](https://github.com/Dreamacro/clash) : A multi-platform & rule-base tunnel
-- **[KoolClash](https://koolclash.js.org) : This project, a rule based custom proxy for [Koolshare OpenWrt/LEDE](http://koolshare.cn/forum-97-1.html) based on Clash.**
+- **[KoolClash](https://koolclash.js.org) : This project, a rule based custom proxy for [Koolshare OpenWrt/LEDE x64](http://koolshare.cn/forum-97-1.html) based on Clash.**
 
 ## Features
 
@@ -48,7 +48,7 @@ Besides those features that Clash have, KoolClash has more:
 
 - Install clash and upload config to [Koolshare OpenWrt/LEDE X86](https://firmware.koolshare.cn/LEDE_X64_fw867/)
 - ~~Transparent proxy for all of your devices~~
-- Surge Enhanced Mode like proxy gateway
+- Proxy gateway like Surge Enhanced Mode 
 
 ## Installation
 
@@ -73,6 +73,7 @@ $ ./build dashboard # Update clash-dashboard to latest
 - [clashX](https://github.com/yichengchen/clashX) : A rule based custom proxy with GUI for Mac base on clash
 - [ClashA](https://github.com/ccg2018/ClashA) : An Android GUI for Clash
 - [Clash for OpenWrt](https://github.com/frainzy1477/clash) : A rule based custom proxy for OpenWrt based on Clash.
+- [OpenClash](https://github.com/vernesong/OpenClash) : Another Clash Client For OpenWrt
 
 ## Contributions
 
