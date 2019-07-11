@@ -27,6 +27,11 @@ fi
 echo_date "开始下载最新 IP 数据库..." >>/tmp/upload/koolclash_log.txt
 $command
 
+if [ ! -f "$KSROOT/koolclash/ipdb.tar.gz" ]; then
+    echo_date "下载 IP 数据库失败！" >>/tmp/upload/koolclash_log.txt
+    exit 1
+fi
+
 echo_date "下载完成，开始解压" >>/tmp/upload/koolclash_log.txt
 tar zxvf $KSROOT/koolclash/ipdb.tar.gz -C $KSROOT/koolclash/ipdb
 
