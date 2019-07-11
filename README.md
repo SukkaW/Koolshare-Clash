@@ -20,8 +20,11 @@ A rule based custom proxy for <strong>Koolshare OpenWrt/LEDE x64</strong> based 
     <a href="https://github.com/Dreamacro/clash" target="_blank">
         <img src="https://img.shields.io/badge/Clash-0.15.0-1c4070.svg?style=flat-square"/>
     </a>
-    <a href="https://github.com/SukkaW/Koolshare-Clash/blob/master/LICENSE">
+    <a href="https://github.com/SukkaW/Koolshare-Clash/blob/master/LICENSE" target="_blank">
         <img src="https://img.shields.io/github/license/sukkaw/koolshare-clash.svg?style=flat-square"/>
+    </a>
+    <a href="https://github.com/SukkaW/Koolshare-Clash/releases" target="_blank">
+        <img src="https://img.shields.io/github/downloads/sukkaw/koolshare-clash/total.svg?style=flat-square"/>
     </a>
 </p>
 
