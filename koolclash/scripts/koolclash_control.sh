@@ -304,7 +304,8 @@ apply_nat_rules() {
     # 包括路由器本机 IP
     iptables -t nat -A koolclash -m set --match-set koolclash_white dst -j ACCEPT
     # Free 22 SSH
-    iptables -t nat -A koolclash -p tcp --dport 22 -j ACCEPT
+    iptables -t nat -A koolclash -p tcp --dport 22 -d $lan_ip -j ACCEPT
+
     #iptables -t nat -A koolclash -p tcp -m set --match-set koolclash_black dst -j REDIRECT --to-ports 23456
 
     # Redirect all tcp traffic to 23456
