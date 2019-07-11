@@ -285,7 +285,7 @@
                     <div style="display: flex;">
                         <div style="width: 61.8%">
                             <p><span class="ip-title">IPIP&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-ipipnet"></span></p>
-                            <p><span class="ip-title">淘宝&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-taobao"></span>&nbsp;<span id="ip-taobao-ipip"></span></p>
+                            <p><span class="ip-title">淘宝&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-taobao"></span>&nbsp;<span id="ip-taobao-ipip"></span>（淘宝 IP 接口已经不准）</p>
                             <p><span class="ip-title">IP.SB&nbsp;海外</span>:&nbsp;<span id="ip-ipsb"></span>&nbsp;<span id="ip-ipsb-geo"></span></p>
                             <p><span class="ip-title">IPAPI&nbsp;海外</span>:&nbsp;<span id="ip-ipapi"></span>&nbsp;<span id="ip-ipapi-geo"></span></p>
                         </div>
@@ -307,8 +307,9 @@
                     <div id="koolclash-dashboard-info"></div>
 
                     <div class="koolclash-btn-container">
-                        <button class="btn btn-primary" onclick="window.open(`http:\/\/${window.location.hostname.replace('%3', '')}:6170/ui/`, 'newwindow', '')">访问 Clash 面板</button>
-                        <button type="button" id="koolclash-btn-submit-control" onclick="KoolClash.submitExternalControl();" class="btn">提交外部控制设置</button>
+                        <a href="#" target="_blank" id="btn-open-clash-dashboard" class="btn btn-primary">访问 Clash 面板</a>
+                        <button type="button" id="koolclash-btn-submit-control" onclick="KoolClash.submitExternalControl();" class="btn">提交外部控制配置</button>
+                        <p style="margin-top: 8px">只有在 Clash 正在运行的时候才可以访问 Clash 面板</p>
                     </div>
                 </div>
             </div>
@@ -692,6 +693,7 @@ dns:
                         E('koolclash_status').innerHTML = pid_text;
                         E('koolclash_watchdog_status').innerHTML = pid_watchdog_text;
                         E('_koolclash_dashboard_host').value = control_host;
+                        E('btn-open-clash-dashboard').href = `http://${control_host}:6170/ui/`
 
                         /*
                          * 0 没有找到 config.yml
