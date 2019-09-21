@@ -24,4 +24,6 @@ KoolClash 插件将会修改 Clash Config 文件中的部分运行设置（如�
 
 在 `0.17.0-beta` 之前的版本的 KoolClash，由于使用 Clash DNS 的 `redir-host` 模式实现透明代理，客户端获得的 IP 地址和客户端实际连接的 IP、或是代理服务器实际连接的 IP 可能完全不同，可能导致某些应用程序无法正确联网。KoolClash 并不能够修改 Clash 的这一行为、或提供有效的替代方案，这意味着 KoolClash 可能并不是最好的透明代理方案。
 
-在 `0.17.0-beta` 及其之后版本的 KoolClash 使用了 Clash DNS 的 `fake-ip`，实现了与 Surge 增强模式类似的代理网关。因此 KoolClash 将不适合安装在主路由上使用（因为这会导致主路由下所有设备的所有流量均经过 Clash），建议将 KoolClash 作为旁路网关使用，并只为需要使用 Clash 的设备修改网关和 DNS（具体设置参考「使用教程」）。同时 KoolClash 将会占用 `198.18.0.0/16` 和 `198.19.0.0/16` 用于 Fake IP 和 Fake DNS，请确保这两个 IP 段没有被占用。
+在 `0.17.0-beta` 及其之后版本的 KoolClash 使用了 Clash DNS 的 `fake-ip`，实现了与 Surge 增强模式类似的代理网关。
+
+Fake IP 模式需要由 Clash 接管 DNS 和所有 TCP 流量，并会对所有 DNS 查询请求返回 Fake IP，因此一旦在主路由上安装 Clash，便不可能实现对部分设备、端口提供加白。因此如果你有部分设备加白不走 Clash 的需求，`0.17.0-beta` 及其之后版本的 KoolClash 将不适合安装在主路由上。此时建议将 KoolClash 作为旁路网关使用，并只为需要使用 Clash 的设备修改网关和 DNS（具体设置参考「使用教程」）。同时 KoolClash 将会占用 `198.18.0.0/16` 和 `198.19.0.0/16` 用于 Fake IP 和 Fake DNS，请确保这两个 IP 段没有被占用。

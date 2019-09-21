@@ -15,3 +15,11 @@
 - [代替 Surge 增强模式——使用 KoolClash 作为代理网关](https://blog.skk.moe/post/alternate-surge-koolclash-as-gateway/)
 
 这篇文章主要介绍了 KoolClash 旧版本使用 `redir-host` 模式的弊端，以及使用 fake-ip 带来的影响。
+
+- [KoolClash 的工作机制](https://blog.skk.moe/post/how-koolclash-worked/)
+
+这篇文章介绍了 KoolClash 作为一个 Koolshare OpenWrt 插件是如何处理文件上传、YAML 解析和修改的，以及 Fake DNS 和看门狗背后的工作原理
+
+- [浅谈在代理环境中的 DNS 解析行为](https://blog.skk.moe/post/what-happend-to-dns-in-proxy/)
+
+这篇文章介绍了诸多代理软件的工作中，DNS 是如何发挥作用的。
