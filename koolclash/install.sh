@@ -80,7 +80,7 @@ cp /tmp/koolclash/uninstall.sh $KSROOT/scripts/uninstall_koolclash.sh
 
 if [ ! -f $KSROOT/koolclash/config/Country.mmdb ]; then
     cp -rf /tmp/koolclash/koolclash/config/Country.mmdb $KSROOT/koolclash/config/Country.mmdb
-    dbus set koolclash_ipdb_version=20190903
+    dbus set koolclash_ipdb_version=20190917
 fi
 
 # 删除 Luci 缓存
