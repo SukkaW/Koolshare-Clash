@@ -13,15 +13,15 @@ pid_clash=$(pidof clash)
 pid_watchdog=$(ps | grep koolclash_watchdog.sh | grep -v grep | awk '{print $1}')
 date=$(echo_date)
 
-if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+if [ ! -f $KSROOT/koolclash/config/config.yaml ]; then
     host=''
     secret=''
 else
-    host=$(yq r /koolshare/koolclash/config/config.yml external-controller)
-    secret=$(yq r /koolshare/koolclash/config/config.yml secret)
+    host=$(yq r /koolshare/koolclash/config/config.yaml external-controller)
+    secret=$(yq r /koolshare/koolclash/config/config.yaml secret)
 fi
 
-if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+if [ ! -f $KSROOT/koolclash/config/config.yaml ]; then
     # 没有找到 Clash 配置文件，不显示 DNS 配置输入，dnsmode 为 0
     dbus set koolclash_dnsmode=0
     dnsmode=0

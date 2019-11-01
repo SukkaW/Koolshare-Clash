@@ -697,7 +697,7 @@ dns:
                         E('btn-open-clash-dashboard').href = `http://${control_host}:6170/ui/`
 
                         /*
-                         * 0 没有找到 config.yml
+                         * 0 没有找到 config.yaml
                          * 1 origin.yml DNS 配置合法
                          * 2 origin.yml DNS 配置合法 但是用户想要自定义 DNS
                          * 3 origin.yml DNS 配置不合法而且没有 dns.yml
@@ -796,7 +796,7 @@ dns:
                 E('koolclash-btn-upload').innerHTML = '正在上传 Clash 配置...';
 
                 let formData = new FormData();
-                formData.append('clash.config.yml', $('#koolclash-file-config')[0].files[0]);
+                formData.append('clash.config.yaml', $('#koolclash-file-config')[0].files[0]);
                 $.ajax({
                     url: '/_upload',
                     type: 'POST',

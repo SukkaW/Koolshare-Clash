@@ -17,6 +17,6 @@ else
     ext_control_ip=$2
 fi
 
-yq w -i $KSROOT/koolclash/config/config.yml external-controller "$ext_control_ip:6170"
+yq w -i $KSROOT/koolclash/config/config.yaml external-controller "$ext_control_ip:6170"
 
 http_response "$external_controller@$secret"

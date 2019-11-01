@@ -10,15 +10,15 @@ eval $(dbus export koolclash_)
 
 overwrite_dns_config() {
     # 启用 external-ui
-    yq w -i $KSROOT/koolclash/config/config.yml external-ui "/koolshare/webs/koolclash/"
+    yq w -i $KSROOT/koolclash/config/config.yaml external-ui "/koolshare/webs/koolclash/"
     # 确保启用 DNS
-    yq w -i $KSROOT/koolclash/config/config.yml dns.enable "true"
+    yq w -i $KSROOT/koolclash/config/config.yaml dns.enable "true"
     # 修改端口
-    yq w -i $KSROOT/koolclash/config/config.yml dns.listen "0.0.0.0:23453"
+    yq w -i $KSROOT/koolclash/config/config.yaml dns.listen "0.0.0.0:23453"
     # 修改模式
-    yq w -i $KSROOT/koolclash/config/config.yml dns.enhanced-mode "fake-ip"
+    yq w -i $KSROOT/koolclash/config/config.yaml dns.enhanced-mode "fake-ip"
     # Fake IP Range
-    yq w -i $KSROOT/koolclash/config/config.yml dns.fake-ip-range "198.18.0.1/16"
+    yq w -i $KSROOT/koolclash/config/config.yaml dns.fake-ip-range "198.18.0.1/16"
 }
 #---------------------------------------------------------------------
 
@@ -28,8 +28,8 @@ echo $2 | base64 -d | tee $KSROOT/koolclash/config/dns.yml
 
 fallbackdns=$(cat $KSROOT/koolclash/config/dns.yml)
 
-rm -rf $KSROOT/koolclash/config/config.yml
-cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
+rm -rf $KSROOT/koolclash/config/config.yaml
+cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yaml
 
 if [ "$koolclash_dnsmode" == "1" ] && [ "$3" == "1" ]; then
     # Clash 配置文件存在且 DNS 配置合法，不显示 DNS 配置输入，此时 dnsmode 为 1
@@ -40,11 +40,11 @@ if [ "$koolclash_dnsmode" == "1" ] && [ "$3" == "1" ]; then
         http_response 'nofallbackdns'
     else
         echo_date "删除 Clash 配置文件中原有的 DNS 配置"
-        yq d -i $KSROOT/koolclash/config/config.yml dns
+        yq d -i $KSROOT/koolclash/config/config.yaml dns
 
         echo_date "将提交的自定义 DNS 设置覆盖 Clash 配置文件..."
-        # 将后备 DNS 配置以覆盖的方式与 config.yml 合并
-        yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
+        # 将后备 DNS 配置以覆盖的方式与 config.yaml 合并
+        yq m -x -i $KSROOT/koolclash/config/config.yaml $KSROOT/koolclash/config/dns.yml
 
         overwrite_dns_config
         # 强制生效 DNS 配置，修改 dnsmode 为 2
@@ -55,8 +55,8 @@ if [ "$koolclash_dnsmode" == "1" ] && [ "$3" == "1" ]; then
 elif [ "$koolclash_dnsmode" == "2" ] && [ "$3" == "0" ]; then
     # 用户已经要用自己的 DNS 配置覆盖，dnsmode 为 2
     # 但是取消勾选了 DNS 配置文件的勾，是想要还原原始 Clash 配置文件
-    rm -rf $KSROOT/koolclash/config/config.yml
-    cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
+    rm -rf $KSROOT/koolclash/config/config.yaml
+    cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yaml
     overwrite_dns_config
     dbus set koolclash_dnsmode=1
     echo_date "自定义 DNS 设置提交成功！"
@@ -65,8 +65,8 @@ elif [ "$koolclash_dnsmode" == "2" ] && [ "$3" == "1" ]; then
     # 用户已经要用自己的 DNS 配置覆盖，dnsmode 为 2
     if [ ! -n "$fallbackdns" ]; then
         # 看来你是想还原原始 Clash 配置文件同时还删除自定义 DNS 配置
-        rm -rf $KSROOT/koolclash/config/config.yml
-        cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yml
+        rm -rf $KSROOT/koolclash/config/config.yaml
+        cp $KSROOT/koolclash/config/origin.yml $KSROOT/koolclash/config/config.yaml
         overwrite_dns_config
         dbus set koolclash_dnsmode=1
         echo_date "自定义 DNS 设置提交成功！"
@@ -74,11 +74,11 @@ elif [ "$koolclash_dnsmode" == "2" ] && [ "$3" == "1" ]; then
     else
         # 你应该是想更新一下自定义 DNS 配置
         echo_date "删除 Clash 配置文件中原有的 DNS 配置"
-        yq d -i $KSROOT/koolclash/config/config.yml dns
+        yq d -i $KSROOT/koolclash/config/config.yaml dns
 
         echo_date "将提交的自定义 DNS 设置覆盖 Clash 配置文件..."
-        # 将后备 DNS 配置以覆盖的方式与 config.yml 合并
-        yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
+        # 将后备 DNS 配置以覆盖的方式与 config.yaml 合并
+        yq m -x -i $KSROOT/koolclash/config/config.yaml $KSROOT/koolclash/config/dns.yml
 
 
         overwrite_dns_config
@@ -95,11 +95,11 @@ elif [ "$koolclash_dnsmode" == "3" ]; then
         http_response 'nofallbackdns'
     else
         echo_date "删除 Clash 配置文件中原有的 DNS 配置"
-        yq d -i $KSROOT/koolclash/config/config.yml dns
+        yq d -i $KSROOT/koolclash/config/config.yaml dns
 
         echo_date "将提交的后备 DNS 设置合并到 Clash 配置文件中..."
-        # 将后备 DNS 配置以覆盖的方式与 config.yml 合并
-        yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
+        # 将后备 DNS 配置以覆盖的方式与 config.yaml 合并
+        yq m -x -i $KSROOT/koolclash/config/config.yaml $KSROOT/koolclash/config/dns.yml
 
 
         overwrite_dns_config
@@ -115,11 +115,11 @@ elif [ "$koolclash_dnsmode" == "4" ]; then
         http_response 'nofallbackdns'
     else
         echo_date "删除 Clash 配置文件中原有的 DNS 配置"
-        yq d -i $KSROOT/koolclash/config/config.yml dns
+        yq d -i $KSROOT/koolclash/config/config.yaml dns
 
         echo_date "将提交的后备 DNS 设置合并到 Clash 配置文件中..."
-        # 将后备 DNS 配置以覆盖的方式与 config.yml 合并
-        yq m -x -i $KSROOT/koolclash/config/config.yml $KSROOT/koolclash/config/dns.yml
+        # 将后备 DNS 配置以覆盖的方式与 config.yaml 合并
+        yq m -x -i $KSROOT/koolclash/config/config.yaml $KSROOT/koolclash/config/dns.yml
 
 
         overwrite_dns_config

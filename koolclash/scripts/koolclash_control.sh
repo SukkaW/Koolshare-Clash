@@ -381,7 +381,7 @@ stop_koolclash() {
 case $1 in
 start)
     if [ "$koolclash_enable" == "1" ]; then
-        if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+        if [ ! -f $KSROOT/koolclash/config/config.yaml ]; then
             echo_date "【没有找到 Clash 的配置文件！】"
             echo_date "【KoolClash 将会中断启动并回滚操作！】"
             stop_koolclash
@@ -394,7 +394,7 @@ start)
             echo_date "【请尝试更新 IP 数据库！】"
             echo "XU6J03M6"
         else
-            if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
+            if [ $(yq r $KSROOT/koolclash/config/config.yaml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yaml dns.enhanced-mode) == 'fake-ip' ]; then
                 start_koolclash
                 echo "XU6J03M6"
             else
@@ -421,7 +421,7 @@ stop_for_install)
     stop_koolclash
     ;;
 start_after_install)
-    if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+    if [ ! -f $KSROOT/koolclash/config/config.yaml ]; then
         echo_date "【没有找到 Clash 的配置文件！】"
         echo_date "【KoolClash 将会中断启动并回滚操作！】"
         stop_koolclash
@@ -430,7 +430,7 @@ start_after_install)
         echo_date "【KoolClash 将会中断启动并回滚操作！】"
         stop_koolclash
     else
-        if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
+        if [ $(yq r $KSROOT/koolclash/config/config.yaml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yaml dns.enhanced-mode) == 'fake-ip' ]; then
             start_koolclash
         else
             echo_date "【没有找到正确的 DNS 配置或 DNS 配置不合法！】"
@@ -443,7 +443,7 @@ start_after_install)
 *)
     if [ -z "$2" ]; then
         if [ "$koolclash_enable" == "1" ]; then
-            if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+            if [ ! -f $KSROOT/koolclash/config/config.yaml ]; then
                 echo_date "【没有找到 Clash 的配置文件！】"
                 echo_date "【KoolClash 将会中断启动并回滚操作！】"
                 stop_koolclash
@@ -456,7 +456,7 @@ start_after_install)
                 echo_date "【请尝试更新 IP 数据库！】"
                 echo "XU6J03M6"
             else
-                if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
+                if [ $(yq r $KSROOT/koolclash/config/config.yaml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yaml dns.enhanced-mode) == 'fake-ip' ]; then
                     start_koolclash
                     echo "XU6J03M6"
                 else
@@ -481,7 +481,7 @@ case $2 in
 start)
     rm -rf /tmp/upload/koolclash_log.txt && touch /tmp/upload/koolclash_log.txt
     sleep 1
-    if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+    if [ ! -f $KSROOT/koolclash/config/config.yaml ]; then
         echo_date "【没有找到 Clash 的配置文件！】" >/tmp/upload/koolclash_log.txt
         echo_date "【KoolClash 将会中断启动并回滚操作！】" >>/tmp/upload/koolclash_log.txt
         stop_koolclash >>/tmp/upload/koolclash_log.txt
@@ -498,7 +498,7 @@ start)
         echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt
         http_response 'nofile'
     else
-        if [ $(yq r $KSROOT/koolclash/config/config.yml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yml dns.enhanced-mode) == 'fake-ip' ]; then
+        if [ $(yq r $KSROOT/koolclash/config/config.yaml dns.enable) == 'true' ] && [ $(yq r $KSROOT/koolclash/config/config.yaml dns.enhanced-mode) == 'fake-ip' ]; then
             start_koolclash >/tmp/upload/koolclash_log.txt
             echo_date ------------------ 请不要关闭或者刷新页面！倒计时结束时会自动刷新！ ------------------ >>/tmp/upload/koolclash_log.txt
             echo "XU6J03M6" >>/tmp/upload/koolclash_log.txt

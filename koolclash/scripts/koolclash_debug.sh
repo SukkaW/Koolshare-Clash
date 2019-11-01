@@ -14,7 +14,7 @@ clash_version=$($KSROOT/bin/clash -v)
 
 fallbackdns=$(cat $KSROOT/koolclash/config/dns.yml | base64 | xargs)
 
-if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
+if [ ! -f $KSROOT/koolclash/config/config.yaml ]; then
     clash_allow_lan=''
     clash_ext_controller=''
     clash_redir=''
@@ -23,13 +23,13 @@ if [ ! -f $KSROOT/koolclash/config/config.yml ]; then
     clash_dns_mode=''
     clash_dns_listen=''
 else
-    clash_allow_lan=$(yq r /koolshare/koolclash/config/config.yml allow-lan)
-    clash_ext_controller=$(yq r /koolshare/koolclash/config/config.yml external-controller)
-    clash_redir=$(yq r /koolshare/koolclash/config/config.yml redir-port)
-    clash_dns_enable=$(yq r /koolshare/koolclash/config/config.yml dns.enable)
-    clash_dns_ipv6=$(yq r /koolshare/koolclash/config/config.yml dns.ipv6)
-    clash_dns_mode=$(yq r /koolshare/koolclash/config/config.yml dns.enhanced-mode)
-    clash_dns_listen=$(yq r /koolshare/koolclash/config/config.yml dns.listen)
+    clash_allow_lan=$(yq r /koolshare/koolclash/config/config.yaml allow-lan)
+    clash_ext_controller=$(yq r /koolshare/koolclash/config/config.yaml external-controller)
+    clash_redir=$(yq r /koolshare/koolclash/config/config.yaml redir-port)
+    clash_dns_enable=$(yq r /koolshare/koolclash/config/config.yaml dns.enable)
+    clash_dns_ipv6=$(yq r /koolshare/koolclash/config/config.yaml dns.ipv6)
+    clash_dns_mode=$(yq r /koolshare/koolclash/config/config.yaml dns.enhanced-mode)
+    clash_dns_listen=$(yq r /koolshare/koolclash/config/config.yaml dns.listen)
 fi
 
 iptables_mangle=$(iptables -nvL PREROUTING -t mangle | sed 1,2d | grep 'clash' | base64 | base64 | xargs)
