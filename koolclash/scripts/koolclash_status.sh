@@ -4,7 +4,7 @@ export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
 eval $(dbus export koolclash_)
 
-lan_ip=$(uci get network.lan.ipaddr)
+lan_ip=$(ubus call network.interface.lan status | jsonfilter -e '@["ipv4-address"][0].address')
 #wan_ip=$(ubus call network.interface.wan status | grep \"address\" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'

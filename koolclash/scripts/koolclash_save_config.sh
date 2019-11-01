@@ -7,7 +7,7 @@ alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 eval $(dbus export koolclash_)
 
 # 从 DMZ 插件抄来的获取 LAN/WAN IP
-lan_ip=$(uci get network.lan.ipaddr)
+lan_ip=$(ubus call network.interface.lan status | jsonfilter -e '@["ipv4-address"][0].address')
 wan_ip=$(ubus call network.interface.wan status | grep \"address\" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 # fallback dns
 fallbackdns=$(cat $KSROOT/koolclash/config/dns.yml)

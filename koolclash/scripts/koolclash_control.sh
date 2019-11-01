@@ -4,7 +4,7 @@ export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
 eval $(dbus export koolclash_)
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
-lan_ip=$(uci get network.lan.ipaddr)
+lan_ip=$(ubus call network.interface.lan status | jsonfilter -e '@["ipv4-address"][0].address')
 
 ONSTART=$(ps -l | grep $PPID | grep -v grep | grep "S99koolclash")
 
@@ -15,7 +15,7 @@ ONSTART=$(ps -l | grep $PPID | grep -v grep | grep "S99koolclash")
 #    set -- 0^^^128^192^224^240^248^252^254^ $(((${#netmask} - ${#x}) * 2)) ${x%%.*}
 #    x=${1%%$3*}
 #    suffix=$(($2 + (${#x} / 4)))
-#    prefix=$(uci get network.lan.ipaddr | cut -d "." -f1,2,3)
+#    prefix=$(ubus call network.interface.lan status | jsonfilter -e '@["ipv4-address"][0].address' | cut -d "." -f1,2,3)
 #    echo $prefix.0/$suffix
 #}
 
