@@ -286,7 +286,7 @@
                     <div style="display: flex;">
                         <div style="width: 61.8%">
                             <p><span class="ip-title">IPIP&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-ipipnet"></span></p>
-                            <p><span class="ip-title">淘宝&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-taobao"></span>&nbsp;<span id="ip-taobao-ipip"></span>（淘宝 IP 接口已经不准）</p>
+                            <p><span class="ip-title">搜狐&nbsp;&nbsp;国内</span>:&nbsp;<span id="ip-sohu"></span>&nbsp;<span id="ip-sohu-ipip"></span></p>
                             <p><span class="ip-title">IP.SB&nbsp;海外</span>:&nbsp;<span id="ip-ipsb"></span>&nbsp;<span id="ip-ipsb-geo"></span></p>
                             <p><span class="ip-title">IPAPI&nbsp;海外</span>:&nbsp;<span id="ip-ipapi"></span>&nbsp;<span id="ip-ipapi-geo"></span></p>
                         </div>
@@ -431,9 +431,9 @@
                 IP.get(`https://myip.ipip.net?${+(new Date)}`, 'text')
                     .then(resp => E('ip-ipipnet').innerHTML = resp.data.replace('当前 IP：', '').replace('来自于：', ''));
             },
-            getTaobaoIP: (data) => {
-                E('ip-taobao').innerHTML = data.ip;
-                IP.parseIPIpip(data.ip, 'ip-taobao-ipip');
+            getSohuIP: (data) => {
+                E('ip-sohu').innerHTML = returnCitySN.cip;
+                IP.parseIPIpip(returnCitySN.cip, 'ip-sohu-ipip');
             },
             getIpsbIP: (data) => {
                 E('ip-ipsb').innerHTML = data.address;
@@ -744,6 +744,7 @@ dns:
             },
             checkIP: () => {
                 IP.getIpipnetIP();
+                IP.getSohuIP();
                 IP.getIpApiIP();
                 HTTP.runcheck();
             },
@@ -1447,6 +1448,6 @@ ${Base64.decode(data.firewall_white_ip)}
             });
         }
     </script>
-    <script src="https://www.taobao.com/help/getip.php"></script>
-    <script src="https://ipv4.ip.sb/addrinfo?callback=IP.getIpsbIP"></script>
+    <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script src="https://ip.sb/addrinfo?callback=IP.getIpsbIP"></script>
 </content>
