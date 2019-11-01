@@ -3,6 +3,7 @@ export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
 eval $(dbus export koolclash)
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
+IPDB_VERSION=20191029
 
 # 判断路由架构和平台
 # Modified from koolss plugin (https://github.com/koolshare/ledesoft/blob/master/koolclash/koolss/install.sh)
@@ -80,7 +81,7 @@ cp /tmp/koolclash/uninstall.sh $KSROOT/scripts/uninstall_koolclash.sh
 
 if [ ! -f $KSROOT/koolclash/config/Country.mmdb ]; then
     cp -rf /tmp/koolclash/koolclash/config/Country.mmdb $KSROOT/koolclash/config/Country.mmdb
-    dbus set koolclash_ipdb_version=20190917
+    dbus set koolclash_ipdb_version=$IPDB_VERSION
 fi
 
 # 删除 Luci 缓存
