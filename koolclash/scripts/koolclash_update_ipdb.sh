@@ -9,7 +9,7 @@ mkdir -p $KSROOT/koolclash/ipdb
 curl=$(which curl)
 wget=$(which wget)
 
-ipdb_url="https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz"
+ipdb_url="https://static.clash.to/GeoIP2/GeoIP2-Country.tar.gz"
 
 rm -rf /tmp/upload/koolclash_log.txt && touch /tmp/upload/koolclash_log.txt
 sleep 1
@@ -35,10 +35,10 @@ fi
 echo_date "下载完成，开始解压" >>/tmp/upload/koolclash_log.txt
 tar zxvf $KSROOT/koolclash/ipdb.tar.gz -C $KSROOT/koolclash/ipdb
 
-chmod 644 $KSROOT/koolclash/ipdb/GeoLite2-Country_*/*
-version=$(ls $KSROOT/koolclash/ipdb | grep 'GeoLite2-Country' | sed "s|GeoLite2-Country_||g")
+chmod 644 $KSROOT/koolclash/ipdb/GeoIP2-Country_*/*
+version=$(ls $KSROOT/koolclash/ipdb | grep 'GeoIP2-Country' | sed "s|GeoIP2-Country_||g")
 
-cp -rf $KSROOT/koolclash/ipdb/GeoLite2-Country_*/GeoLite2-Country.mmdb $KSROOT/koolclash/config/Country.mmdb
+cp -rf $KSROOT/koolclash/ipdb/GeoIP2-Country_*/GeoIP2-Country.mmdb $KSROOT/koolclash/config/Country.mmdb
 
 echo_date "更新 IP 数据库至 $version 版本" >>/tmp/upload/koolclash_log.txt
 dbus set koolclash_ipdb_version=$version
