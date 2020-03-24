@@ -37,12 +37,12 @@ pack)
     echo '----------------------------------------'
     ;;
 ipdb)
-    wget https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz -O ipdb.tar.gz
+    wget https://static.clash.to/GeoIP2/GeoIP2-Country.tar.gz -O ipdb.tar.gz
     mkdir -p geolite
     tar zxvf ipdb.tar.gz -C geolite
-    chmod 644 geolite/GeoLite2-Country_*/*
-    version=$(ls geolite | grep 'GeoLite2-Country' | sed "s|GeoLite2-Country_||g")
-    cp -rf geolite/GeoLite2-Country_*/GeoLite2-Country.mmdb koolclash/koolclash/config/Country.mmdb
+    chmod 644 geolite/GeoIP2-Country_*/*
+    version=$(ls geolite | grep 'GeoIP2-Country' | sed "s|GeoIP2-Country_||g")
+    cp -rf geolite/GeoIP2-Country_*/GeoIP2-Country.mmdb koolclash/koolclash/config/Country.mmdb
     rm -rf ipdb.tar.gz
     rm -rf geolite
     echo '----------------------------------------'
