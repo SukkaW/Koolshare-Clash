@@ -96,7 +96,7 @@ KoolClash is not responsible for any loss of any user, including but not limited
 
 ## Sponsors
 
-[![Dler Cloud](https://img.vim-cn.com/7e/dbc9122a41f7eadbab889a9037ef6232cbea51.png)](https://dlercloud.me)
+[![Dler Cloud](https://img.vim-cn.com/7e/dbc9122a41f7eadbab889a9037ef6232cbea51.png)](https://dlercloud.com)
 
 ## Maintainer
 
