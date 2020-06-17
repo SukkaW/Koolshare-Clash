@@ -31,7 +31,16 @@ pack)
 
     tar zcvf ../koolclash.tar.gz koolclash
     cd ..
+
+    mkdir -p koolclash-build/fuckkoolshare
+    cp -rf fuckkoolshare/* koolclash-build/fuckkoolshare
+
+    cd koolclash-build
+    tar zcvf ../fuckkoolshare.tar.gz fuckkoolshare
+    cd ..
+
     rm -rf koolclash-build
+
     echo '----------------------------------------'
     echo 'Build the latest version'
     echo '----------------------------------------'
