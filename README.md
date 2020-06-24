@@ -32,7 +32,7 @@ A rule based custom proxy for <strong>Koolshare OpenWrt/LEDE x64</strong> based 
     <img src="https://i.loli.net/2019/04/16/5cb5e4b579a44.png">
 </p>
 
-> KoolClash is for `Koolshare OpenWrt/LEDE x86_64` ONLY. Use [Clash for OpenWrt](https://github.com/frainzy1477/clash/) if you are running original OpenWrt.
+> KoolClash is for `Koolshare OpenWrt/LEDE x86_64` ONLY. Use [OpenClash](https://github.com/vernesong/OpenClash/) if you are running original OpenWrt.
 
 ## Keywords
 
@@ -75,7 +75,6 @@ $ ./build dashboard # Update clash-dashboard to latest
 - [Clash for Windows](https://github.com/Fndroid/clash_for_windows_pkg) : A Windows GUI based on Clash
 - [clashX](https://github.com/yichengchen/clashX) : A rule based custom proxy with GUI for Mac base on clash
 - [ClashA](https://github.com/ccg2018/ClashA) : An Android GUI for Clash
-- [Clash for OpenWrt](https://github.com/frainzy1477/clash) : A rule based custom proxy for OpenWrt based on Clash.
 - [OpenClash](https://github.com/vernesong/OpenClash) : Another Clash Client For OpenWrt
 
 ## Contributions
@@ -97,6 +96,8 @@ KoolClash is not responsible for any loss of any user, including but not limited
 ## Sponsors
 
 [![Dler Cloud](https://img.vim-cn.com/7e/dbc9122a41f7eadbab889a9037ef6232cbea51.png)](https://dlercloud.com)
+
+[<img src="https://api.gitsponsors.com/api/badge/img?id=170092929" height="0">](https://api.gitsponsors.com/api/badge/link?p=UEtzZCAWg+MeBmcF/ZNpMKSoLMiCb6qfb0UTqycbSm8fqzNgmuMRH/j1IFhLCNUXaF7rif0ZBsiwFV4CL9uDDYanr4pd0MMbcKtMqHgDoBWW+H5tquKBW+AwvdIF2V1e1qzLG21KUB/eCxmQhGMFAA==)
 
 ## Maintainer
 
