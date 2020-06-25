@@ -295,7 +295,24 @@ apply_nat_rules() {
 
     iptables -t nat -A PREROUTING -p tcp --dport 53 -d 198.19.0.0/24 -j koolclash_dns
     iptables -t nat -A PREROUTING -p udp --dport 53 -d 198.19.0.0/24 -j koolclash_dns
-    iptables -t nat -A PREROUTING -p tcp -j koolclash
+    # koolproxyR 兼容增加
+    KP_INDEX=`iptables -nvL PREROUTING -t nat |sed 1,2d | sed -n '/KOOLPROXY/='|head -n1`
+	if [ -n "$KP_INDEX" ]; then
+		let KP_INDEX+=1
+		echo_date "您已开启kp/kpr，现已开启兼容。"
+		#开启了KP，这把规则放在KOOLPROXY下面
+		iptables -t nat -I PREROUTING $KP_INDEX -p tcp -j koolclash
+	else
+		#KP没有运行，确保添加到prerouting_rule规则之后
+		PR_INDEX=`iptables -t nat -L PREROUTING|tail -n +3|sed -n -e '/^prerouting_rule/='`
+		if [ -z "$PR_INDEX" ]; then
+			PR_INDEX=1
+		else
+			let PR_INDEX+=1
+		fi	
+		iptables -t nat -I PREROUTING $PR_INDEX -p tcp -j koolclash
+	fi
+  # 暂时注释 iptables -t nat -A PREROUTING -p tcp -j koolclash
 
     iptables -t nat -A koolclash_dns -p udp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
     iptables -t nat -A koolclash_dns -p tcp --dport 53 -d 198.19.0.0/24 -j DNAT --to-destination $lan_ip:23453
